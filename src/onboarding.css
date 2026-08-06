@@ -1,0 +1,390 @@
+/* Onboarding first-run dialog (Task 10). Shares settings.css's surface/canvas/
+   text tokens + the AA-safe #0E7C86 accent. The bright Task-9 teal (#2dd4bf)
+   lives on as --accent-bright for DECORATION only (dots, rail, indeterminate
+   bar, check disc) — it fails WCAG under text (white-on-it 1.86:1), so no text
+   sits on it. Breathing-dot/check CSS copied from overlay.css (subset). */
+
+:root {
+  --bg: #FFFFFF;
+  --canvas: #F4F5F7;
+  --border: #E5E7EB;
+  --text: #1A1A1A;
+  /* #4B5563 (gray-600): #6B7280 failed AA on canvas (4.43:1 → 6.93). */
+  --muted: #4B5563;
+  /* Two teal roles (color review 2026-08): --accent is the AA-safe text/CTA
+     teal (white-on-teal 4.95, teal-as-text 4.95) — unified with settings.css.
+     --accent-bright is the decorative Task-9 #2dd4bf (white-on-it 1.86:1 → no
+     text on it: dots, rail, indeterminate bar, check disc). */
+  --accent: #0E7C86;
+  --accent-hover: #0a6670;
+  --accent-bright: #2dd4bf;
+  --on-accent: #FFFFFF;
+  --destructive: #DC2626;
+  --radius-control: 6px;
+  --radius-card: 8px;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: system-ui, "Segoe UI", "Segoe UI Variable", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--canvas);
+}
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 100vh;
+  padding: 24px 32px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* ── Top row: step indicator + Skip ── */
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.step-indicator {
+  font-size: 13px;
+}
+
+/* UI-language picker (top-left corner). Endonyms are language-neutral, so the
+   select carries only a localized aria-label (set in applyTranslations). */
+.lang-select {
+  font: inherit;
+  font-size: 13px;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.link {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-control);
+  transition: color 150ms var(--ease), background 150ms var(--ease);
+}
+
+.link:hover {
+  color: var(--text);
+  background: var(--bg);
+}
+
+/* ── Rail: 3 segments ── */
+.rail {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+}
+
+.seg {
+  height: 3px;
+  border-radius: 2px;
+  background: var(--border);
+  transition: background 200ms var(--ease);
+}
+
+.seg.done,
+.seg.active {
+  background: var(--accent-bright);
+}
+
+/* ── Step body ── */
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  /* Fill remaining height so actions pin to the bottom on tall viewports. */
+  flex: 1 1 auto;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-block-start: 8px;
+}
+
+.lead {
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.55;
+  max-width: 56ch;
+}
+
+.small {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.heard {
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.combo {
+  font-variant-numeric: tabular-nums;
+  font-size: 14px;
+}
+
+/* ── Download (Step 1): indeterminate bar ──
+   No byte-level progress (model_store is coarse-only — D2). The bar animates
+   continuously while the bg thread downloads/spawns; auto-advances on
+   engine-ready. prefers-reduced-motion kills the animation below. */
+.download {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-block-start: 4px;
+}
+
+.bar-indeterminate {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  overflow: hidden;
+  position: relative;
+}
+
+.bar-indeterminate::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  border-radius: 2px;
+  background: var(--accent-bright);
+  animation: indeterminate 1.4s ease-in-out infinite;
+}
+
+@keyframes indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(350%);
+  }
+}
+
+/* ── Capture card (Step 2): breathing dot + capture button + captured combo ── */
+.capture-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--bg);
+}
+
+.mic-test {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.practice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 24px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--bg);
+  min-height: 120px;
+  justify-content: center;
+}
+
+.caption {
+  font-size: 17px;
+  color: var(--text);
+  text-align: center;
+  min-height: 1.5em;
+  word-break: break-word;
+  max-width: 50ch;
+}
+
+.all-set {
+  font-size: 15px;
+  color: var(--text);
+  text-align: center;
+  font-weight: 500;
+}
+
+.preparing {
+  font-size: 14px;
+}
+
+/* ── Breathing dot (Task-9 overlay continuity, copied subset) ──
+   Scales with mic-level via --mic CSS variable (0..1). On Step 3 the same dot
+   grows into the teal check on success (visual continuity with the overlay the
+   user will see on every dictation). */
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-bright);
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* --mic drives scale on the mic-test + practice dots (0..1 from Rust level). */
+  --mic: 0;
+  transform: scale(calc(1 + 0.8 * var(--mic)));
+  transition: transform 60ms linear;
+}
+
+.dot.breathing {
+  animation: breathe 1.6s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(calc(1 + 0.8 * var(--mic)));
+  }
+  50% {
+    transform: scale(calc(1.15 + 0.8 * var(--mic)));
+  }
+}
+
+.mic-dot,
+.practice-dot {
+  width: 14px;
+  height: 14px;
+}
+
+/* Check (Step 3 success): teal disc + white SVG check (inline in TS). */
+.dot.check {
+  width: 28px;
+  height: 28px;
+  background: var(--accent-bright);
+  animation: none;
+  transform: none;
+}
+
+.dot.check svg {
+  width: 18px;
+  height: 18px;
+  animation: check-in 0.4s ease-out both;
+}
+
+@keyframes check-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ── Buttons (mirror settings.css .btn) ── */
+.btn {
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  border-radius: var(--radius-control);
+  cursor: pointer;
+  transition: background 150ms var(--ease), border-color 150ms var(--ease);
+  min-height: 36px;
+  min-width: 72px;
+}
+
+.btn:hover {
+  background: var(--canvas);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn.primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.btn.primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.btn:focus-visible,
+.link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ── Alert (engine-error) ── */
+.alert {
+  padding: 10px 12px;
+  border-inline-start: 3px solid var(--border);
+  border-radius: var(--radius-control);
+  background: var(--bg);
+  font-size: 13px;
+}
+
+.alert.error {
+  border-color: var(--destructive);
+  color: var(--text);
+}
+
+/* ── Actions row ── */
+.actions {
+  margin-block-start: auto;
+  padding-block-start: 8px;
+}
+
+.row-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* ── Utilities ── */
+.hidden {
+  display: none !important;
+}
+
+/* ── Motion: respect user preference ── */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

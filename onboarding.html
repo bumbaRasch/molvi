@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>molvi</title>
+    <link rel="stylesheet" href="/src/onboarding.css" />
+    <script type="module" src="/src/onboarding.ts" defer></script>
+  </head>
+  <body>
+    <main id="onboarding" class="dialog">
+      <header class="top">
+        <select id="ui-lang" class="lang-select" aria-label="Language"></select>
+        <span id="step-indicator" class="step-indicator muted"></span>
+        <button id="skip" class="link" type="button"></button>
+      </header>
+
+      <!-- Step rail: 3 segments; .done/.active/.pending drive fill. -->
+      <div class="rail" aria-hidden="true">
+        <span class="seg" data-i="1"></span>
+        <span class="seg" data-i="2"></span>
+        <span class="seg" data-i="3"></span>
+      </div>
+
+      <!-- Step bodies: only one is visible at a time. TS toggles .hidden. -->
+      <section class="step" data-step="1">
+        <h1 id="welcome-title" class="title"></h1>
+        <p id="privacy-lead" class="lead"></p>
+        <div class="download">
+          <div class="bar-indeterminate"></div>
+          <p id="downloading" class="muted small"></p>
+        </div>
+        <p id="model-explainer" class="muted small"></p>
+        <p id="engine-error" class="alert error hidden"></p>
+        <div class="row-end actions">
+          <button class="btn hidden" id="open-settings-error" type="button"></button>
+          <button class="btn primary" id="continue-1" type="button"></button>
+        </div>
+      </section>
+
+      <section class="step hidden" data-step="2">
+        <h1 id="hotkey-title" class="title"></h1>
+        <p id="hotkey-hint" class="lead"></p>
+        <div class="capture-card">
+          <span id="dot-2" class="dot breathing" aria-hidden="true"></span>
+          <button class="btn primary" id="hotkey-capture" type="button"></button>
+          <span id="hotkey-captured" class="combo muted"></span>
+        </div>
+        <div class="mic-test">
+          <span id="dot-mic" class="dot breathing mic-dot" aria-hidden="true"></span>
+          <p id="mic-hint" class="muted small"></p>
+          <p id="mic-heard" class="heard hidden"></p>
+        </div>
+        <div class="row-end actions">
+          <button class="btn primary" id="continue-2" type="button"></button>
+        </div>
+      </section>
+
+      <section class="step hidden" data-step="3">
+        <h1 id="first-word-title" class="title"></h1>
+        <p id="first-word-hint" class="lead"></p>
+        <div class="practice">
+          <span id="dot-practice" class="dot breathing practice-dot" aria-hidden="true"></span>
+          <p id="preparing" class="preparing muted"></p>
+          <p id="caption" class="caption"></p>
+          <p id="all-set" class="all-set hidden"></p>
+        </div>
+        <div class="row-end actions">
+          <button class="btn" id="open-settings-done" type="button"></button>
+          <button class="btn primary" id="done" type="button"></button>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

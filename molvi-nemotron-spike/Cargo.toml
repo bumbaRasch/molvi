@@ -1,0 +1,27 @@
+[package]
+name = "molvi-nemotron-spike"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.97.1"
+publish = false
+description = "Standalone Nemotron-3.5-ASR viability spike for molvi (RTF/RSS/CPU/WER measurement). Not a molvi dependency."
+
+[dependencies]
+parakeet-rs = "0.3.7"
+hound = "3.5"
+windows = { version = "0.62", features = [
+    "Win32_System_ProcessStatus",
+    "Win32_System_Threading",
+    "Win32_System_SystemInformation",
+    "Win32_Foundation",
+] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+anyhow = "1"
+# ponytail: ort graph-opt (Level3) was measured RTF-neutral but doubled cold-load
+# → net-negative, dropped. parakeet-rs defaults (4 intra / 1 inter threads) are
+# fastest on the i5-12450H. P-core PROCESS affinity was measured ~40% SLOWER for
+# Nemotron (unlike GigaAM) → default --affinity is `all`; `pcores` kept as a
+# measurable comparison. See report/ + README "Findings".
+
+# ponytail: std-only arg parsing + manual UTC stamp — no clap/chrono dep for a one-shot spike.
