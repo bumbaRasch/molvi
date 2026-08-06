@@ -9,6 +9,7 @@ export const fr: Dict = {
     "nav.microphone": "Microphone",
     "nav.overlay": "Superposition",
     "nav.recognition": "Reconnaissance",
+    "nav.snippets": "Snippets",
     "nav.text": "Texte",
     "nav.updates": "Mises à jour",
     // common.*
@@ -18,6 +19,7 @@ export const fr: Dict = {
     "common.confirm": "Confirmer",
     "common.delete": "Supprimer",
     "common.empty_dict": "Le dictionnaire est vide.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Erreur : ",
     "common.export": "Exporter",
     "common.import": "Importer",
@@ -126,6 +128,20 @@ export const fr: Dict = {
     "dictionary.undo": "Annuler",
     "dictionary.removed": "Entrée supprimée",
     "dictionary.preview_text": "{total} entrées : {new} nouvelles, {conflicts} seront écrasées.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Tout effacer",
     "history.danger_hint": "Désactiver le commutateur conserve les entrées sur le disque. « Désactiver et effacer » les supprime définitivement.",
@@ -178,8 +194,6 @@ export const fr: Dict = {
     "overlay.waveform": "Afficher la forme d'onde",
     // ovl.*
     "ovl.recording": "Enregistrement",
-    "ovl.listening": "Écoute",
-    "ovl.working": "Traitement",
     "ovl.polishing": "Finalisation",
     "ovl.paste_failed": "Échec du collage — le texte est dans le presse-papiers",
     "ovl.edit": "Modifier",
@@ -215,7 +229,6 @@ export const fr: Dict = {
     "onboarding.hotkey_title": "Appuyez sur votre touche",
     "onboarding.hotkey_hint": "C'est votre touche push-to-talk. Maintenez-la n'importe où pour parler.",
     "onboarding.hotkey_capture": "Appuyez sur une combinaison de touches",
-    "onboarding.mic_title": "Puis dites un mot",
     "onboarding.mic_hint": "Vérifions que votre microphone fonctionne.",
     "onboarding.mic_heard": "Je vous entends.",
     "onboarding.first_word_title": "Dites n'importe quoi",
@@ -228,4 +241,7 @@ export const fr: Dict = {
     "onboarding.engine_error": "Impossible de démarrer le moteur de reconnaissance.",
     "onboarding.step": "Étape {n} sur 3",
 };
+
+
+
 

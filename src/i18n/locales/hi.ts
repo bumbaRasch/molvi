@@ -9,6 +9,7 @@ export const hi: Dict = {
     "nav.microphone": "माइक्रोफ़ोन",
     "nav.overlay": "ओवरले",
     "nav.recognition": "पहचान",
+    "nav.snippets": "Snippets",
     "nav.text": "पाठ",
     "nav.updates": "अपडेट",
     // common.*
@@ -18,6 +19,7 @@ export const hi: Dict = {
     "common.confirm": "पुष्टि करें",
     "common.delete": "हटाएँ",
     "common.empty_dict": "शब्दकोश खाली है।",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "त्रुटि: ",
     "common.export": "निर्यात",
     "common.import": "आयात",
@@ -126,6 +128,20 @@ export const hi: Dict = {
     "dictionary.undo": "पूर्ववत्",
     "dictionary.removed": "प्रविष्टि हटाई गई",
     "dictionary.preview_text": "{total} प्रविष्टियाँ: {new} नई, {conflicts} अधिलेखित होंगी।",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "सभी साफ़ करें",
     "history.danger_hint": "टॉगल बंद करने से डिस्क पर प्रविष्टियाँ रहती हैं। \u201cअक्षम करें और मिटाएँ\u201d उन्हें पुनर्प्राप्ति से परे मिटा देता है।",
@@ -178,8 +194,6 @@ export const hi: Dict = {
     "overlay.waveform": "तरंगरूप दिखाएँ",
     // ovl.*
     "ovl.recording": "रिकॉर्डिंग",
-    "ovl.listening": "सुन रहा है",
-    "ovl.working": "कार्यरत",
     "ovl.polishing": "अंतिम रूप दे रहा है",
     "ovl.paste_failed": "पेस्ट विफल — पाठ क्लिपबोर्ड में है",
     "ovl.edit": "संपादित करें",
@@ -215,7 +229,6 @@ export const hi: Dict = {
     "onboarding.hotkey_title": "अपना कुंजी दबाएँ",
     "onboarding.hotkey_hint": "यह आपकी पुश-टू-टॉक कुंजी है। बोलने के लिए इसे कहीं भी दबाकर रखें।",
     "onboarding.hotkey_capture": "कुंजी संयोजन दबाएँ",
-    "onboarding.mic_title": "फिर एक शब्द बोलें",
     "onboarding.mic_hint": "आइए जाँचें कि आपका माइक काम कर रहा है।",
     "onboarding.mic_heard": "मैं सुन रहा हूँ।",
     "onboarding.first_word_title": "कुछ भी बोलें",
@@ -228,4 +241,7 @@ export const hi: Dict = {
     "onboarding.engine_error": "स्पीच इंजन शुरू नहीं हो सका।",
     "onboarding.step": "चरण {n} / 3",
 };
+
+
+
 

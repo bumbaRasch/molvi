@@ -9,6 +9,7 @@ export const tr: Dict = {
     "nav.microphone": "Mikrofon",
     "nav.overlay": "Yer paylaşımı",
     "nav.recognition": "Tanıma",
+    "nav.snippets": "Snippets",
     "nav.text": "Metin",
     "nav.updates": "Güncellemeler",
     // common.*
@@ -18,6 +19,7 @@ export const tr: Dict = {
     "common.confirm": "Onayla",
     "common.delete": "Sil",
     "common.empty_dict": "Sözlük boş.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Hata: ",
     "common.export": "Dışa aktar",
     "common.import": "İçe aktar",
@@ -126,6 +128,20 @@ export const tr: Dict = {
     "dictionary.undo": "Geri al",
     "dictionary.removed": "Girdi kaldırıldı",
     "dictionary.preview_text": "{total} girdi: {new} yeni, {conflicts} üzerine yazılacak.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Tümünü temizle",
     "history.danger_hint": "Düğmeyi kapatmak girişleri diskte tutar. \"Devre dışı bırak ve sil\" bunları geri alınamaz şekilde kaldırır.",
@@ -178,8 +194,6 @@ export const tr: Dict = {
     "overlay.waveform": "Dalga biçimini göster",
     // ovl.*
     "ovl.recording": "Kaydediliyor",
-    "ovl.listening": "Dinleniyor",
-    "ovl.working": "İşleniyor",
     "ovl.polishing": "Sonlandırılıyor",
     "ovl.paste_failed": "Yapıştırma başarısız — metin panoda",
     "ovl.edit": "Düzenle",
@@ -215,7 +229,6 @@ export const tr: Dict = {
     "onboarding.hotkey_title": "Tuşunuza basın",
     "onboarding.hotkey_hint": "Bu, bas-konuş tuşunuz. Konuşmak için onu her yerde basılı tutun.",
     "onboarding.hotkey_capture": "Bir tuş kombinasyonuna basın",
-    "onboarding.mic_title": "Sonra bir kelime söyleyin",
     "onboarding.mic_hint": "Mikrofonunuzun çalıştığını kontrol edelim.",
     "onboarding.mic_heard": "Sizi duyuyorum.",
     "onboarding.first_word_title": "Herhangi bir şey söyleyin",
@@ -228,4 +241,7 @@ export const tr: Dict = {
     "onboarding.engine_error": "Konuşma motoru başlatılamadı.",
     "onboarding.step": "Adım {n} / 3",
 };
+
+
+
 

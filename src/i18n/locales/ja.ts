@@ -9,6 +9,7 @@ export const ja: Dict = {
     "nav.microphone": "マイク",
     "nav.overlay": "オーバーレイ",
     "nav.recognition": "認識",
+    "nav.snippets": "Snippets",
     "nav.text": "テキスト",
     "nav.updates": "更新",
     // common.*
@@ -18,6 +19,7 @@ export const ja: Dict = {
     "common.confirm": "確認",
     "common.delete": "削除",
     "common.empty_dict": "辞書は空です。",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "エラー: ",
     "common.export": "エクスポート",
     "common.import": "インポート",
@@ -126,6 +128,20 @@ export const ja: Dict = {
     "dictionary.undo": "元に戻す",
     "dictionary.removed": "エントリーを削除しました",
     "dictionary.preview_text": "{total}件: 新規{new}件、{conflicts}件が上書きされます。",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "すべて消去",
     "history.danger_hint": "トグルをオフにしてもディスク上にエントリが残ります。「無効化して消去」で完全に削除されます。",
@@ -178,8 +194,6 @@ export const ja: Dict = {
     "overlay.waveform": "波形を表示",
     // ovl.*
     "ovl.recording": "録音中",
-    "ovl.listening": "待機中",
-    "ovl.working": "処理中",
     "ovl.polishing": "仕上げ中",
     "ovl.paste_failed": "貼り付けに失敗 — テキストはクリップボードにあります",
     "ovl.edit": "編集",
@@ -215,7 +229,6 @@ export const ja: Dict = {
     "onboarding.hotkey_title": "キーを押してください",
     "onboarding.hotkey_hint": "これがプッシュ・トゥ・トークのキーです。どこでも押し続けて話しかけます。",
     "onboarding.hotkey_capture": "キーの組み合わせを押してください",
-    "onboarding.mic_title": "では、ひとことどうぞ",
     "onboarding.mic_hint": "マイクが機能しているか確認しましょう。",
     "onboarding.mic_heard": "聞こえています。",
     "onboarding.first_word_title": "何でも話してみてください",
@@ -228,4 +241,7 @@ export const ja: Dict = {
     "onboarding.engine_error": "音声エンジンを開始できませんでした。",
     "onboarding.step": "ステップ {n} / 3",
 };
+
+
+
 

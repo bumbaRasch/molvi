@@ -80,6 +80,20 @@ impl Resampler {
         Ok(out_all)
     }
 
+    /// Reset internal state so the next session starts from a clean baseline.
+    /// Without this, the previous session's FFT overlap-add tail (~10ms of
+    /// attenuated audio @48k→16k) bleeds into the next recording's first output
+    /// frames. Called on `EngineCmd::Start`. rubato's `Resampler::reset` zeros
+    /// the overlap buffers (synchro.rs:664); `leftover` is cleared too (it is
+    /// normally empty after a clean finalize/flush, but a Cancel may leave some).
+    /// No-op on the 16k passthrough path (`inner` is None).
+    pub fn reset(&mut self) {
+        if let Some(r) = self.inner.as_mut() {
+            r.reset();
+        }
+        self.leftover.clear();
+    }
+
     /// Flush any pending `leftover` (< one input chunk) at session end by
     /// zero-padding to a full chunk and processing once. Called by the engine
     /// worker's Finalize path so the trailing sub-chunk isn't dropped.

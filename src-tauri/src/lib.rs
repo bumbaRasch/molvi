@@ -57,11 +57,6 @@ pub struct AppState {
     /// `postproc::smart_pipeline` via `expand()` (Task 8b).
     pub snippets: Arc<Mutex<snippets::Snippets>>,
     pub history: Mutex<Option<Arc<history::History>>>,
-    /// Process affinity captured at startup (all logical cores, before any
-    /// pinning). `apply_for_engine` restores it for Nemotron (all-cores) or
-    /// restricts to P-cores for GigaAM. Live-flipped by `ipc::set_settings`
-    /// when the model id changes.
-    pub original_affinity: usize,
     /// On-demand mic-preview flag. Read by the mic-level poller so it emits the
     /// level event while preview is on (even with the overlay hidden). Set by
     /// `ipc::set_mic_preview`, which also forwards `Command::MicPreview` to the
@@ -204,13 +199,12 @@ fn open_history(app: tauri::AppHandle) {
 /// the log guard for the app lifetime.
 pub fn run() {
     let _log_guard = log::init().expect("log init");
-    // Engine-specific affinity (R6): capture the original (all-cores) mask
-    // BEFORE any pinning, then load settings (needs cfg.model), then apply.
-    // Nemotron must NOT inherit P-core pinning (measured ~40% slower); GigaAM
-    // wants P-cores. Fail-open: unwrap_or(0) → apply_for_engine skips on 0.
-    let original = ort_affinity::capture_process_affinity().unwrap_or(0);
+    // Engine-specific affinity (R6): pin to P-cores for GigaAM (measured help);
+    // Nemotron uses all cores (P-core pinning is ~40% slower). Applied ONCE at
+    // startup; engine-swap = restart, so no mid-process undo is needed.
+    // Fail-open: p_core_mask -> None on a homogeneous CPU -> no pinning.
     let cfg = settings::Settings::load().unwrap_or_default();
-    ort_affinity::apply_for_engine(original, crate::engine_adapter::is_nemotron(&cfg.model));
+    ort_affinity::apply_for_engine(crate::engine_adapter::is_nemotron(&cfg.model));
     match paths::settings_path() {
         Ok(p) => tracing::info!("settings loaded from {}", crate::paths::redact_appdata(&p)),
         Err(_) => tracing::info!("settings: using defaults"),
@@ -265,7 +259,6 @@ pub fn run() {
             dictionary,
             snippets,
             history: Mutex::new(history),
-            original_affinity: original,
             mic_preview: Arc::new(AtomicBool::new(false)),
             onboarding_practice: Arc::new(AtomicBool::new(false)),
             pending_paste: Mutex::new(None),
@@ -287,6 +280,11 @@ pub fn run() {
             crate::ipc::dictionary_import_preview,
             crate::ipc::dictionary_import_apply,
             crate::ipc::dictionary_export,
+            crate::ipc::snippet_list,
+            crate::ipc::snippet_add,
+            crate::ipc::snippet_remove,
+            crate::ipc::snippet_import,
+            crate::ipc::snippet_export,
             crate::ipc::history_query,
             crate::ipc::history_bulk_delete,
             crate::ipc::history_distinct_langs,
@@ -462,12 +460,6 @@ pub fn run() {
                     // Coordinator thread: owns AppPipeline + the state machine.
                     let dictionary = app_handle.state::<AppState>().dictionary.clone();
                     let snippets = app_handle.state::<AppState>().snippets.clone();
-                    let history = app_handle
-                        .state::<AppState>()
-                        .history
-                        .lock()
-                        .unwrap()
-                        .clone();
                     let pipeline = pipeline::AppPipeline::new(
                         app_handle.clone(),
                         capture,
@@ -476,7 +468,6 @@ pub fn run() {
                         cmd_tx.clone(),
                         dictionary,
                         snippets,
-                        history,
                     );
                     if let Err(e) = std::thread::Builder::new()
                         .name("molvi-coordinator".into())
@@ -496,7 +487,7 @@ pub fn run() {
                     }
 
                     // Drives the Status item text + tooltip (warming-up -> ready).
-                    tray::set_status(&app_handle, true);
+                    tray::set_status(&app_handle);
                     tracing::info!("PTT ready");
                     // Task 10 D3: signal onboarding (Step 1 auto-advance + Step 3
                     // gate). Global emit — only the onboarding window listens;

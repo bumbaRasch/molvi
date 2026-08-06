@@ -5,7 +5,6 @@
 //! in (privacy: nothing on disk until then).
 //! Privacy (spec §10.1): NEVER logs transcript text or row contents.
 
-use std::path::Path;
 use std::sync::{Arc, Mutex};
 
 use rusqlite::{Connection, params};
@@ -61,18 +60,14 @@ impl History {
 
     pub(crate) fn open(settings: &HistorySettings) -> Result<History> {
         let p = paths::history_db_path()?;
-        Self::open_at(&p, settings.max_entries, settings.max_age_days)
-    }
-
-    fn open_at(p: &Path, max_entries: u32, max_age_days: u32) -> Result<History> {
-        let conn = Connection::open(p).map_err(|e| {
-            MolviError::Db(format!("open {}: {e}", crate::paths::redact_appdata(p)))
+        let conn = Connection::open(&p).map_err(|e| {
+            MolviError::Db(format!("open {}: {e}", crate::paths::redact_appdata(&p)))
         })?;
         Self::schema(&conn)?;
         Ok(History {
             conn: Arc::new(Mutex::new(conn)),
-            max_entries,
-            max_age_days,
+            max_entries: settings.max_entries,
+            max_age_days: settings.max_age_days,
         })
     }
 

@@ -9,6 +9,7 @@ export const bg: Dict = {
     "nav.microphone": "Микрофон",
     "nav.overlay": "Индикатор",
     "nav.recognition": "Разпознаване",
+    "nav.snippets": "Snippets",
     "nav.text": "Текст",
     "nav.updates": "Обновления",
     // common.*
@@ -18,6 +19,7 @@ export const bg: Dict = {
     "common.confirm": "Потвърди",
     "common.delete": "Изтрий",
     "common.empty_dict": "Речникът е празен.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Грешка: ",
     "common.export": "Експорт",
     "common.import": "Импорт",
@@ -126,6 +128,20 @@ export const bg: Dict = {
     "dictionary.undo": "Отмени",
     "dictionary.removed": "Записът е премахнат",
     "dictionary.preview_text": "{total} записа: {new} нови, {conflicts} ще бъдат презаписани.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Изчистване на всичко",
     "history.danger_hint": "Изключването на превключвателя запазва записите на диска. „Изключи и изтрий“ ги премахва безвъзвратно.",
@@ -178,8 +194,6 @@ export const bg: Dict = {
     "overlay.waveform": "Показване на вълната",
     // ovl.*
     "ovl.recording": "Запис",
-    "ovl.listening": "Слушане",
-    "ovl.working": "Обработка",
     "ovl.polishing": "Финализиране",
     "ovl.paste_failed": "Поставянето е неуспешно — текстът е в буферната обмен",
     "ovl.edit": "Редактиране",
@@ -215,7 +229,6 @@ export const bg: Dict = {
     "onboarding.hotkey_title": "Натиснете клавиша си",
     "onboarding.hotkey_hint": "Това е Вашият клавиш за диктовка. Задръжте го навсякъде, за да говорите.",
     "onboarding.hotkey_capture": "Натиснете комбинация от клавиши",
-    "onboarding.mic_title": "После кажете дума",
     "onboarding.mic_hint": "Нека проверим, че микрофонът Ви работи.",
     "onboarding.mic_heard": "Чувам Ви.",
     "onboarding.first_word_title": "Кажете каквото и да е",
@@ -228,4 +241,7 @@ export const bg: Dict = {
     "onboarding.engine_error": "Стартирането на речевия двигател е неуспешно.",
     "onboarding.step": "Стъпка {n} от 3",
 };
+
+
+
 

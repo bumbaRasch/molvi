@@ -9,6 +9,7 @@ export const es: Dict = {
     "nav.microphone": "Micrófono",
     "nav.overlay": "Superposición",
     "nav.recognition": "Reconocimiento",
+    "nav.snippets": "Snippets",
     "nav.text": "Texto",
     "nav.updates": "Actualizaciones",
     // common.*
@@ -18,6 +19,7 @@ export const es: Dict = {
     "common.confirm": "Confirmar",
     "common.delete": "Eliminar",
     "common.empty_dict": "El diccionario está vacío.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Error: ",
     "common.export": "Exportar",
     "common.import": "Importar",
@@ -126,6 +128,20 @@ export const es: Dict = {
     "dictionary.undo": "Deshacer",
     "dictionary.removed": "Entrada eliminada",
     "dictionary.preview_text": "{total} entradas: {new} nuevas, {conflicts} se sobrescribirán.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Borrar todo",
     "history.danger_hint": "Apagar el interruptor conserva las entradas en el disco. \"Desactivar y borrar\" las elimina sin posibilidad de recuperación.",
@@ -178,8 +194,6 @@ export const es: Dict = {
     "overlay.waveform": "Mostrar forma de onda",
     // ovl.*
     "ovl.recording": "Grabando",
-    "ovl.listening": "Escuchando",
-    "ovl.working": "Procesando",
     "ovl.polishing": "Finalizando",
     "ovl.paste_failed": "Error al pegar — el texto está en el portapapeles",
     "ovl.edit": "Editar",
@@ -215,7 +229,6 @@ export const es: Dict = {
     "onboarding.hotkey_title": "Pulsa tu tecla",
     "onboarding.hotkey_hint": "Esta es tu tecla de pulsar para hablar. Mantenla pulsada en cualquier lugar para hablar.",
     "onboarding.hotkey_capture": "Pulsa una combinación de teclas",
-    "onboarding.mic_title": "Luego di una palabra",
     "onboarding.mic_hint": "Comprobemos que tu micrófono funciona.",
     "onboarding.mic_heard": "Te oigo.",
     "onboarding.first_word_title": "Di cualquier cosa",
@@ -228,4 +241,7 @@ export const es: Dict = {
     "onboarding.engine_error": "No se pudo iniciar el motor de voz.",
     "onboarding.step": "Paso {n} de 3",
 };
+
+
+
 

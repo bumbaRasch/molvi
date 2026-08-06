@@ -9,6 +9,7 @@ export const lt: Dict = {
     "nav.microphone": "Mikrofonas",
     "nav.overlay": "Perdanga",
     "nav.recognition": "Atpažinimas",
+    "nav.snippets": "Snippets",
     "nav.text": "Tekstas",
     "nav.updates": "Atnaujinimai",
     // common.*
@@ -18,6 +19,7 @@ export const lt: Dict = {
     "common.confirm": "Patvirtinti",
     "common.delete": "Ištrinti",
     "common.empty_dict": "Žodynas tuščias.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Klaida: ",
     "common.export": "Eksportuoti",
     "common.import": "Importuoti",
@@ -126,6 +128,20 @@ export const lt: Dict = {
     "dictionary.undo": "Atšaukti",
     "dictionary.removed": "Įrašas pašalintas",
     "dictionary.preview_text": "{total} įrašai: {new} nauji, {conflicts} bus perrašyti.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Išvalyti viską",
     "history.danger_hint": "Perjungiklio išjungimas palieka įrašus diske. „Išjungti ir ištrinti\" pašalina juos negrįžtamai.",
@@ -178,8 +194,6 @@ export const lt: Dict = {
     "overlay.waveform": "Rodyti bangos formą",
     // ovl.*
     "ovl.recording": "Įrašoma",
-    "ovl.listening": "Klausoma",
-    "ovl.working": "Apdorojama",
     "ovl.polishing": "Užbaigiama",
     "ovl.paste_failed": "Įdėti nepavyko — tekstas yra iškarpinėje",
     "ovl.edit": "Redaguoti",
@@ -215,7 +229,6 @@ export const lt: Dict = {
     "onboarding.hotkey_title": "Paspauskite savo klavišą",
     "onboarding.hotkey_hint": "Tai Jūsų spausk-kad-kalbėtumėte klavišas. Laikykite jį bet kur, kad kalbėtumėte.",
     "onboarding.hotkey_capture": "Paspauskite klavišų derinį",
-    "onboarding.mic_title": "Tada pasakykite žodį",
     "onboarding.mic_hint": "Patikrinkime, ar veikia Jūsų mikrofonas.",
     "onboarding.mic_heard": "Girdžiu Jus.",
     "onboarding.first_word_title": "Pasakykite bet ką",
@@ -228,4 +241,7 @@ export const lt: Dict = {
     "onboarding.engine_error": "Nepavyko paleisti kalbos variklio.",
     "onboarding.step": "{n} žingsnis iš 3",
 };
+
+
+
 

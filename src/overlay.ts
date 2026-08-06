@@ -149,9 +149,9 @@ void (async (): Promise<void> => {
     setActions([edit]);
   });
 
-  await listen("mic-level", (e) => {
+  await listen<{ level: number }>("mic-level", (e) => {
     // 0..100 from Rust; drive the waveform height placeholder.
-    const level = (e.payload as { level: number }).level;
+    const level = e.payload.level;
     document.documentElement.style.setProperty("--mic", `${Math.min(100, level)}%`);
   });
 

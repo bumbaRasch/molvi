@@ -9,6 +9,7 @@ export const zh: Dict = {
     "nav.microphone": "麦克风",
     "nav.overlay": "悬浮窗",
     "nav.recognition": "识别",
+    "nav.snippets": "Snippets",
     "nav.text": "文本",
     "nav.updates": "更新",
     // common.*
@@ -18,6 +19,7 @@ export const zh: Dict = {
     "common.confirm": "确认",
     "common.delete": "删除",
     "common.empty_dict": "词典为空。",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "错误: ",
     "common.export": "导出",
     "common.import": "导入",
@@ -126,6 +128,20 @@ export const zh: Dict = {
     "dictionary.undo": "撤销",
     "dictionary.removed": "条目已删除",
     "dictionary.preview_text": "共 {total} 条: 新增 {new} 条, 将覆盖 {conflicts} 条。",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "全部清除",
     "history.danger_hint": "关闭开关会将条目保留在磁盘上。\u201c禁用并删除\u201d会永久删除,无法恢复。",
@@ -178,8 +194,6 @@ export const zh: Dict = {
     "overlay.waveform": "显示波形",
     // ovl.*
     "ovl.recording": "录制中",
-    "ovl.listening": "聆听中",
-    "ovl.working": "处理中",
     "ovl.polishing": "润色中",
     "ovl.paste_failed": "粘贴失败 — 文本已在剪贴板中",
     "ovl.edit": "编辑",
@@ -215,7 +229,6 @@ export const zh: Dict = {
     "onboarding.hotkey_title": "按下您的按键",
     "onboarding.hotkey_hint": "这是您的按住说话按键。在任何地方按住它即可说话。",
     "onboarding.hotkey_capture": "按下一个组合键",
-    "onboarding.mic_title": "然后说一个词",
     "onboarding.mic_hint": "让我们检查一下您的麦克风是否工作。",
     "onboarding.mic_heard": "听到您了。",
     "onboarding.first_word_title": "随便说什么",
@@ -228,4 +241,7 @@ export const zh: Dict = {
     "onboarding.engine_error": "无法启动语音引擎。",
     "onboarding.step": "第 {n} 步,共 3 步",
 };
+
+
+
 

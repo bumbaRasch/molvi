@@ -9,6 +9,7 @@ export const el: Dict = {
     "nav.microphone": "Μικρόφωνο",
     "nav.overlay": "Επικάλυψη",
     "nav.recognition": "Αναγνώριση",
+    "nav.snippets": "Snippets",
     "nav.text": "Κείμενο",
     "nav.updates": "Ενημερώσεις",
     // common.*
@@ -18,6 +19,7 @@ export const el: Dict = {
     "common.confirm": "Επιβεβαίωση",
     "common.delete": "Διαγραφή",
     "common.empty_dict": "Το λεξικό είναι άδειο.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Σφάλμα: ",
     "common.export": "Εξαγωγή",
     "common.import": "Εισαγωγή",
@@ -126,6 +128,20 @@ export const el: Dict = {
     "dictionary.undo": "Αναίρεση",
     "dictionary.removed": "Η καταχώρηση καταργήθηκε",
     "dictionary.preview_text": "{total} καταχωρήσεις: {new} νέες, {conflicts} θα αντικατασταθούν.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Καθαρισμός όλων",
     "history.danger_hint": "Η απενεργοποίηση του διακόπτη διατηρεί τις καταχωρήσεις στον δίσκο. Το «Απενεργοποίηση και διαγραφή» τις αφαιρεί ανεπανόρθωτα.",
@@ -178,8 +194,6 @@ export const el: Dict = {
     "overlay.waveform": "Εμφάνιση κυματομορφής",
     // ovl.*
     "ovl.recording": "Εγγραφή",
-    "ovl.listening": "Ακρόαση",
-    "ovl.working": "Επεξεργασία",
     "ovl.polishing": "Ολοκλήρωση",
     "ovl.paste_failed": "Η επικόλληση απέτυχε — το κείμενο είναι στο πρόχειρο",
     "ovl.edit": "Επεξεργασία",
@@ -215,7 +229,6 @@ export const el: Dict = {
     "onboarding.hotkey_title": "Πιέστε το πλήκτρό σας",
     "onboarding.hotkey_hint": "Αυτό είναι το πλήκτρο push-to-talk. Κρατήστε το οπουδήποτε για να μιλήσετε.",
     "onboarding.hotkey_capture": "Πιέστε έναν συνδυασμό πλήκτρων",
-    "onboarding.mic_title": "Μετά πείτε μια λέξη",
     "onboarding.mic_hint": "Ας ελέγξουμε ότι το μικρόφωνό σας λειτουργεί.",
     "onboarding.mic_heard": "Σας ακούω.",
     "onboarding.first_word_title": "Πείτε οτιδήποτε",
@@ -228,4 +241,7 @@ export const el: Dict = {
     "onboarding.engine_error": "Δεν ήταν δυνατή η εκκίνηση της μηχανής ομιλίας.",
     "onboarding.step": "Βήμα {n} από 3",
 };
+
+
+
 

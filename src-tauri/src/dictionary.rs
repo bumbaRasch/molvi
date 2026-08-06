@@ -42,11 +42,15 @@ struct Cache {
 
 pub struct Dictionary {
     conn: Connection,
-    // Mutex is required, not over-spec'd: spec §8.2 has the Smart pipeline call
-    // `apply()` from the finalize side-thread while CRUD (add/remove) invalidates
-    // `cache` on the IPC thread (spec §5) -> genuine cross-thread access to
-    // `cache`. Don't "simplify" this to a RefCell: that would race between the
-    // two threads. (The bare `conn` stays IPC-thread-only; only `cache` crosses.)
+    // Both `conn` and `cache` are reached from the finalize side-thread: Smart
+    // `apply()` calls `list()` (→ conn) on a cold cache, then builds `cache`.
+    // CRUD (add/remove) runs on the IPC thread and invalidates `cache`. The
+    // outer `Arc<Mutex<Dictionary>>` (in pipeline.rs/ipc.rs) serializes ALL
+    // access; this inner `Mutex<Option<Cache>>` additionally (a) guards `cache`
+    // across those two threads and (b) gives the `&self` CRUD/apply API the
+    // interior mutability it needs. Don't "simplify" to a RefCell: the cross-
+    // thread access is real, and removing the inner Mutex would force `&mut`
+    // through every caller for no gain.
     cache: Mutex<Option<Cache>>,
 }
 
@@ -86,6 +90,13 @@ impl Dictionary {
     }
 
     pub fn add(&self, entry: &str, replacement: &str) -> Result<()> {
+        // Reject empty/whitespace-only entries at the store boundary: a
+        // dictionary of only empty keys would compile to a degenerate empty-
+        // alternation regex that mangles text via zero-width matches.
+        // Silent no-op (matches the lenient import style; UI never offers this).
+        if entry.trim().is_empty() {
+            return Ok(());
+        }
         let now = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
             .map(|d| d.as_millis() as i64)

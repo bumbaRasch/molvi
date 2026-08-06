@@ -9,6 +9,7 @@ export const ro: Dict = {
     "nav.microphone": "Microfon",
     "nav.overlay": "Suprapunere",
     "nav.recognition": "Recunoaștere",
+    "nav.snippets": "Snippets",
     "nav.text": "Text",
     "nav.updates": "Actualizări",
     // common.*
@@ -18,6 +19,7 @@ export const ro: Dict = {
     "common.confirm": "Confirmă",
     "common.delete": "Șterge",
     "common.empty_dict": "Dicționarul este gol.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Eroare: ",
     "common.export": "Exportă",
     "common.import": "Importă",
@@ -126,6 +128,20 @@ export const ro: Dict = {
     "dictionary.undo": "Anulează",
     "dictionary.removed": "Intrare eliminată",
     "dictionary.preview_text": "{total} intrări: {new} noi, {conflicts} vor fi suprapuse.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Șterge tot",
     "history.danger_hint": "Oprirea comutatorului păstrează înregistrările pe disc. „Dezactivează și șterge\" le elimină definitiv.",
@@ -178,8 +194,6 @@ export const ro: Dict = {
     "overlay.waveform": "Afișează forma de undă",
     // ovl.*
     "ovl.recording": "Înregistrare",
-    "ovl.listening": "Ascultare",
-    "ovl.working": "Procesare",
     "ovl.polishing": "Finalizare",
     "ovl.paste_failed": "Lipirea a eșuat — textul este în clipboard",
     "ovl.edit": "Editează",
@@ -215,7 +229,6 @@ export const ro: Dict = {
     "onboarding.hotkey_title": "Apasă tasta ta",
     "onboarding.hotkey_hint": "Aceasta este tasta apasă-pentru-a-vorbi. Ține-o apăsată oriunde ca să vorbești.",
     "onboarding.hotkey_capture": "Apasă o combinație de taste",
-    "onboarding.mic_title": "Apoi spune un cuvânt",
     "onboarding.mic_hint": "Să verificăm că microfonul tău funcționează.",
     "onboarding.mic_heard": "Te aud.",
     "onboarding.first_word_title": "Spune orice",
@@ -228,4 +241,7 @@ export const ro: Dict = {
     "onboarding.engine_error": "Pornirea motorului de vorbire a eșuat.",
     "onboarding.step": "Pasul {n} din 3",
 };
+
+
+
 

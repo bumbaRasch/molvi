@@ -145,8 +145,10 @@ impl ModelProgressEmitter {
         let last = self.last_emit_ms.load(Ordering::Relaxed);
         if should_emit(last, now) {
             self.last_emit_ms.store(now, Ordering::Relaxed);
-            // bytes ≤ total always → pct ∈ 0..=100; checked_div guards div-by-zero.
-            let pct = (bytes * 100).checked_div(self.total).unwrap_or(0);
+            // bytes ≤ total by contract → pct ∈ 0..=100; checked_div guards
+            // div-by-zero; .min(100) clamps a HF re-pack overshoot so the bar
+            // never exceeds full.
+            let pct = (bytes * 100).checked_div(self.total).unwrap_or(0).min(100);
             let _ = self.app.emit(
                 "model-download-progress",
                 serde_json::json!({ "model": self.model_id, "bytes": bytes, "total": self.total, "pct": pct }),
@@ -157,11 +159,28 @@ impl ModelProgressEmitter {
 
 impl ProgressHandler for ModelProgressEmitter {
     fn on_progress(&self, event: &ProgressEvent) {
-        // Single active file per download_file() call → files.last() is it.
-        if let ProgressEvent::Download(DownloadEvent::Progress { files }) = event
-            && let Some(f) = files.last()
-        {
-            self.emit(self.offset.saturating_add(f.bytes_completed));
+        // Two progress channels (hf-hub 1.0, progress.rs:268-300):
+        //  • `Progress { files }` — per-file delta; `files.last()` is the single
+        //    active file in a per-`download_file()` call.
+        //  • `AggregateProgress { bytes_completed }` — xet-batch cumulative bytes
+        //    (~10Hz), reported with no per-file breakdown. Large LFS weights
+        //    (e.g. the 2.4GB encoder.onnx.data) are typically xet-backed and
+        //    surface ONLY through this variant — handling it keeps the bar moving
+        //    instead of freezing for the whole multi-GB transfer. `bytes_completed`
+        //    is cumulative for the in-flight batch (= the one file molvi downloads
+        //    per call), so `offset + bytes_completed` is the grand cumulative.
+        match event {
+            ProgressEvent::Download(DownloadEvent::Progress { files }) => {
+                if let Some(f) = files.last() {
+                    self.emit(self.offset.saturating_add(f.bytes_completed));
+                }
+            }
+            ProgressEvent::Download(DownloadEvent::AggregateProgress {
+                bytes_completed, ..
+            }) => {
+                self.emit(self.offset.saturating_add(*bytes_completed));
+            }
+            _ => {}
         }
     }
 }
@@ -221,20 +240,18 @@ pub fn has_disk_space(needed: u64) -> Result<bool> {
     Ok(avail >= needed)
 }
 
-/// Non-windows stub keeps it linkable (the app is windows-only; this never
-/// runs). ponytail: one line, defensive.
-#[cfg(not(target_os = "windows"))]
-pub fn has_disk_space(_needed: u64) -> Result<bool> {
-    Ok(true)
-}
-
 /// Ensure the model is present on disk (download if missing), returning the
 /// model directory. `make_progress(cumulative_offset)` is called per file with
 /// the bytes already completed by prior files in the manifest; it returns an
 /// `Option<Progress>` the hf-hub async client drives (None = no progress
 /// reporting, e.g. the cold-start path that only signals start/complete via
-/// `engine-ready`/`engine-error`). Resume is handled by hf-hub's content cache
-/// when partial files exist.
+/// `engine-ready`/`engine-error`).
+///
+/// NOTE: `.local_dir` mode re-creates each file from scratch on failure (no
+/// HTTP Range resume — hf-hub's resume lives on the cache path, not local_dir).
+/// A dropped connection on the 2.4GB Nemotron weights restarts that file. The
+/// byte-exact cache check rejects any partial, so the next run re-downloads
+/// cleanly; correctness is never at risk, only bandwidth on a flaky link.
 pub async fn ensure_model(
     model_id: &str,
     make_progress: impl Fn(u64) -> Option<hf_hub::progress::Progress>,
@@ -257,8 +274,9 @@ pub async fn ensure_model(
     }
 
     tracing::info!("downloading model {model_id} from hf:{hf_owner}/{hf_name}");
+    // `.local_dir` is the download destination; the client's own cache_dir is
+    // not consulted in local-dir mode, so we don't set one (default suffices).
     let client = hf_hub::HFClientBuilder::new()
-        .cache_dir(base.join("_hf"))
         .build()
         .map_err(|e| MolviError::ModelStore(format!("hf client: {e}")))?;
     let repo = client.model(hf_owner, hf_name);

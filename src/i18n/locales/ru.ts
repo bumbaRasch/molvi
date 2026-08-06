@@ -9,6 +9,7 @@ export const ru: Dict = {
     "nav.microphone": "Микрофон",
     "nav.overlay": "Индикатор",
     "nav.recognition": "Распознавание",
+    "nav.snippets": "Сниппеты",
     "nav.text": "Текст",
     "nav.updates": "Обновления",
     // common.*
@@ -18,6 +19,7 @@ export const ru: Dict = {
     "common.confirm": "Подтвердить",
     "common.delete": "Удалить",
     "common.empty_dict": "Словарь пуст.",
+    "common.empty_snip": "Сниппетов пока нет.",
     "common.error_prefix": "Ошибка: ",
     "common.export": "Экспорт",
     "common.import": "Импорт",
@@ -126,6 +128,21 @@ export const ru: Dict = {
     "dictionary.undo": "Отменить",
     "dictionary.removed": "Запись удалена",
     "dictionary.preview_text": "{total} записей: {new} новых, {conflicts} будут заменены.",
+    // snippets.*
+    "snippets.added": "Сниппет добавлен.",
+    "snippets.cue": "Ключ",
+    "snippets.cue_ph": "слово, которое скажете",
+    "snippets.empty_cue": "Ключ не может быть пустым.",
+    "snippets.expansion": "Раскрытие",
+    "snippets.expansion_ph": "блок для вставки",
+    "snippets.exported": "Экспортировано.",
+    "snippets.filter": "Фильтр",
+    "snippets.filter_ph": "Фильтр сниппетов…",
+    "snippets.imported": "Импортировано.",
+    "snippets.removed": "Сниппет удалён",
+    "snippets.title": "Голосовые сниппеты",
+    "snippets.title_tip": "Произнесите слово-ключ, чтобы вставить сохранённый текстовый блок (подпись, адрес или шаблон). Вся диктовка должна точно совпадать с ключом. Импорт или экспорт в CSV или JSON.",
+    "snippets.undo": "Отменить",
     // history.*
     "history.clear_all": "Очистить всё",
     "history.danger_hint": "Выключение переключателя сохраняет записи на диске. «Отключить и стереть» удаляет их без возможности восстановления.",
@@ -178,8 +195,6 @@ export const ru: Dict = {
     "overlay.waveform": "Показывать волну",
     // ovl.*
     "ovl.recording": "Запись",
-    "ovl.listening": "Слушаю",
-    "ovl.working": "Обработка",
     "ovl.polishing": "Финализация",
     "ovl.paste_failed": "Вставка не удалась — текст в буфере обмена",
     "ovl.edit": "Изменить",
@@ -215,7 +230,6 @@ export const ru: Dict = {
     "onboarding.hotkey_title": "Нажмите Вашу клавишу",
     "onboarding.hotkey_hint": "Это Ваша клавиша push-to-talk. Удерживайте её где угодно, чтобы говорить.",
     "onboarding.hotkey_capture": "Нажмите сочетание клавиш",
-    "onboarding.mic_title": "Затем скажите слово",
     "onboarding.mic_hint": "Давайте проверим, что Ваш микрофон работает.",
     "onboarding.mic_heard": "Слышу Вас.",
     "onboarding.first_word_title": "Скажите что угодно",
@@ -228,4 +242,5 @@ export const ru: Dict = {
     "onboarding.engine_error": "Не удалось запустить речевой движок.",
     "onboarding.step": "Шаг {n} из 3",
 };
+
 

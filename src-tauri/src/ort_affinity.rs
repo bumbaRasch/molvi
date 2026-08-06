@@ -11,9 +11,7 @@ use windows::Win32::System::SystemInformation::{
     GetLogicalProcessorInformationEx, RelationProcessorCore,
     SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX,
 };
-use windows::Win32::System::Threading::{
-    GetCurrentProcess, GetProcessAffinityMask, SetProcessAffinityMask,
-};
+use windows::Win32::System::Threading::{GetCurrentProcess, SetProcessAffinityMask};
 
 /// Compute a process-affinity mask covering only P-cores (`EfficiencyClass ==
 /// 0`). Returns `None` when the CPU is homogeneous (no E-cores → affinity is
@@ -98,47 +96,34 @@ pub fn p_core_mask() -> Option<usize> {
     Some(mask)
 }
 
-/// Capture the current process affinity mask (all logical cores by default,
-/// before any pinning). Returned to `apply_for_engine` so Nemotron can restore
-/// the full set (P-core pinning is ~40% slower for Nemotron — Task-17 spike).
-/// `None` on any Win32 error (fail-open).
-pub fn capture_process_affinity() -> Option<usize> {
-    let mut proc_mask: usize = 0;
-    let mut sys_mask: usize = 0;
-    // SAFETY: GetCurrentProcess() returns a pseudo-handle valid for the calling
-    // process; both out-params are stack `usize` vars of the documented type
-    // (PDWORD_PTR = pointer to usize on x64).
-    let ok = unsafe { GetProcessAffinityMask(GetCurrentProcess(), &mut proc_mask, &mut sys_mask) };
-    if ok.is_ok() && proc_mask != 0 {
-        Some(proc_mask)
-    } else {
-        None
-    }
-}
-
-/// Apply the engine-appropriate process affinity:
-/// - Nemotron → restore `original_mask` (all logical cores; parakeet-rs uses
-///   the full 4P+4E set — measured ~40% faster than P-core pinning).
-/// - GigaAM (default) → P-cores (helps GigaAM, Task 5); fall back to
-///   `original_mask` if P-core detection fails. Fail-open on any Win32 error
-///   (warn + leave affinity as-is).
-pub fn apply_for_engine(original_mask: usize, is_nemotron: bool) {
-    let mask = if is_nemotron {
-        original_mask
-    } else {
-        p_core_mask().unwrap_or(original_mask)
-    };
-    if mask == 0 {
-        tracing::warn!("affinity mask resolved to 0; leaving affinity as-is");
+/// Apply the engine-appropriate process affinity, ONCE at startup:
+/// - Nemotron → leave affinity as-is. parakeet-rs uses the full 4P+4E set
+///   (P-core pinning is measured ~40% slower), so no `SetProcessAffinityMask`
+///   call is needed — the process already runs on all logical cores.
+/// - GigaAM (default) → P-cores (helps GigaAM). Fail-open (warn + leave as-is)
+///   on any Win32 error OR a homogeneous CPU (`p_core_mask` → None).
+///
+/// `apply_for_engine` is the ONLY `SetProcessAffinityMask` caller in the repo,
+/// runs once at startup, and an engine swap = `restart_app` (a fresh process
+/// re-runs this with the new engine). So there's no mid-process switch to undo
+/// — the previous "restore original mask for Nemotron" arm was a no-op (it set
+/// the mask to what it already was), and `capture_process_affinity` existed
+/// only to feed that no-op. Both are gone.
+pub fn apply_for_engine(is_nemotron: bool) {
+    if is_nemotron {
+        tracing::info!("process affinity: all-cores (nemotron — no pinning)");
         return;
     }
-    // SAFETY: SetProcessAffinityMask on the current process; `mask` is either
-    // the captured original (real topology) or a P-core mask computed from it.
+    let Some(mask) = p_core_mask() else {
+        tracing::info!("process affinity: homogeneous CPU (no E-cores), leaving as-is");
+        return;
+    };
+    // SAFETY: SetProcessAffinityMask on the current process; `mask` is a real
+    // P-core topology mask computed from GetLogicalProcessorInformationEx.
     // GetCurrentProcess() is always valid for the calling process.
     let ok = unsafe { SetProcessAffinityMask(GetCurrentProcess(), mask) };
     if ok.is_ok() {
-        let policy = if is_nemotron { "all-cores" } else { "p-cores" };
-        tracing::info!("process affinity set to {policy} (mask=0x{mask:X})");
+        tracing::info!("process affinity set to p-cores (mask=0x{mask:X})");
     } else {
         tracing::warn!("SetProcessAffinityMask failed; affinity unchanged");
     }
@@ -154,16 +139,6 @@ mod tests {
     #[test]
     fn p_core_mask_is_some_or_none_gracefully() {
         if let Some(m) = p_core_mask() {
-            assert_ne!(m, 0);
-        }
-    }
-
-    /// `capture_process_affinity` reads the live process mask. Always `Some`
-    /// (non-zero) on a real Windows process; never panics. Mirrors the
-    /// p_core_mask smoke test's fail-open contract.
-    #[test]
-    fn capture_process_affinity_smoke() {
-        if let Some(m) = capture_process_affinity() {
             assert_ne!(m, 0);
         }
     }

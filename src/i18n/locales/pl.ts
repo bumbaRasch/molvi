@@ -9,6 +9,7 @@ export const pl: Dict = {
     "nav.microphone": "Mikrofon",
     "nav.overlay": "Nakładka",
     "nav.recognition": "Rozpoznawanie",
+    "nav.snippets": "Snippets",
     "nav.text": "Tekst",
     "nav.updates": "Aktualizacje",
     // common.*
@@ -18,6 +19,7 @@ export const pl: Dict = {
     "common.confirm": "Potwierdź",
     "common.delete": "Usuń",
     "common.empty_dict": "Słownik jest pusty.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Błąd: ",
     "common.export": "Eksportuj",
     "common.import": "Importuj",
@@ -126,6 +128,20 @@ export const pl: Dict = {
     "dictionary.undo": "Cofnij",
     "dictionary.removed": "Wpis usunięty",
     "dictionary.preview_text": "{total} wpisów: {new} nowych, {conflicts} zostanie zastąpionych.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Wyczyść wszystko",
     "history.danger_hint": "Wyłączenie przełącznika zachowuje wpisy na dysku. „Wyłącz i usuń” usuwa je bezpowrotnie.",
@@ -178,8 +194,6 @@ export const pl: Dict = {
     "overlay.waveform": "Pokaż przebieg fali",
     // ovl.*
     "ovl.recording": "Nagrywanie",
-    "ovl.listening": "Nasłuchiwanie",
-    "ovl.working": "Przetwarzanie",
     "ovl.polishing": "Finalizacja",
     "ovl.paste_failed": "Wklejenie nie powiodło się — tekst jest w schowku",
     "ovl.edit": "Edytuj",
@@ -215,7 +229,6 @@ export const pl: Dict = {
     "onboarding.hotkey_title": "Naciśnij swój klawisz",
     "onboarding.hotkey_hint": "To jest Twój klawisz naciśnij-i-mów. Przytrzymaj go wszędzie, aby mówić.",
     "onboarding.hotkey_capture": "Naciśnij kombinację klawiszy",
-    "onboarding.mic_title": "Potem powiedz słowo",
     "onboarding.mic_hint": "Sprawdźmy, czy Twój mikrofon działa.",
     "onboarding.mic_heard": "Słyszę Cię.",
     "onboarding.first_word_title": "Powiedz cokolwiek",
@@ -228,4 +241,7 @@ export const pl: Dict = {
     "onboarding.engine_error": "Nie udało się uruchomić silnika mowy.",
     "onboarding.step": "Krok {n} z 3",
 };
+
+
+
 

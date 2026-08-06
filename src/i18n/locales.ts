@@ -44,4 +44,4 @@ export const locales: Record<Lang, Dict> = {
   ar, bg, cs, da, de, el, en, es, et, fi, fr, he, hi, hr, hu, it, ja, ko, lt, lv, mt, nb, nl, nn, pl, pt, ro, ru, sk, sl, sv, th, tr, uk, vi, zh,
 };
 
-export type { Lang, Dict } from "./types";
+export type { Lang } from "./types";

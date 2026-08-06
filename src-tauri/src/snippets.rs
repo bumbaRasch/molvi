@@ -23,12 +23,13 @@ pub struct SnippetEntry {
 
 pub struct Snippets {
     conn: Connection,
-    // Mutex is required, not over-spec'd: spec §6.5.5 has the Smart pipeline
-    // call `expand()` from the finalize side-thread while CRUD (add/remove)
-    // invalidates `cache` on the IPC thread (spec §5) -> genuine cross-thread
-    // access to `cache`. Don't "simplify" to a RefCell: that would race. (The
-    // bare `conn` stays IPC-thread-only; only `cache` crosses.) Key is the
-    // lowercased cue; value is the expansion.
+    // Both `conn` and `cache` are reached from the finalize side-thread: Smart
+    // `expand()` calls `list()` (→ conn) on a cold cache, then builds `cache`.
+    // CRUD (add/remove) runs on the IPC thread and invalidates `cache`. The
+    // outer `Arc<Mutex<Snippets>>` serializes ALL access; this inner Mutex
+    // guards `cache` across threads + enables the `&self` CRUD/expand API.
+    // (Mirrors `dictionary.rs` exactly.) Key is the lowercased cue; value is
+    // the expansion.
     cache: Mutex<Option<HashMap<String, String>>>,
 }
 
@@ -68,6 +69,11 @@ impl Snippets {
     }
 
     pub fn add(&self, cue: &str, expansion: &str) -> Result<()> {
+        // Reject empty/whitespace-only cues: a "" cue would whole-text-match an
+        // empty transcript. Silent no-op (mirrors dictionary's empty-entry guard).
+        if cue.trim().is_empty() {
+            return Ok(());
+        }
         let now = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
             .map(|d| d.as_millis() as i64)

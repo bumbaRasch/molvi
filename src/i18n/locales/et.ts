@@ -9,6 +9,7 @@ export const et: Dict = {
     "nav.microphone": "Mikrofon",
     "nav.overlay": "Ülekate",
     "nav.recognition": "Tuvastamine",
+    "nav.snippets": "Snippets",
     "nav.text": "Tekst",
     "nav.updates": "Uuendused",
     // common.*
@@ -18,6 +19,7 @@ export const et: Dict = {
     "common.confirm": "Kinnita",
     "common.delete": "Kustuta",
     "common.empty_dict": "Sõnastik on tühi.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Viga: ",
     "common.export": "Ekspordi",
     "common.import": "Impordi",
@@ -126,6 +128,20 @@ export const et: Dict = {
     "dictionary.undo": "Võta tagasi",
     "dictionary.removed": "Kirje eemaldatud",
     "dictionary.preview_text": "{total} kirjet: {new} uut, {conflicts} kirjutatakse üle.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Tühjenda kõik",
     "history.danger_hint": "Lüliti väljalülitamine jätab kirjed kettale. „Keela ja kustuta\" eemaldab need taastamatult.",
@@ -178,8 +194,6 @@ export const et: Dict = {
     "overlay.waveform": "Kuva lainekuju",
     // ovl.*
     "ovl.recording": "Salvestamine",
-    "ovl.listening": "Kuulamine",
-    "ovl.working": "Töötlemine",
     "ovl.polishing": "Viimistlemine",
     "ovl.paste_failed": "Kleepimine ebaõnnestus — tekst on lõikelauas",
     "ovl.edit": "Muuda",
@@ -215,7 +229,6 @@ export const et: Dict = {
     "onboarding.hotkey_title": "Vajutage oma klahvi",
     "onboarding.hotkey_hint": "See on Teie vajuta-et-räägi klahv. Hoidke seda kõjal, et rääkida.",
     "onboarding.hotkey_capture": "Vajutage klahvikombinatsiooni",
-    "onboarding.mic_title": "Seejärel ütle sõna",
     "onboarding.mic_hint": "Vaatame, kas Teie mikrofon töötab.",
     "onboarding.mic_heard": "Kuulen Teid.",
     "onboarding.first_word_title": "Ütle midagi",
@@ -228,4 +241,7 @@ export const et: Dict = {
     "onboarding.engine_error": "Kõnetuvastusmootorit ei õnnestunud käivitada.",
     "onboarding.step": "Samm {n} kokku 3-st",
 };
+
+
+
 

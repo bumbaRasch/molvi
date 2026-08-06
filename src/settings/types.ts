@@ -10,8 +10,7 @@ export type RecognitionMode = "push_to_talk" | "toggle" | "command";
 export type PostMode = "raw" | "smart" | "polished";
 
 // ponytail: phase3 mirror of settings.rs CommandModeSettings + ProfileEntry.
-// Unread until Task 5 / Task 8; alive here so the R4 invariant (TS mirrors
-// settings.rs EXACTLY) holds the moment the Rust types land.
+// Consumed by commands.rs / profiles.rs (Tasks 5/7/8).
 export interface CommandModeSettings {
   enabled: boolean;
   hotkey: string | null;
@@ -114,6 +113,14 @@ export interface DictEntry {
   created_at: number;
 }
 
+// Snippets IPC row (snippet_list payload) — mirrors src-tauri/src/snippets.rs.
+// cue = the spoken trigger word; expansion = the stored block pasted on a
+// whole-text match. (No created_at — the snippets table doesn't track it.)
+export interface SnippetEntry {
+  cue: string;
+  expansion: string;
+}
+
 // Dictionary import-preview IPC row (dictionary_import_preview payload).
 export interface ImportPreview {
   path: string;
@@ -139,6 +146,14 @@ export interface ModelStatus {
   model_id: string;
   cached: boolean;
   size_bytes: number;
+}
+
+// Update-check IPC row (check_update payload) — mirrors src-tauri/src/updater.rs
+// `CheckResult`. snake_case wire format; NOT a Settings field (R4 unaffected).
+export interface CheckResult {
+  up_to_date: boolean;
+  version: string | null;
+  current_version: string;
 }
 
 export type State = { settings: Settings | null };

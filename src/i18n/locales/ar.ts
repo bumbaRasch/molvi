@@ -9,6 +9,7 @@ export const ar: Dict = {
     "nav.microphone": "الميكروفون",
     "nav.overlay": "المؤشر",
     "nav.recognition": "التعرّف",
+    "nav.snippets": "Snippets",
     "nav.text": "النص",
     "nav.updates": "التحديثات",
     // common.*
@@ -18,6 +19,7 @@ export const ar: Dict = {
     "common.confirm": "تأكيد",
     "common.delete": "حذف",
     "common.empty_dict": "القاموس فارغ.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "خطأ: ",
     "common.export": "تصدير",
     "common.import": "استيراد",
@@ -126,6 +128,20 @@ export const ar: Dict = {
     "dictionary.undo": "تراجع",
     "dictionary.removed": "تم حذف المدخل",
     "dictionary.preview_text": "{total} مدخل: {new} جديد، سيتم استبدال {conflicts}.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "مسح الكل",
     "history.danger_hint": "إيقاف التبديل يُبقي السجلات على القرص. يؤدي «تعطيل وحذف» إلى إزالتها نهائيًا.",
@@ -178,8 +194,6 @@ export const ar: Dict = {
     "overlay.waveform": "إظهار الموجة",
     // ovl.*
     "ovl.recording": "تسجيل",
-    "ovl.listening": "يستمع",
-    "ovl.working": "قيد المعالجة",
     "ovl.polishing": "اللمسات الأخيرة",
     "ovl.paste_failed": "فشل اللصق — النص موجود في الحافظة",
     "ovl.edit": "تحرير",
@@ -215,7 +229,6 @@ export const ar: Dict = {
     "onboarding.hotkey_title": "اضغط مفتاحك",
     "onboarding.hotkey_hint": "هذا مفتاح الضغط للتكلم. اضغط مع الاستمرار في أي مكان للتحدث.",
     "onboarding.hotkey_capture": "اضغط مجموعة مفاتيح",
-    "onboarding.mic_title": "ثم انطق كلمة",
     "onboarding.mic_hint": "لنتحقق أن الميكروفون يعمل.",
     "onboarding.mic_heard": "أسمعك.",
     "onboarding.first_word_title": "قل أي شيء",
@@ -228,4 +241,7 @@ export const ar: Dict = {
     "onboarding.engine_error": "تعذّر تشغيل محرك الكلام.",
     "onboarding.step": "الخطوة {n} من 3",
 };
+
+
+
 

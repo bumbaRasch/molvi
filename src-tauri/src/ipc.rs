@@ -22,18 +22,18 @@ use crate::settings::Settings;
 // ── Format dispatch (dictionary import/export) ──
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum DictFormat {
+enum ImportFormat {
     Csv,
     Json,
 }
 
 /// Map a user-picked file path to its dictionary format. Returns None for
 /// unknown/missing extensions — caller surfaces an error to the UI.
-fn dict_format_for_path(path: &std::path::Path) -> Option<DictFormat> {
+fn import_format_for_path(path: &std::path::Path) -> Option<ImportFormat> {
     let ext = path.extension()?.to_str()?.to_ascii_lowercase();
     match ext.as_str() {
-        "csv" => Some(DictFormat::Csv),
-        "json" => Some(DictFormat::Json),
+        "csv" => Some(ImportFormat::Csv),
+        "json" => Some(ImportFormat::Json),
         _ => None,
     }
 }
@@ -103,10 +103,11 @@ pub async fn set_settings(
     // R3 + R2 live-apply: history.enabled flip.
     if old_hist_enabled != settings.history.enabled {
         let mut g = state.history.lock().unwrap();
+        // history.enabled flip is fully live: AppPipeline reads the writer
+        // fresh from AppState at each finalize, so disabling stops new
+        // recordings on the next dictation and enabling persists them — both
+        // without a restart. IPC queries also work immediately either way.
         if settings.history.enabled {
-            // ponytail: AppPipeline's writer copy stays None until next launch
-            // — mid-session enable makes IPC queries work immediately but new
-            // recordings aren't persisted until restart (R2 known limitation).
             match crate::history::History::open(&settings.history) {
                 Ok(h) => {
                     *g = Some(Arc::new(h));
@@ -179,7 +180,7 @@ pub async fn dictionary_import_preview(
     let Some(path) = pick_open_path(&app) else {
         return Ok(None); // user cancelled the picker
     };
-    if dict_format_for_path(&path).is_none() {
+    if import_format_for_path(&path).is_none() {
         return Err(MolviError::Dictionary(
             "unsupported format (use .csv or .json)".into(),
         ));
@@ -201,13 +202,13 @@ pub async fn dictionary_import_apply(
     path: String,
 ) -> Result<(), MolviError> {
     let p = std::path::Path::new(&path);
-    let fmt = dict_format_for_path(p)
+    let fmt = import_format_for_path(p)
         .ok_or_else(|| MolviError::Dictionary("unsupported format (use .csv or .json)".into()))?;
     let d = state.dictionary.lock().unwrap();
     let before = d.list()?.len();
     match fmt {
-        DictFormat::Csv => d.import_csv(p)?,
-        DictFormat::Json => d.import_json(p)?,
+        ImportFormat::Csv => d.import_csv(p)?,
+        ImportFormat::Json => d.import_json(p)?,
     }
     let after = d.list()?.len();
     tracing::info!(
@@ -225,15 +226,88 @@ pub async fn dictionary_export(
     let Some(path) = pick_save_path(&app) else {
         return Ok(()); // user cancelled
     };
-    let fmt = dict_format_for_path(&path)
+    let fmt = import_format_for_path(&path)
         .ok_or_else(|| MolviError::Dictionary("unsupported format (use .csv or .json)".into()))?;
     let d = state.dictionary.lock().unwrap();
     let count = d.list()?.len();
     match fmt {
-        DictFormat::Csv => d.export_csv(&path)?,
-        DictFormat::Json => d.export_json(&path)?,
+        ImportFormat::Csv => d.export_csv(&path)?,
+        ImportFormat::Json => d.export_json(&path)?,
     }
     tracing::info!("dictionary: exported {} entries", count);
+    Ok(())
+}
+
+// ── Snippets ──
+// Voice-cue → stored-block expansion (mirrors the Dictionary IPC shape). The
+// store + `expand()` Smart-step already exist; these commands make it
+// user-populable. Privacy §10.1: logs carry counts only — never cue/expansion.
+
+#[tauri::command]
+pub async fn snippet_list(
+    state: State<'_, AppState>,
+) -> Result<Vec<crate::snippets::SnippetEntry>, MolviError> {
+    let list = state.snippets.lock().unwrap().list()?;
+    tracing::info!("snippets: list returned {} entries", list.len());
+    Ok(list)
+}
+
+#[tauri::command]
+pub async fn snippet_add(
+    state: State<'_, AppState>,
+    cue: String,
+    expansion: String,
+) -> Result<(), MolviError> {
+    state.snippets.lock().unwrap().add(&cue, &expansion)?;
+    tracing::info!("snippets: add");
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn snippet_remove(state: State<'_, AppState>, cue: String) -> Result<(), MolviError> {
+    state.snippets.lock().unwrap().remove(&cue)?;
+    tracing::info!("snippets: remove");
+    Ok(())
+}
+
+/// Atomic import (pick → apply), no preview. Snippets are small-scale
+/// (signatures/addresses); the dictionary's 2-IPC preview split is dictionary-
+/// scale polish. YAGNI here — add a preview if users ever import en masse.
+#[tauri::command]
+pub async fn snippet_import(app: AppHandle, state: State<'_, AppState>) -> Result<(), MolviError> {
+    let Some(path) = pick_open_path(&app) else {
+        return Ok(()); // user cancelled the picker
+    };
+    let fmt = import_format_for_path(&path)
+        .ok_or_else(|| MolviError::Snippet("unsupported format (use .csv or .json)".into()))?;
+    let s = state.snippets.lock().unwrap();
+    let before = s.list()?.len();
+    match fmt {
+        ImportFormat::Csv => s.import_csv(&path)?,
+        ImportFormat::Json => s.import_json(&path)?,
+    }
+    let after = s.list()?.len();
+    tracing::info!(
+        "snippets: imported {} entries",
+        after.saturating_sub(before)
+    );
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn snippet_export(app: AppHandle, state: State<'_, AppState>) -> Result<(), MolviError> {
+    let Some(path) = pick_save_path(&app) else {
+        return Ok(()); // user cancelled
+    };
+    let fmt = import_format_for_path(&path)
+        .ok_or_else(|| MolviError::Snippet("unsupported format (use .csv or .json)".into()))?;
+    let s = state.snippets.lock().unwrap();
+    let count = s.list()?.len();
+    match fmt {
+        ImportFormat::Csv => s.export_csv(&path)?,
+        ImportFormat::Json => s.export_json(&path)?,
+    }
+    tracing::info!("snippets: exported {} entries", count);
     Ok(())
 }
 
@@ -442,7 +516,7 @@ pub fn complete_onboarding(app: AppHandle, state: State<'_, AppState>) -> Result
 fn pick_open_path(app: &AppHandle) -> Option<PathBuf> {
     app.dialog()
         .file()
-        .add_filter("Dictionary", &["csv", "json"])
+        .add_filter("CSV/JSON", &["csv", "json"])
         .blocking_pick_file()
         .and_then(|p| p.into_path().ok())
 }
@@ -450,7 +524,7 @@ fn pick_open_path(app: &AppHandle) -> Option<PathBuf> {
 fn pick_save_path(app: &AppHandle) -> Option<PathBuf> {
     app.dialog()
         .file()
-        .add_filter("Dictionary", &["csv", "json"])
+        .add_filter("CSV/JSON", &["csv", "json"])
         .blocking_save_file()
         .and_then(|p| p.into_path().ok())
 }
@@ -462,7 +536,7 @@ pub async fn pick_sound_file(app: AppHandle) -> Result<Option<String>, MolviErro
     let path = app
         .dialog()
         .file()
-        .add_filter("Звук", &["wav"])
+        .add_filter("WAV", &["wav"])
         .blocking_pick_file()
         .and_then(|p| p.into_path().ok());
     Ok(path.map(|p| p.to_string_lossy().into_owned()))
@@ -555,19 +629,19 @@ mod tests {
     #[test]
     fn dict_format_dispatch() {
         assert_eq!(
-            dict_format_for_path(std::path::Path::new("a.csv")),
-            Some(DictFormat::Csv)
+            import_format_for_path(std::path::Path::new("a.csv")),
+            Some(ImportFormat::Csv)
         );
         assert_eq!(
-            dict_format_for_path(std::path::Path::new("a.json")),
-            Some(DictFormat::Json)
+            import_format_for_path(std::path::Path::new("a.json")),
+            Some(ImportFormat::Json)
         );
         assert_eq!(
-            dict_format_for_path(std::path::Path::new("a.CSV")),
-            Some(DictFormat::Csv)
+            import_format_for_path(std::path::Path::new("a.CSV")),
+            Some(ImportFormat::Csv)
         );
-        assert_eq!(dict_format_for_path(std::path::Path::new("a.txt")), None);
-        assert_eq!(dict_format_for_path(std::path::Path::new("noext")), None);
+        assert_eq!(import_format_for_path(std::path::Path::new("a.txt")), None);
+        assert_eq!(import_format_for_path(std::path::Path::new("noext")), None);
     }
 
     #[test]

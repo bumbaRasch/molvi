@@ -9,6 +9,7 @@ export const lv: Dict = {
     "nav.microphone": "Mikrofons",
     "nav.overlay": "Pārklājums",
     "nav.recognition": "Atpazīšana",
+    "nav.snippets": "Snippets",
     "nav.text": "Teksts",
     "nav.updates": "Atjauninājumi",
     // common.*
@@ -18,6 +19,7 @@ export const lv: Dict = {
     "common.confirm": "Apstiprināt",
     "common.delete": "Dzēst",
     "common.empty_dict": "Vārdnīca ir tukša.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Kļūda: ",
     "common.export": "Eksportēt",
     "common.import": "Importēt",
@@ -126,6 +128,20 @@ export const lv: Dict = {
     "dictionary.undo": "Atsaukt",
     "dictionary.removed": "Ieraksts noņemts",
     "dictionary.preview_text": "{total} ieraksti: {new} jauni, {conflicts} tiks pārrakstīti.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Notīrīt visu",
     "history.danger_hint": "Pārslēdzēja izslēgšana patur ierakstus diskā. „Atspējot un dzēst\" noņem tos neatgriezeniski.",
@@ -178,8 +194,6 @@ export const lv: Dict = {
     "overlay.waveform": "Rādīt viļņformu",
     // ovl.*
     "ovl.recording": "Ieraksta",
-    "ovl.listening": "Klausās",
-    "ovl.working": "Apstrādā",
     "ovl.polishing": "Pabeidz",
     "ovl.paste_failed": "Ielīmēšana neizdevās — teksts ir starpliktuvē",
     "ovl.edit": "Rediģēt",
@@ -215,7 +229,6 @@ export const lv: Dict = {
     "onboarding.hotkey_title": "Nospiediet savu taustiņu",
     "onboarding.hotkey_hint": "Šis ir Jūsu spied-runā taustiņš. Turiet to jebkur, lai runātu.",
     "onboarding.hotkey_capture": "Nospiediet taustiņu kombināciju",
-    "onboarding.mic_title": "Tad pasakiet vārdu",
     "onboarding.mic_hint": "Pārbaudīsim, vai Jūsu mikrofons darbojas.",
     "onboarding.mic_heard": "Dzirdu Jūs.",
     "onboarding.first_word_title": "Sakiet kaut ko",
@@ -228,4 +241,7 @@ export const lv: Dict = {
     "onboarding.engine_error": "Neizdevās startēt runas dzinēju.",
     "onboarding.step": "{n}. solis no 3",
 };
+
+
+
 

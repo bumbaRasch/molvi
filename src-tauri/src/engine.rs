@@ -299,6 +299,11 @@ fn worker_loop(
                         "Start during active session (ignored)"
                     );
                 } else {
+                    // Clear the resampler's FFT overlap + leftover from the
+                    // previous session so the first output frames are clean
+                    // (not the prior utterance's attenuated ~10ms tail). No-op
+                    // on the 16k passthrough path.
+                    resampler.reset();
                     session = Some(Session {
                         on_partial,
                         frame_buf: Vec::with_capacity(VAD_FRAME * 4),

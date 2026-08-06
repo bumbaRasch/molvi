@@ -9,6 +9,7 @@ export const th: Dict = {
     "nav.microphone": "ไมโครโฟน",
     "nav.overlay": "ตัวบ่งชี้",
     "nav.recognition": "การจดจำ",
+    "nav.snippets": "Snippets",
     "nav.text": "ข้อความ",
     "nav.updates": "การอัปเดต",
     // common.*
@@ -18,6 +19,7 @@ export const th: Dict = {
     "common.confirm": "ยืนยัน",
     "common.delete": "ลบ",
     "common.empty_dict": "พจนานุกรมว่าง",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "ข้อผิดพลาด: ",
     "common.export": "ส่งออก",
     "common.import": "นำเข้า",
@@ -126,6 +128,20 @@ export const th: Dict = {
     "dictionary.undo": "เลิกทำ",
     "dictionary.removed": "ลบรายการแล้ว",
     "dictionary.preview_text": "{total} รายการ: ใหม่ {new} รายการ จะเขียนทับ {conflicts} รายการ",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "ล้างทั้งหมด",
     "history.danger_hint": "การปิดสวิตช์จะเก็บรายการไว้ในดิสก์ \u201cปิดและลบ\u201d จะลบทิ้งโดยกู้คืนไม่ได้",
@@ -178,8 +194,6 @@ export const th: Dict = {
     "overlay.waveform": "แสดงรูปคลื่น",
     // ovl.*
     "ovl.recording": "กำลังบันทึก",
-    "ovl.listening": "กำลังฟัง",
-    "ovl.working": "กำลังประมวลผล",
     "ovl.polishing": "กำลังขัดเกลา",
     "ovl.paste_failed": "วางไม่สำเร็จ — ข้อความอยู่ในคลิปบอร์ด",
     "ovl.edit": "แก้ไข",
@@ -215,7 +229,6 @@ export const th: Dict = {
     "onboarding.hotkey_title": "กดปุ่มของคุณ",
     "onboarding.hotkey_hint": "นี่คือปุ่มกดค้างเพื่อพูด กดค้างไว้ที่ใดก็ได้เพื่อพูด",
     "onboarding.hotkey_capture": "กดการผสมปุ่ม",
-    "onboarding.mic_title": "แล้วพูดหนึ่งคำ",
     "onboarding.mic_hint": "มาตรวจสอบกันว่าไมโครโฟนของคุณใช้งานได้",
     "onboarding.mic_heard": "ได้ยินแล้ว",
     "onboarding.first_word_title": "พูดอะไรก็ได้",
@@ -228,4 +241,7 @@ export const th: Dict = {
     "onboarding.engine_error": "เริ่มเอนจินเสียงพูดไม่ได้",
     "onboarding.step": "ขั้นที่ {n} จาก 3",
 };
+
+
+
 

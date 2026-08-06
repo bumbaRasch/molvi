@@ -2,12 +2,9 @@ import { invoke } from "@tauri-apps/api/core";
 import { getVersion } from "@tauri-apps/api/app";
 
 import { Button, SettingsGroup, Toggle, toast } from "../ui";
-import type { SectionBuilder } from "../types";
+import type { CheckResult, SectionBuilder } from "../types";
 import { errText, patcher } from "../persist";
 import { t } from "../../i18n";
-
-// Update-check IPC contract (mirrors `CheckResult` in src-tauri/src/updater.rs).
-type CheckResult = { up_to_date: boolean; version: string | null; current_version: string };
 
 export const buildUpdates: SectionBuilder = (store) => {
   const patch = patcher(store);

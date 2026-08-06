@@ -9,6 +9,7 @@ export const he: Dict = {
     "nav.microphone": "מיקרופון",
     "nav.overlay": "חיווי",
     "nav.recognition": "זיהוי",
+    "nav.snippets": "Snippets",
     "nav.text": "טקסט",
     "nav.updates": "עדכונים",
     // common.*
@@ -18,6 +19,7 @@ export const he: Dict = {
     "common.confirm": "אישור",
     "common.delete": "מחיקה",
     "common.empty_dict": "המילון ריק.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "שגיאה: ",
     "common.export": "ייצוא",
     "common.import": "ייבוא",
@@ -126,6 +128,20 @@ export const he: Dict = {
     "dictionary.undo": "בטל",
     "dictionary.removed": "רשומה הוסרה",
     "dictionary.preview_text": "{total} רשומות: {new} חדשות, {conflicts} יוחלפו.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "ניקוי הכל",
     "history.danger_hint": "כיבוי המתג משאיר רשומות בכונן. \u201cהשבת ומחק\u201d מסיר אותן לצמיתות.",
@@ -178,8 +194,6 @@ export const he: Dict = {
     "overlay.waveform": "הצגת צורת גל",
     // ovl.*
     "ovl.recording": "מקליט",
-    "ovl.listening": "מאזין",
-    "ovl.working": "מעבד",
     "ovl.polishing": "מסיים",
     "ovl.paste_failed": "ההדבקה נכשלה — הטקסט בלוח הגזירה",
     "ovl.edit": "עריכה",
@@ -215,7 +229,6 @@ export const he: Dict = {
     "onboarding.hotkey_title": "לחץ את המקש שלך",
     "onboarding.hotkey_hint": "זהו מקש הלחץ-כדי-לדבר. לחץ אותו בכל מקום כדי לדבר.",
     "onboarding.hotkey_capture": "לחץ צירוף מקשים",
-    "onboarding.mic_title": "אז אמור מילה",
     "onboarding.mic_hint": "בוא נבדוק שהמיקרופון שלך עובד.",
     "onboarding.mic_heard": "אני שומע אותך.",
     "onboarding.first_word_title": "אמור משהו",
@@ -228,4 +241,7 @@ export const he: Dict = {
     "onboarding.engine_error": "לא הצליח להפעיל את מנוע הדיבור.",
     "onboarding.step": "שלב {n} מתוך 3",
 };
+
+
+
 

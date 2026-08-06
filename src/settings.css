@@ -14,7 +14,6 @@
   --on-accent: #FFFFFF;
 
   /* Semantic — STATUS ONLY, never decoration (Fluent rule) */
-  --recording: #DC2626;   /* live indicator */
   --success: #16A34A;
   --warning: #D97706;
   --destructive: #DC2626; /* Clear all, Disable & erase */
@@ -236,31 +235,6 @@ textarea:focus-visible {
   text-align: end;
 }
 
-/* SettingRow: grid — label | (control + help). */
-.setting-row {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 12px;
-  align-items: start;
-  padding-block: 8px;
-}
-
-.setting-row .row-label {
-  padding-block-start: 6px;
-  font-weight: 500;
-}
-
-.setting-row .row-control {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.setting-row .help {
-  color: var(--muted);
-  font-size: 13px;
-}
-
 /* ── Buttons ───────────────────────────────────────────────────────────── */
 
 .btn {
@@ -365,11 +339,6 @@ textarea:focus-visible {
 
 .alert.error {
   border-color: var(--destructive);
-}
-
-/* Error host: only takes vertical space when it actually holds an alert. */
-.alert-host:not(:empty) {
-  margin-block-end: 16px;
 }
 
 /* ── Utilities ─────────────────────────────────────────────────────────── */
@@ -531,7 +500,7 @@ details.advanced[open] > summary {
   justify-content: space-between;
   gap: 8px;
   padding-block: 6px;
-  border-bottom: 1px solid var(--border);
+  border-block-end: 1px solid var(--border);
 }
 
 .dic-pair {

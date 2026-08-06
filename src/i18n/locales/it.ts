@@ -9,6 +9,7 @@ export const it: Dict = {
     "nav.microphone": "Microfono",
     "nav.overlay": "Sovrapposizione",
     "nav.recognition": "Riconoscimento",
+    "nav.snippets": "Snippets",
     "nav.text": "Testo",
     "nav.updates": "Aggiornamenti",
     // common.*
@@ -18,6 +19,7 @@ export const it: Dict = {
     "common.confirm": "Conferma",
     "common.delete": "Elimina",
     "common.empty_dict": "Il dizionario è vuoto.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Errore: ",
     "common.export": "Esporta",
     "common.import": "Importa",
@@ -126,6 +128,20 @@ export const it: Dict = {
     "dictionary.undo": "Annulla",
     "dictionary.removed": "Voce rimossa",
     "dictionary.preview_text": "{total} voci: {new} nuove, {conflicts} saranno sovrascritte.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Cancella tutto",
     "history.danger_hint": "Disattivare l'interruttore mantiene le voci sul disco. \"Disattiva ed elimina\" le rimuove in modo irreversibile.",
@@ -178,8 +194,6 @@ export const it: Dict = {
     "overlay.waveform": "Mostra forma d'onda",
     // ovl.*
     "ovl.recording": "Registrazione",
-    "ovl.listening": "In ascolto",
-    "ovl.working": "Elaborazione",
     "ovl.polishing": "Finalizzazione",
     "ovl.paste_failed": "Incollaggio non riuscito — il testo è negli appunti",
     "ovl.edit": "Modifica",
@@ -215,7 +229,6 @@ export const it: Dict = {
     "onboarding.hotkey_title": "Premi il tuo tasto",
     "onboarding.hotkey_hint": "Questo è il tuo tasto premi-per-parlare. Tienilo premuto ovunque per parlare.",
     "onboarding.hotkey_capture": "Premi una combinazione di tasti",
-    "onboarding.mic_title": "Poi dì una parola",
     "onboarding.mic_hint": "Verifichiamo che il microfono funzioni.",
     "onboarding.mic_heard": "Ti sento.",
     "onboarding.first_word_title": "Di' qualsiasi cosa",
@@ -228,4 +241,7 @@ export const it: Dict = {
     "onboarding.engine_error": "Impossibile avviare il motore vocale.",
     "onboarding.step": "Passo {n} di 3",
 };
+
+
+
 

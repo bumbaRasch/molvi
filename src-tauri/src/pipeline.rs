@@ -16,7 +16,6 @@ use crate::coordinator::{Command, Pipeline};
 use crate::dictionary::Dictionary;
 use crate::engine::{AutoStopConfig, EngineCmd, EngineHandle};
 use crate::errors::Result;
-use crate::history::History;
 use crate::settings::{PostMode, ProfileEntry, RecognitionMode, Settings};
 use crate::{overlay, paste};
 
@@ -45,7 +44,6 @@ pub struct AppPipeline {
     /// Snippet store forwarded to the finalize side-thread for the Smart-step
     /// `expand()` (Task 8b). Same shape as `dictionary` — see AppState doc.
     snippets: Arc<Mutex<crate::snippets::Snippets>>,
-    history: Option<Arc<History>>,
     // Capture run-state single source of truth. `session_active` is AtomicBool
     // because `finalize_session` is `&self` (interior mutability); `preview` is
     // plain bool (only ever set via `mic_preview(&mut self)`). Capture runs iff
@@ -56,11 +54,9 @@ pub struct AppPipeline {
 }
 
 impl AppPipeline {
-    // ponytail: 8 params — clippy wants a builder/struct bag, but this mirrors
-    // the established AppPipeline::new shape (one positional arg per owned
-    // dependency) and the brief mandates the exact signature. A bag struct for
-    // two new fields is unrequested abstraction.
-    #[allow(clippy::too_many_arguments)]
+    // ponytail: 7 params — one positional arg per owned dependency; mirrors the
+    // established AppPipeline::new shape. A bag struct for these is unrequested
+    // abstraction.
     pub fn new(
         app: AppHandle,
         audio: AudioCapture,
@@ -69,7 +65,6 @@ impl AppPipeline {
         cmd_tx: mpsc::Sender<Command>,
         dictionary: Arc<Mutex<Dictionary>>,
         snippets: Arc<Mutex<crate::snippets::Snippets>>,
-        history: Option<Arc<History>>,
     ) -> Self {
         Self {
             app,
@@ -82,7 +77,6 @@ impl AppPipeline {
             generation: Arc::new(AtomicU32::new(0)),
             dictionary,
             snippets,
-            history,
             session_active: AtomicBool::new(false),
             preview: false,
         }
@@ -217,7 +211,17 @@ impl Pipeline for AppPipeline {
         let snippets = self.snippets.clone();
         let snippets_enabled = self.settings.snippets_enabled;
         let backtrack = self.settings.backtrack_parsing;
-        let history = self.history.clone();
+        // Read history LIVE from AppState (not a construction-time clone) so a
+        // mid-session enable/disable in `ipc::set_settings` takes effect on the
+        // NEXT finalize. Privacy §10.1: the Arc is dropped here the instant
+        // AppState sets it to None.
+        let history = self
+            .app
+            .state::<crate::AppState>()
+            .history
+            .lock()
+            .unwrap()
+            .clone();
         // Apply the resolved per-app profile's post_mode + prompt override for
         // this session (None → noop → global post-proc stands). Applied BEFORE
         // the move so the side thread sees the effective config. Pure helper;

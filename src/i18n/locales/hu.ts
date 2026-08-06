@@ -9,6 +9,7 @@ export const hu: Dict = {
     "nav.microphone": "Mikrofon",
     "nav.overlay": "Átfedés",
     "nav.recognition": "Felismerés",
+    "nav.snippets": "Snippets",
     "nav.text": "Szöveg",
     "nav.updates": "Frissítések",
     // common.*
@@ -18,6 +19,7 @@ export const hu: Dict = {
     "common.confirm": "Megerősítés",
     "common.delete": "Törlés",
     "common.empty_dict": "A szótár üres.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Hiba: ",
     "common.export": "Exportálás",
     "common.import": "Importálás",
@@ -126,6 +128,20 @@ export const hu: Dict = {
     "dictionary.undo": "Visszavonás",
     "dictionary.removed": "Bejegyzés eltávolítva",
     "dictionary.preview_text": "{total} bejegyzés: {new} új, {conflicts} felülrírásra kerül.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Összes törlése",
     "history.danger_hint": "A kapcsoló kikapcsolása megtartja a bejegyzéseket a lemezen. A „Letiltás és törlés\" visszavonhatatlanul eltávolítja őket.",
@@ -178,8 +194,6 @@ export const hu: Dict = {
     "overlay.waveform": "Hullámforma megjelenítése",
     // ovl.*
     "ovl.recording": "Felvétel",
-    "ovl.listening": "Hallgatás",
-    "ovl.working": "Feldolgozás",
     "ovl.polishing": "Véglegesítés",
     "ovl.paste_failed": "Beillesztés sikertelen — a szöveg a vágólapon van",
     "ovl.edit": "Szerkesztés",
@@ -215,7 +229,6 @@ export const hu: Dict = {
     "onboarding.hotkey_title": "Nyomja le a gombját",
     "onboarding.hotkey_hint": "Ez a nyomva tartva beszél gombja. Tartsa lenyomva bárhol, hogy beszéljen.",
     "onboarding.hotkey_capture": "Nyomjon le egy billentyűkombinációt",
-    "onboarding.mic_title": "Mondjon egy szót",
     "onboarding.mic_hint": "Ellenőrizzük, hogy a mikrofonja működik.",
     "onboarding.mic_heard": "Hallom.",
     "onboarding.first_word_title": "Mondjon bármit",
@@ -228,4 +241,7 @@ export const hu: Dict = {
     "onboarding.engine_error": "Nem sikerült elindítani a beszédmotort.",
     "onboarding.step": "{n}. lépés a 3-ból",
 };
+
+
+
 

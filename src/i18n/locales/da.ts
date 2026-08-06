@@ -9,6 +9,7 @@ export const da: Dict = {
     "nav.microphone": "Mikrofon",
     "nav.overlay": "Overlejring",
     "nav.recognition": "Genkendelse",
+    "nav.snippets": "Snippets",
     "nav.text": "Tekst",
     "nav.updates": "Opdateringer",
     // common.*
@@ -18,6 +19,7 @@ export const da: Dict = {
     "common.confirm": "Bekræft",
     "common.delete": "Slet",
     "common.empty_dict": "Ordlisten er tom.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Fejl: ",
     "common.export": "Eksporter",
     "common.import": "Importer",
@@ -126,6 +128,20 @@ export const da: Dict = {
     "dictionary.undo": "Fortryd",
     "dictionary.removed": "Post fjernet",
     "dictionary.preview_text": "{total} poster: {new} nye, {conflicts} bliver overskrevet.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Ryd alt",
     "history.danger_hint": "At slå kontakten fra beholder poster på disken. \"Deaktiver og slet\" fjerner dem permanent.",
@@ -178,8 +194,6 @@ export const da: Dict = {
     "overlay.waveform": "Vis bølgeform",
     // ovl.*
     "ovl.recording": "Optager",
-    "ovl.listening": "Lytter",
-    "ovl.working": "Behandler",
     "ovl.polishing": "Færdiggør",
     "ovl.paste_failed": "Indsættelse mislykkedes — teksten er i udklipsholderen",
     "ovl.edit": "Rediger",
@@ -215,7 +229,6 @@ export const da: Dict = {
     "onboarding.hotkey_title": "Tryk på din tast",
     "onboarding.hotkey_hint": "Dette er din tryk-for-at-tale-tast. Hold den nede hvor som helst for at tale.",
     "onboarding.hotkey_capture": "Tryk på en tastekombination",
-    "onboarding.mic_title": "Sig så et ord",
     "onboarding.mic_hint": "Lad os tjekke at din mikrofon virker.",
     "onboarding.mic_heard": "Jeg hører dig.",
     "onboarding.first_word_title": "Sig hvad som helst",
@@ -228,4 +241,7 @@ export const da: Dict = {
     "onboarding.engine_error": "Kunne ikke starte talemotoren.",
     "onboarding.step": "Trin {n} af 3",
 };
+
+
+
 

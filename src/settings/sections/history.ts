@@ -312,7 +312,15 @@ export const buildHistory: SectionBuilder = (store) => {
 
     // ── inner closures (capture search / offset / listHost / moreBtn) ──
 
+    // Race guard: rapid filter/offset changes can resolve out-of-order (a slow
+    // prior query landing after a newer one). `querySeq` stamps each query; a
+    // resolve whose stamp is stale is dropped before rendering. Same pattern as
+    // federated-search.ts. Local SQLite is sub-ms so this rarely fires, but it
+    // guarantees the list never briefly shows superseded rows.
+    let querySeq = 0;
+
     async function query(append: boolean): Promise<void> {
+      const mine = ++querySeq;
       let rows: HistoryRow[] = [];
       try {
         rows = await invoke<HistoryRow[]>("history_query", {
@@ -323,6 +331,7 @@ export const buildHistory: SectionBuilder = (store) => {
         showActionError(e);
         return;
       }
+      if (mine !== querySeq) return; // a newer query superseded this one
       if (!append) listHost.replaceChildren();
       renderRows(rows);
       // ponytail: «more» visibility is a "last page was a full PAGE_SIZE" heuristic —

@@ -9,6 +9,7 @@ export const cs: Dict = {
     "nav.microphone": "Mikrofon",
     "nav.overlay": "Překryv",
     "nav.recognition": "Rozpoznávání",
+    "nav.snippets": "Snippets",
     "nav.text": "Text",
     "nav.updates": "Aktualizace",
     // common.*
@@ -18,6 +19,7 @@ export const cs: Dict = {
     "common.confirm": "Potvrdit",
     "common.delete": "Smazat",
     "common.empty_dict": "Slovník je prázdný.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Chyba: ",
     "common.export": "Exportovat",
     "common.import": "Importovat",
@@ -126,6 +128,20 @@ export const cs: Dict = {
     "dictionary.undo": "Zpět",
     "dictionary.removed": "Položka odstraněna",
     "dictionary.preview_text": "{total} položek: {new} nových, {conflicts} bude přepsáno.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Smazat vše",
     "history.danger_hint": "Vypnutím přepínače zůstanou záznamy na disku. „Deaktivovat a smazat“ je odstraní nenávratně.",
@@ -178,8 +194,6 @@ export const cs: Dict = {
     "overlay.waveform": "Zobrazit průběh",
     // ovl.*
     "ovl.recording": "Nahrávání",
-    "ovl.listening": "Naslouchá",
-    "ovl.working": "Zpracování",
     "ovl.polishing": "Dokončování",
     "ovl.paste_failed": "Vložení selhalo — text je ve schránce",
     "ovl.edit": "Upravit",
@@ -215,7 +229,6 @@ export const cs: Dict = {
     "onboarding.hotkey_title": "Zmáčkněte svou klávesu",
     "onboarding.hotkey_hint": "Toto je Vaše klávesa pro diktování. Podržte ji kdekoli a mluvte.",
     "onboarding.hotkey_capture": "Zmáčkněte kombinaci kláves",
-    "onboarding.mic_title": "Pak řekněte slovo",
     "onboarding.mic_hint": "Ověřme, že Váš mikrofon funguje.",
     "onboarding.mic_heard": "Slyším Vás.",
     "onboarding.first_word_title": "Řekněte cokoliv",
@@ -228,4 +241,7 @@ export const cs: Dict = {
     "onboarding.engine_error": "Nepodařilo se spustit engine pro řeč.",
     "onboarding.step": "Krok {n} ze 3",
 };
+
+
+
 

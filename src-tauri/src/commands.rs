@@ -31,7 +31,7 @@ pub struct KeyChord {
 // Diacritics (é/ü/ñ) are NOT folded: Nemotron emits them correctly for FR/DE/ES.
 // If smoke shows poor FR/DE/ES match rates, folding via char::decompose / a
 // small accent-fold map is the recall knob (add it here, table stays as-is).
-pub fn normalize(input: &str) -> String {
+fn normalize(input: &str) -> String {
     let lowered = input.to_lowercase();
     let folded = lowered.replace('ё', "е");
     // ponytail: split_whitespace().join(' ') trims AND collapses runs in one

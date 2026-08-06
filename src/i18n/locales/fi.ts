@@ -9,6 +9,7 @@ export const fi: Dict = {
     "nav.microphone": "Mikrofoni",
     "nav.overlay": "Peite",
     "nav.recognition": "Tunnistus",
+    "nav.snippets": "Snippets",
     "nav.text": "Teksti",
     "nav.updates": "Päivitykset",
     // common.*
@@ -18,6 +19,7 @@ export const fi: Dict = {
     "common.confirm": "Vahvista",
     "common.delete": "Poista",
     "common.empty_dict": "Sanakirja on tyhjä.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Virhe: ",
     "common.export": "Vie",
     "common.import": "Tuo",
@@ -126,6 +128,20 @@ export const fi: Dict = {
     "dictionary.undo": "Kumoa",
     "dictionary.removed": "Merkintä poistettu",
     "dictionary.preview_text": "{total} merkintää: {new} uutta, {conflicts} korvataan.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Tyhjennä kaikki",
     "history.danger_hint": "Kytkimen sammuttaminen säilyttää merkinnät levyllä. \"Poista käytöstä ja pyyhi\" poistaa ne pysyvästi.",
@@ -178,8 +194,6 @@ export const fi: Dict = {
     "overlay.waveform": "Näytä aaltomuoto",
     // ovl.*
     "ovl.recording": "Tallennetaan",
-    "ovl.listening": "Kuunnellaan",
-    "ovl.working": "Käsitellään",
     "ovl.polishing": "Viimeistellään",
     "ovl.paste_failed": "Liittäminen epäonnistui — teksti on leikepöydällä",
     "ovl.edit": "Muokkaa",
@@ -215,7 +229,6 @@ export const fi: Dict = {
     "onboarding.hotkey_title": "Paina näppäintäsi",
     "onboarding.hotkey_hint": "Tämä on paina-puhu -näppäimesi. Pidä se alhaalla puhuaksesi missä vain.",
     "onboarding.hotkey_capture": "Paina näppäinyhdistelmää",
-    "onboarding.mic_title": "Sano sitten sana",
     "onboarding.mic_hint": "Tarkistetaan, että mikrofonisi toimii.",
     "onboarding.mic_heard": "Kuulen sinua.",
     "onboarding.first_word_title": "Sano mitä tahansa",
@@ -228,4 +241,7 @@ export const fi: Dict = {
     "onboarding.engine_error": "Puhemoottoria ei voitu käynnistää.",
     "onboarding.step": "Vaihe {n} / 3",
 };
+
+
+
 

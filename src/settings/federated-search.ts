@@ -13,7 +13,7 @@ import { getCurrentLang, t } from "../i18n";
 // would show immediately at smoke). Keywords are language-neutral technical
 // terms; titles come from nav.<id> (localized).
 const SECTIONS = [
-  "recognition", "microphone", "text", "dictionary",
+  "recognition", "microphone", "text", "dictionary", "snippets",
   "history", "hotkey", "overlay", "updates", "about",
 ] as const;
 
@@ -22,6 +22,7 @@ const KEYWORDS: Record<string, string[]> = {
   microphone: ["mic", "device", "noise", "input", "level", "preview"],
   text: ["paste", "clipboard", "replace", "type", "polish", "smart", "raw", "mode"],
   dictionary: ["entry", "replacement", "word", "correct", "expand"],
+  snippets: ["snippet", "cue", "expansion", "macro", "signature", "boilerplate", "template"],
   history: ["history", "log", "record", "retention", "entries", "days", "erase"],
   hotkey: ["hotkey", "ptt", "push-to-talk", "alt", "shortcut", "altgr"],
   overlay: ["overlay", "caption", "bubble", "edit", "paste-failed"],

@@ -14,7 +14,7 @@ let pending: Settings | null = null;
 // "Saved" toast per 2s. Errors are NOT throttled (immediate feedback wanted).
 let lastSuccessAt = 0;
 
-export function persist(store: SettingsStore, next: Settings): void {
+function persist(store: SettingsStore, next: Settings): void {
   store.set({ settings: next });
   pending = next;
   if (timer) clearTimeout(timer);

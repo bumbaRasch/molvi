@@ -9,6 +9,7 @@ export const sv: Dict = {
     "nav.microphone": "Mikrofon",
     "nav.overlay": "Överlagring",
     "nav.recognition": "Igenkänning",
+    "nav.snippets": "Snippets",
     "nav.text": "Text",
     "nav.updates": "Uppdateringar",
     // common.*
@@ -18,6 +19,7 @@ export const sv: Dict = {
     "common.confirm": "Bekräfta",
     "common.delete": "Ta bort",
     "common.empty_dict": "Ordlistan är tom.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Fel: ",
     "common.export": "Exportera",
     "common.import": "Importera",
@@ -126,6 +128,20 @@ export const sv: Dict = {
     "dictionary.undo": "Ångra",
     "dictionary.removed": "Post borttagen",
     "dictionary.preview_text": "{total} poster: {new} nya, {conflicts} skrivs över.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Rensa allt",
     "history.danger_hint": "Att slå av reglaget behåller poster på disken. \"Inaktivera och radera\" tar bort dem permanent.",
@@ -178,8 +194,6 @@ export const sv: Dict = {
     "overlay.waveform": "Visa vågform",
     // ovl.*
     "ovl.recording": "Spelar in",
-    "ovl.listening": "Lyssnar",
-    "ovl.working": "Bearbetar",
     "ovl.polishing": "Slutför",
     "ovl.paste_failed": "Inklistring misslyckades — texten finns i urklipp",
     "ovl.edit": "Redigera",
@@ -215,7 +229,6 @@ export const sv: Dict = {
     "onboarding.hotkey_title": "Tryck ned din tangent",
     "onboarding.hotkey_hint": "Detta är din tryck-för-att-tala-tangent. Håll den nedtryckt var som helst för att tala.",
     "onboarding.hotkey_capture": "Tryck en tangentkombination",
-    "onboarding.mic_title": "Säg sedan ett ord",
     "onboarding.mic_hint": "Låt oss kontrollera att din mikrofon fungerar.",
     "onboarding.mic_heard": "Jag hör dig.",
     "onboarding.first_word_title": "Säg vad som helst",
@@ -228,4 +241,7 @@ export const sv: Dict = {
     "onboarding.engine_error": "Kunde inte starta talmotorn.",
     "onboarding.step": "Steg {n} av 3",
 };
+
+
+
 

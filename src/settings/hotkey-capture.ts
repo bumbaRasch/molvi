@@ -6,7 +6,7 @@
 
 // R6: serialize to the vocabulary Rust's binding.parse expects
 // ("Alt+`", "Ctrl+Space", "Alt+Shift+F2", "Ctrl+Alt+`").
-export function serialize(ev: KeyboardEvent): string {
+function serialize(ev: KeyboardEvent): string {
   const mods: string[] = [];
   if (ev.ctrlKey) mods.push("Ctrl");
   if (ev.altKey) mods.push("Alt");

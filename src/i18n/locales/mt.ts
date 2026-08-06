@@ -9,6 +9,7 @@ export const mt: Dict = {
     "nav.microphone": "Mikrofonu",
     "nav.overlay": "Sovrappożizzjoni",
     "nav.recognition": "Rikonoxximent",
+    "nav.snippets": "Snippets",
     "nav.text": "Test",
     "nav.updates": "Aġġornamenti",
     // common.*
@@ -18,6 +19,7 @@ export const mt: Dict = {
     "common.confirm": "Ikkonferma",
     "common.delete": "Ħassar",
     "common.empty_dict": "Id-dizzjunarju huwa vojt.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Żball: ",
     "common.export": "Esporta",
     "common.import": "Importa",
@@ -126,6 +128,20 @@ export const mt: Dict = {
     "dictionary.undo": "Neħħi",
     "dictionary.removed": "Dħul imneħħi",
     "dictionary.preview_text": "{total} dħul: {new} ġodda, {conflicts} se jitbiddlu.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Ħassar kollox",
     "history.danger_hint": "It-tifrik tal-bidla jżomm l-entrati fuq id-disk. \"Iddiżattiva u ħassar\" jneħħihom bla ritorn.",
@@ -178,8 +194,6 @@ export const mt: Dict = {
     "overlay.waveform": "Uri l-forma tal-mewġa",
     // ovl.*
     "ovl.recording": "Qiegħed jirrekordja",
-    "ovl.listening": "Qiegħed jisma'",
-    "ovl.working": "Qiegħed jipproċessa",
     "ovl.polishing": "Qiegħed jiffinalizza",
     "ovl.paste_failed": "Il-paste ma rnexxix — it-test huwa fil-clipboard",
     "ovl.edit": "Editja",
@@ -215,7 +229,6 @@ export const mt: Dict = {
     "onboarding.hotkey_title": "Agħfas il-buttuna tiegħek",
     "onboarding.hotkey_hint": "Din hija l-buttuna pressjona-biex-titkellem. Żommha mkemmxa kull fejn biex titkellem.",
     "onboarding.hotkey_capture": "Agħfas kombinazzjoni ta' tasti",
-    "onboarding.mic_title": "Imbagħad għid kelma",
     "onboarding.mic_hint": "Ejja nivverifikaw li l-mikrofown tiegħek jaħdem.",
     "onboarding.mic_heard": "Qiegħed nismagħek.",
     "onboarding.first_word_title": "Għid xi ħaġa",
@@ -228,4 +241,7 @@ export const mt: Dict = {
     "onboarding.engine_error": "Ma setax jibda l-engine tal-vuċi.",
     "onboarding.step": "Pass {n} minn 3",
 };
+
+
+
 

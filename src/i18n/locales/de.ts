@@ -9,6 +9,7 @@ export const de: Dict = {
     "nav.microphone": "Mikrofon",
     "nav.overlay": "Overlay",
     "nav.recognition": "Erkennung",
+    "nav.snippets": "Snippets",
     "nav.text": "Text",
     "nav.updates": "Updates",
     // common.*
@@ -18,6 +19,7 @@ export const de: Dict = {
     "common.confirm": "Bestätigen",
     "common.delete": "Löschen",
     "common.empty_dict": "Wörterbuch ist leer.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Fehler: ",
     "common.export": "Exportieren",
     "common.import": "Importieren",
@@ -126,6 +128,20 @@ export const de: Dict = {
     "dictionary.undo": "Rückgängig",
     "dictionary.removed": "Eintrag entfernt",
     "dictionary.preview_text": "{total} Einträge: {new} neu, {conflicts} werden überschrieben.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Alle löschen",
     "history.danger_hint": "Das Ausschalten des Schalters behält die Einträge auf dem Datenträger. \"Deaktivieren und löschen\" entfernt sie unwiderruflich.",
@@ -178,8 +194,6 @@ export const de: Dict = {
     "overlay.waveform": "Waveform anzeigen",
     // ovl.*
     "ovl.recording": "Aufnahme",
-    "ovl.listening": "Lauschen",
-    "ovl.working": "Verarbeitung",
     "ovl.polishing": "Finalisierung",
     "ovl.paste_failed": "Einfügen fehlgeschlagen — Text ist in der Zwischenablage",
     "ovl.edit": "Bearbeiten",
@@ -215,7 +229,6 @@ export const de: Dict = {
     "onboarding.hotkey_title": "Drücken Sie Ihre Taste",
     "onboarding.hotkey_hint": "Dies ist Ihre Drücken-um-Sprechen-Taste. Halten Sie sie überall gedrückt, um zu sprechen.",
     "onboarding.hotkey_capture": "Drücken Sie eine Tastenkombination",
-    "onboarding.mic_title": "Sagen Sie dann ein Wort",
     "onboarding.mic_hint": "Prüfen wir, ob Ihr Mikrofon funktioniert.",
     "onboarding.mic_heard": "Ich höre Sie.",
     "onboarding.first_word_title": "Sagen Sie irgendetwas",
@@ -228,4 +241,7 @@ export const de: Dict = {
     "onboarding.engine_error": "Sprach-Engine konnte nicht gestartet werden.",
     "onboarding.step": "Schritt {n} von 3",
 };
+
+
+
 

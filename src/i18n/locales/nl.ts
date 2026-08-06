@@ -9,6 +9,7 @@ export const nl: Dict = {
     "nav.microphone": "Microfoon",
     "nav.overlay": "Overlay",
     "nav.recognition": "Herkenning",
+    "nav.snippets": "Snippets",
     "nav.text": "Tekst",
     "nav.updates": "Updates",
     // common.*
@@ -18,6 +19,7 @@ export const nl: Dict = {
     "common.confirm": "Bevestigen",
     "common.delete": "Verwijderen",
     "common.empty_dict": "Woordenboek is leeg.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Fout: ",
     "common.export": "Exporteren",
     "common.import": "Importeren",
@@ -126,6 +128,20 @@ export const nl: Dict = {
     "dictionary.undo": "Ongedaan maken",
     "dictionary.removed": "Vermelding verwijderd",
     "dictionary.preview_text": "{total} vermeldingen: {new} nieuw, {conflicts} worden overschreven.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Alles wissen",
     "history.danger_hint": "De schakelaar uitzetten behoudt vermeldingen op schijf. \"Uitschakelen en wissen\" verwijdert ze onherroepelijk.",
@@ -178,8 +194,6 @@ export const nl: Dict = {
     "overlay.waveform": "Golfvorm tonen",
     // ovl.*
     "ovl.recording": "Opname",
-    "ovl.listening": "Luistert",
-    "ovl.working": "Verwerken",
     "ovl.polishing": "Afronden",
     "ovl.paste_failed": "Plakken mislukt — tekst staat in het klembord",
     "ovl.edit": "Bewerken",
@@ -215,7 +229,6 @@ export const nl: Dict = {
     "onboarding.hotkey_title": "Druk op uw toets",
     "onboarding.hotkey_hint": "Dit is uw druk-om-te-praten-toets. Houd hem overal ingedrukt om te spreken.",
     "onboarding.hotkey_capture": "Druk een toetsencombinatie",
-    "onboarding.mic_title": "Zeg dan een woord",
     "onboarding.mic_hint": "Laten we controleren of uw microfoon werkt.",
     "onboarding.mic_heard": "Ik hoor u.",
     "onboarding.first_word_title": "Zeg maar wat",
@@ -228,4 +241,7 @@ export const nl: Dict = {
     "onboarding.engine_error": "Kon de spraakengine niet starten.",
     "onboarding.step": "Stap {n} van 3",
 };
+
+
+
 

@@ -9,6 +9,7 @@ export const ko: Dict = {
     "nav.microphone": "마이크",
     "nav.overlay": "오버레이",
     "nav.recognition": "인식",
+    "nav.snippets": "Snippets",
     "nav.text": "텍스트",
     "nav.updates": "업데이트",
     // common.*
@@ -18,6 +19,7 @@ export const ko: Dict = {
     "common.confirm": "확인",
     "common.delete": "삭제",
     "common.empty_dict": "사전이 비어 있습니다.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "오류: ",
     "common.export": "내보내기",
     "common.import": "가져오기",
@@ -126,6 +128,20 @@ export const ko: Dict = {
     "dictionary.undo": "실행 취소",
     "dictionary.removed": "항목이 삭제됨",
     "dictionary.preview_text": "항목 {total}개: 새 항목 {new}개, {conflicts}개를 덮어씁니다.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "모두 지우기",
     "history.danger_hint": "토글을 끄면 항목이 디스크에 보관됩니다. \u201c비활성화 및 삭제\u201d는 복구할 수 없게 제거합니다.",
@@ -178,8 +194,6 @@ export const ko: Dict = {
     "overlay.waveform": "파형 표시",
     // ovl.*
     "ovl.recording": "녹음 중",
-    "ovl.listening": "듣는 중",
-    "ovl.working": "처리 중",
     "ovl.polishing": "마무리 중",
     "ovl.paste_failed": "붙여넣기 실패 — 텍스트가 클립보드에 있습니다",
     "ovl.edit": "편집",
@@ -215,7 +229,6 @@ export const ko: Dict = {
     "onboarding.hotkey_title": "키를 누르세요",
     "onboarding.hotkey_hint": "눌러서 말하기 키입니다. 어디서나 누른 채로 말하세요.",
     "onboarding.hotkey_capture": "키 조합을 누르세요",
-    "onboarding.mic_title": "그다음 한 단어를 말하세요",
     "onboarding.mic_hint": "마이크가 작동하는지 확인합시다.",
     "onboarding.mic_heard": "잘 들려요.",
     "onboarding.first_word_title": "아무 말이나 하세요",
@@ -228,4 +241,7 @@ export const ko: Dict = {
     "onboarding.engine_error": "음성 엔진을 시작할 수 없습니다.",
     "onboarding.step": "{n} / 3 단계",
 };
+
+
+
 

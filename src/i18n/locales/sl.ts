@@ -9,6 +9,7 @@ export const sl: Dict = {
     "nav.microphone": "Mikrofon",
     "nav.overlay": "Prekrivanje",
     "nav.recognition": "Prepoznavanje",
+    "nav.snippets": "Snippets",
     "nav.text": "Besedilo",
     "nav.updates": "Posodobitve",
     // common.*
@@ -18,6 +19,7 @@ export const sl: Dict = {
     "common.confirm": "Potrdi",
     "common.delete": "Izbriši",
     "common.empty_dict": "Slovar je prazen.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Napaka: ",
     "common.export": "Izvozi",
     "common.import": "Uvozi",
@@ -126,6 +128,20 @@ export const sl: Dict = {
     "dictionary.undo": "Razveljavi",
     "dictionary.removed": "Vnos odstranjen",
     "dictionary.preview_text": "{total} vnosov: {new} novih, {conflicts} bo prepisanih.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Počisti vse",
     "history.danger_hint": "Izklop stikala ohrani vnose na disku. »Onemogoči in izbriši« jih odstrani trajno.",
@@ -178,8 +194,6 @@ export const sl: Dict = {
     "overlay.waveform": "Prikaži valovno obliko",
     // ovl.*
     "ovl.recording": "Snemanje",
-    "ovl.listening": "Poslušanje",
-    "ovl.working": "Obdelava",
     "ovl.polishing": "Dokončevanje",
     "ovl.paste_failed": "Lepljenje ni uspelo — besedilo je v odložišču",
     "ovl.edit": "Uredi",
@@ -215,7 +229,6 @@ export const sl: Dict = {
     "onboarding.hotkey_title": "Pritisnite svojo tipko",
     "onboarding.hotkey_hint": "To je Vaša tipka pritisni-za-govor. Držite jo povsod, da govorite.",
     "onboarding.hotkey_capture": "Pritisnite kombinacijo tipk",
-    "onboarding.mic_title": "Nato recite besedo",
     "onboarding.mic_hint": "Preverimo, ali Vaš mikrofon deluje.",
     "onboarding.mic_heard": "Slišim Vas.",
     "onboarding.first_word_title": "Recite kar koli",
@@ -228,4 +241,7 @@ export const sl: Dict = {
     "onboarding.engine_error": "Govornega motorja ni mogoče zagnati.",
     "onboarding.step": "Korak {n} od 3",
 };
+
+
+
 

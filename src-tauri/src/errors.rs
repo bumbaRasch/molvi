@@ -14,12 +14,6 @@ pub enum MolviError {
     #[error("audio: {0}")]
     Audio(String),
 
-    // ponytail: phase3 error categories. Command → Task 5 grammar parse,
-    // Profile → Task 8 per-app profiles, Snippet → Task 6 snippet engine.
-    // Same String payload shape as every sibling (io/serde/sqlite metadata).
-    #[error("command: {0}")]
-    Command(String),
-
     #[error("engine: {0}")]
     Engine(String),
 
@@ -40,9 +34,6 @@ pub enum MolviError {
 
     #[error("dictionary: {0}")]
     Dictionary(String),
-
-    #[error("post-proc: {0}")]
-    PostProc(String),
 
     #[error("profile: {0}")]
     Profile(String),

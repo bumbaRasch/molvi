@@ -22,6 +22,12 @@ let engineReady = false;
 let micLevelUnlisten: UnlistenFn | null = null;
 let streamUnlisten: UnlistenFn | null = null;
 let resultUnlisten: UnlistenFn | null = null;
+// engine-ready/error fire from the bg thread at any time; capture their handles
+// so complete() can tear them down alongside the step-scoped listeners (the
+// onboarding window is hidden, not destroyed, but keeping cleanup symmetric
+// avoids a latent leak if its lifecycle ever changes).
+let engineReadyUnlisten: UnlistenFn | null = null;
+let engineErrorUnlisten: UnlistenFn | null = null;
 
 // ── i18n ──
 function applyTranslations(): void {
@@ -181,6 +187,8 @@ async function complete(): Promise<void> {
   if (micLevelUnlisten) { micLevelUnlisten(); micLevelUnlisten = null; }
   if (streamUnlisten) { streamUnlisten(); streamUnlisten = null; }
   if (resultUnlisten) { resultUnlisten(); resultUnlisten = null; }
+  if (engineReadyUnlisten) { engineReadyUnlisten(); engineReadyUnlisten = null; }
+  if (engineErrorUnlisten) { engineErrorUnlisten(); engineErrorUnlisten = null; }
   await invoke("set_onboarding_practice", { enabled: false }).catch(() => undefined);
   await invoke("set_mic_preview", { enabled: false }).catch(() => undefined);
   await invoke("complete_onboarding").catch((e) => console.error("complete_onboarding", e));
@@ -193,8 +201,8 @@ async function init(): Promise<void> {
   applyTranslations();
 
   // Wire engine-ready/error first — the bg thread may fire either at any time.
-  void listen("engine-ready", () => void onEngineReady());
-  void listen("engine-error", () => onEngineError());
+  engineReadyUnlisten = await listen("engine-ready", () => void onEngineReady());
+  engineErrorUnlisten = await listen("engine-error", () => onEngineError());
 
   // Initial step indicator + rail.
   document.querySelectorAll<HTMLElement>(".seg").forEach((el) => {

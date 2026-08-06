@@ -9,6 +9,7 @@ export const uk: Dict = {
     "nav.microphone": "Мікрофон",
     "nav.overlay": "Індикатор",
     "nav.recognition": "Розпізнавання",
+    "nav.snippets": "Snippets",
     "nav.text": "Текст",
     "nav.updates": "Оновлення",
     // common.*
@@ -18,6 +19,7 @@ export const uk: Dict = {
     "common.confirm": "Підтвердити",
     "common.delete": "Видалити",
     "common.empty_dict": "Словник порожній.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Помилка: ",
     "common.export": "Експорт",
     "common.import": "Імпорт",
@@ -126,6 +128,20 @@ export const uk: Dict = {
     "dictionary.undo": "Скасувати",
     "dictionary.removed": "Запис видалено",
     "dictionary.preview_text": "{total} записів: {new} нових, {conflicts} буде перезаписано.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Очистити все",
     "history.danger_hint": "Вимкнення перемикача зберігає записи на диску. «Вимкнути та стерти» видаляє їх безповоротно.",
@@ -178,8 +194,6 @@ export const uk: Dict = {
     "overlay.waveform": "Показувати хвилю",
     // ovl.*
     "ovl.recording": "Запис",
-    "ovl.listening": "Слухаю",
-    "ovl.working": "Обробка",
     "ovl.polishing": "Фіналізація",
     "ovl.paste_failed": "Вставлення не вдалося — текст у буфері обміну",
     "ovl.edit": "Редагувати",
@@ -215,7 +229,6 @@ export const uk: Dict = {
     "onboarding.hotkey_title": "Натисніть Вашу клавішу",
     "onboarding.hotkey_hint": "Це Ваша клавіша push-to-talk. Утримуйте її будь-де, щоб говорити.",
     "onboarding.hotkey_capture": "Натисніть комбінацію клавіш",
-    "onboarding.mic_title": "Потім скажіть слово",
     "onboarding.mic_hint": "Перевіримо, що Ваш мікрофон працює.",
     "onboarding.mic_heard": "Чую Вас.",
     "onboarding.first_word_title": "Скажіть будь-що",
@@ -228,4 +241,7 @@ export const uk: Dict = {
     "onboarding.engine_error": "Не вдалося запустити мовленнєвий рушій.",
     "onboarding.step": "Крок {n} із 3",
 };
+
+
+
 

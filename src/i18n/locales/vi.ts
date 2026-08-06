@@ -9,6 +9,7 @@ export const vi: Dict = {
     "nav.microphone": "Micrô",
     "nav.overlay": "Lớp phủ",
     "nav.recognition": "Nhận dạng",
+    "nav.snippets": "Snippets",
     "nav.text": "Văn bản",
     "nav.updates": "Bản cập nhật",
     // common.*
@@ -18,6 +19,7 @@ export const vi: Dict = {
     "common.confirm": "Xác nhận",
     "common.delete": "Xóa",
     "common.empty_dict": "Từ điển trống.",
+    "common.empty_snip": "No snippets yet.",
     "common.error_prefix": "Lỗi: ",
     "common.export": "Xuất",
     "common.import": "Nhập",
@@ -126,6 +128,20 @@ export const vi: Dict = {
     "dictionary.undo": "Hoàn tác",
     "dictionary.removed": "Đã xóa mục",
     "dictionary.preview_text": "{total} mục: {new} mới, {conflicts} sẽ bị ghi đè.",
+    "snippets.added": "Added.",
+    "snippets.cue": "Cue",
+    "snippets.cue_ph": "the word you'll say",
+    "snippets.empty_cue": "Cue cannot be empty.",
+    "snippets.expansion": "Expansion",
+    "snippets.expansion_ph": "the block to paste",
+    "snippets.exported": "Exported.",
+    "snippets.filter": "Filter",
+    "snippets.filter_ph": "Filter snippets…",
+    "snippets.imported": "Imported.",
+    "snippets.removed": "Snippet removed",
+    "snippets.title": "Voice snippets",
+    "snippets.title_tip": "Speak a cue word to paste a stored text block (a signature, address, or boilerplate). The whole dictation must equal the cue exactly. Import or export as CSV or JSON.",
+    "snippets.undo": "Undo",
     // history.*
     "history.clear_all": "Xóa tất cả",
     "history.danger_hint": "Tắt công tắc vẫn giữ các mục trên ổ đĩa. \u201cVô hiệu hóa và xóa\u201d sẽ xóa vĩnh viễn không thể khôi phục.",
@@ -178,8 +194,6 @@ export const vi: Dict = {
     "overlay.waveform": "Hiện dạng sóng",
     // ovl.*
     "ovl.recording": "Đang ghi",
-    "ovl.listening": "Đang nghe",
-    "ovl.working": "Đang xử lý",
     "ovl.polishing": "Đang hoàn thiện",
     "ovl.paste_failed": "Dán thất bại — văn bản nằm trong clipboard",
     "ovl.edit": "Chỉnh sửa",
@@ -215,7 +229,6 @@ export const vi: Dict = {
     "onboarding.hotkey_title": "Nhấn phím của bạn",
     "onboarding.hotkey_hint": "Đây là phím nhấn-để-nói. Giữ nó ở bất cứ đâu để nói.",
     "onboarding.hotkey_capture": "Nhấn một tổ hợp phím",
-    "onboarding.mic_title": "Sau đó nói một từ",
     "onboarding.mic_hint": "Hãy kiểm tra xem micrô của bạn có hoạt động không.",
     "onboarding.mic_heard": "Tôi nghe thấy bạn.",
     "onboarding.first_word_title": "Nói bất cứ điều gì",
@@ -228,4 +241,7 @@ export const vi: Dict = {
     "onboarding.engine_error": "Không thể khởi động engine giọng nói.",
     "onboarding.step": "Bước {n} trên 3",
 };
+
+
+
 

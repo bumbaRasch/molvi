@@ -7,7 +7,6 @@ import { patcher } from "./persist";
 import { Store } from "./store";
 import { mountFederatedSearch, refreshSearchLang } from "./federated-search";
 import type { Section, SectionBuilder, Settings, State } from "./types";
-import { mountToaster } from "./ui";
 import { buildAbout } from "./sections/about";
 import { buildDictionary } from "./sections/dictionary";
 import { buildHistory } from "./sections/history";
@@ -15,6 +14,7 @@ import { buildHotkey } from "./sections/hotkey";
 import { buildMicrophone } from "./sections/microphone";
 import { buildOverlay } from "./sections/overlay";
 import { buildRecognition } from "./sections/recognition";
+import { buildSnippets } from "./sections/snippets";
 import { buildText } from "./sections/text";
 import { buildUpdates } from "./sections/updates";
 
@@ -26,6 +26,7 @@ const SECTIONS = [
   { id: "microphone",  icon: ICONS.microphone  },
   { id: "text",        icon: ICONS.text        },
   { id: "dictionary",  icon: ICONS.dictionary  },
+  { id: "snippets",    icon: ICONS.snippets    },
   { id: "history",     icon: ICONS.history     },
   { id: "hotkey",      icon: ICONS.hotkey      },
   { id: "overlay",     icon: ICONS.overlay     },
@@ -38,6 +39,7 @@ const BUILDERS: Record<string, SectionBuilder> = {
   microphone: buildMicrophone,
   text: buildText,
   dictionary: buildDictionary,
+  snippets: buildSnippets,
   history: buildHistory,
   hotkey: buildHotkey,
   overlay: buildOverlay,
@@ -138,7 +140,6 @@ void (async (): Promise<void> => {
     console.error("get_settings failed", e);  // metadata-only: error object only
   }
   buildSidebar();
-  mountToaster();
   selectSection("recognition");
   void listen("navigate-history", () => selectSection("history"));
   // An external writer (onboarding) changed ui_lang — re-sync the store (a

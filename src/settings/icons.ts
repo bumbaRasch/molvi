@@ -11,6 +11,8 @@ export const ICONS = {
   text: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17 L10 3 L16 17"/><line x1="6" y1="12" x2="14" y2="12"/></svg>`,
   // 4. Dictionary — open book.
   dictionary: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5v12"/><path d="M3 5h6v12H4a1 1 0 0 1-1-1z"/><path d="M17 5h-6v12h5a1 1 0 0 0 1-1z"/></svg>`,
+  // Snippets — cue bar + expansion lines (a stored text block).
+  snippets: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3.5" y1="5" x2="3.5" y2="15"/><line x1="7" y1="6" x2="16" y2="6"/><line x1="7" y1="10" x2="14" y2="10"/><line x1="7" y1="14" x2="15" y2="14"/></svg>`,
   // 5. History — clock.
   history: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><polyline points="10 6 10 10 13 12"/></svg>`,
   // 6. Hotkey — keyboard.

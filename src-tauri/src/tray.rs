@@ -92,9 +92,11 @@ pub fn build(app: &AppHandle) -> tauri::Result<tauri::tray::TrayIcon> {
         .build(app)
 }
 
-/// Warming-up -> ready (or reset to warming-up). Called from the bg setup
-/// thread once PTT is ready. Drives both the Status item text and the tooltip.
-pub fn set_status(app: &AppHandle, ready: bool) {
+/// Warming-up -> ready. Called once from the bg setup thread when PTT is
+/// ready. (The warming-up state is the INITIAL build state; nothing reverts to
+/// it, so there's no `ready: bool` — this always flips to Ready.) Drives both
+/// the Status item text and the tooltip.
+pub fn set_status(app: &AppHandle) {
     let ui_lang = app
         .state::<AppState>()
         .settings
@@ -104,12 +106,7 @@ pub fn set_status(app: &AppHandle, ready: bool) {
         .clone();
     let s = tray_t(&ui_lang);
     let st = app.state::<TrayState>();
-    let (kind, text) = if ready {
-        (StatusKind::Ready, s.status_ready)
-    } else {
-        (StatusKind::Warming, s.status_warming)
-    };
-    set_status_text(app, &st, kind, text);
+    set_status_text(app, &st, StatusKind::Ready, s.status_ready);
 }
 
 /// Live recording indicator. Called from the pipeline on begin/finalize/cancel.

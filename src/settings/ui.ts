@@ -215,17 +215,13 @@ const TOAST_EXIT_MS = 200; // exit transition (180ms) + small buffer
 const dismissers = new WeakMap<HTMLElement, () => void>();
 
 function ensureToaster(): HTMLElement {
-  const existing = document.getElementById("toaster");
-  if (existing) return existing;
-  const el = document.createElement("div");
-  el.id = "toaster";
-  el.className = "toaster";
-  document.body.appendChild(el);
-  return el;
-}
-
-export function mountToaster(): void {
-  ensureToaster();
+    const existing = document.getElementById("toaster");
+    if (existing) return existing;
+    const el = document.createElement("div");
+    el.id = "toaster";
+    el.className = "toaster";
+    document.body.appendChild(el);
+    return el;
 }
 
 export interface ToastAction { label: string; onClick: () => void; }

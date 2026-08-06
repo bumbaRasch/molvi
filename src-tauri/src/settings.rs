@@ -226,9 +226,13 @@ pub struct Settings {
     pub history: HistorySettings,
     pub autostart: bool,
     pub updater: UpdaterSettings,
-    // ponytail: phase3 foundation fields. command_mode is read by Task 5's
-    // grammar parse; profiles by Task 8's per-app matcher. Alive via these
-    // fields (no orphan structs); no consumer in Task 4 itself.
+    // `profiles` is consumed by `profiles::resolve` (per-app post-proc matcher).
+    // `command_mode` is a STAGED half-feature: command-mode runs off
+    // `recognition_mode == Command` + commands.rs's hardcoded grammar, so the
+    // dedicated `command_mode.{enabled,hotkey,grammar}` config has NO consumer
+    // yet. Kept (not cut) pending a decision: wire a dedicated command-mode
+    // hotkey + grammar picker, or drop the struct. Either way it round-trips
+    // via #[serde(default)] so existing settings.json never breaks.
     pub command_mode: CommandModeSettings,
     pub profiles: Vec<ProfileEntry>,
     // ponytail: phase3 Smart-step gate. Read by postproc::smart_pipeline (Task
