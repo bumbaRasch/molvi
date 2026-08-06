@@ -9,14 +9,8 @@ export type PasteMode = "clipboard" | "type" | "replace";
 export type RecognitionMode = "push_to_talk" | "toggle" | "command";
 export type PostMode = "raw" | "smart" | "polished";
 
-// ponytail: phase3 mirror of settings.rs CommandModeSettings + ProfileEntry.
-// Consumed by commands.rs / profiles.rs (Tasks 5/7/8).
-export interface CommandModeSettings {
-  enabled: boolean;
-  hotkey: string | null;
-  grammar: string;
-}
-
+// ponytail: phase3 mirror of settings.rs ProfileEntry. Consumed by the
+// Settings UI (profiles editor) + reflects the Rust struct field-for-field.
 export interface ProfileEntry {
   exe: string;
   post_mode: PostMode;
@@ -99,7 +93,6 @@ export interface Settings {
   history: HistorySettings;
   autostart: boolean;
   updater: UpdaterSettings;
-  command_mode: CommandModeSettings;
   profiles: ProfileEntry[];
   snippets_enabled: boolean;
   backtrack_parsing: boolean;

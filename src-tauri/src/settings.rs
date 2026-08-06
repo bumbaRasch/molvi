@@ -187,25 +187,6 @@ impl Default for EndpointSettings {
     }
 }
 
-/// Command-mode config (spec §1.4/§6.1). Dedicated hotkey + deterministic
-/// grammar parsed in Task 5. Unread until Task 5 wires `parse()`.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(default)]
-pub struct CommandModeSettings {
-    pub enabled: bool,
-    pub hotkey: Option<String>,
-    pub grammar: String,
-}
-impl Default for CommandModeSettings {
-    fn default() -> Self {
-        Self {
-            enabled: false,
-            hotkey: None,
-            grammar: "default".into(),
-        }
-    }
-}
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(default)]
 pub struct Settings {
@@ -226,14 +207,10 @@ pub struct Settings {
     pub history: HistorySettings,
     pub autostart: bool,
     pub updater: UpdaterSettings,
-    // `profiles` is consumed by `profiles::resolve` (per-app post-proc matcher).
-    // `command_mode` is a STAGED half-feature: command-mode runs off
-    // `recognition_mode == Command` + commands.rs's hardcoded grammar, so the
-    // dedicated `command_mode.{enabled,hotkey,grammar}` config has NO consumer
-    // yet. Kept (not cut) pending a decision: wire a dedicated command-mode
-    // hotkey + grammar picker, or drop the struct. Either way it round-trips
-    // via #[serde(default)] so existing settings.json never breaks.
-    pub command_mode: CommandModeSettings,
+    // Per-app post-proc profiles, consumed by `profiles::resolve`. (Command-
+    // mode needs no config here: it runs off `recognition_mode == Command` +
+    // commands.rs's hardcoded grammar. A dedicated command hotkey, if ever
+    // wanted, is a separate feature with its own setting.)
     pub profiles: Vec<ProfileEntry>,
     // ponytail: phase3 Smart-step gate. Read by postproc::smart_pipeline (Task
     // 8b); off by default so the snippets store is fetched but never consulted
@@ -269,7 +246,6 @@ impl Default for Settings {
             history: HistorySettings::default(),
             autostart: false,
             updater: UpdaterSettings::default(),
-            command_mode: CommandModeSettings::default(),
             profiles: Vec::new(),
             snippets_enabled: false,
             backtrack_parsing: false,
@@ -415,10 +391,6 @@ mod tests {
     #[test]
     fn phase3_fields_default() {
         let s = Settings::default();
-        // command_mode
-        assert!(!s.command_mode.enabled);
-        assert!(s.command_mode.hotkey.is_none());
-        assert_eq!(s.command_mode.grammar, "default");
         // profiles
         assert!(s.profiles.is_empty());
         // RecognitionMode::Command exists, serializes as "command", but is NOT default
@@ -427,9 +399,8 @@ mod tests {
             serde_json::to_string(&RecognitionMode::Command).unwrap(),
             "\"command\""
         );
-        // a settings JSON missing command_mode/profiles still defaults (#[serde(default)])
+        // a settings JSON missing profiles still defaults (#[serde(default)])
         let s2: Settings = serde_json::from_str(r#"{"hotkey":"Alt+`"}"#).unwrap();
-        assert!(!s2.command_mode.enabled);
         assert!(s2.profiles.is_empty());
         // snippets_enabled (Task 8b): default off, missing-key defaulted.
         assert!(!s.snippets_enabled);
