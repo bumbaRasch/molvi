@@ -260,7 +260,9 @@ pub fn has_disk_space(needed: u64) -> Result<bool> {
     }
     // SAFETY: r == 0 → statvfs initialized buf.
     let buf = unsafe { buf.assume_init() };
-    let avail = (buf.f_frsize as u64).saturating_mul(buf.f_bavail as u64);
+    // f_frsize/f_bavail are u64 on molvi's x86_64-linux target (c_ulong /
+    // fsblkcnt_t = u64). saturating_mul guards the frsize*bavail product.
+    let avail = buf.f_frsize.saturating_mul(buf.f_bavail);
     Ok(avail >= needed)
 }
 
