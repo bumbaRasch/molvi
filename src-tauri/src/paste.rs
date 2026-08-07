@@ -6,8 +6,6 @@ use enigo::{
     Direction::{Click, Press, Release},
     Enigo, InputError, Key, Keyboard, Settings,
 };
-use windows::Win32::Foundation::HWND;
-use windows::Win32::UI::WindowsAndMessaging::{GetForegroundWindow, SetForegroundWindow};
 
 use crate::errors::{MolviError, Result};
 use crate::settings::PasteMode;
@@ -16,13 +14,25 @@ use crate::settings::PasteMode;
 /// Called at hotkey-down, before the overlay could ever steal focus.
 /// HWND.0 is a public `*mut c_void` in windows 0.62; cast through isize for
 /// Send storage (HWND itself is !Send).
+#[cfg(target_os = "windows")]
 pub fn capture_target() -> Option<isize> {
+    use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
     let hwnd = unsafe { GetForegroundWindow() };
     let h = hwnd.0 as isize;
     if h == 0 { None } else { Some(h) }
 }
 
+/// Non-Windows stub (Step 0). macOS (pid_t) Phase 2; Linux
+/// (_NET_ACTIVE_WINDOW) Phase 3. None → paste_text/run_command_chord error at
+/// the target guard before any paste attempt (safe; text never misdelivered).
+#[cfg(not(target_os = "windows"))]
+pub fn capture_target() -> Option<isize> {
+    None
+}
+
+#[cfg(target_os = "windows")]
 fn foreground_is(target: isize) -> bool {
+    use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
     let fg = unsafe { GetForegroundWindow() };
     (fg.0 as isize) == target
 }
@@ -32,7 +42,10 @@ fn foreground_is(target: isize) -> bool {
 /// wrong, leave any payload on the clipboard + Err so the caller can toast
 /// rather than misdeliver into a stranger's window. Shared by `paste_text` and
 /// `run_command_chord`.
+#[cfg(target_os = "windows")]
 fn ensure_focus(target: isize) -> Result<()> {
+    use windows::Win32::Foundation::HWND;
+    use windows::Win32::UI::WindowsAndMessaging::SetForegroundWindow;
     if foreground_is(target) {
         return Ok(());
     }
@@ -49,6 +62,13 @@ fn ensure_focus(target: isize) -> Result<()> {
             "focus mismatch; text left on clipboard".into(),
         ))
     }
+}
+
+/// Non-Windows stub (Step 0). Real focus-guard (verify-only macOS / restore
+/// X11) in Phase 2/3.
+#[cfg(not(target_os = "windows"))]
+fn ensure_focus(_target: isize) -> Result<()> {
+    Ok(())
 }
 
 /// Paste per spec §6.6. Clipboard-paste primary, type fallback, focus-guarded.

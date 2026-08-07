@@ -240,6 +240,15 @@ pub fn has_disk_space(needed: u64) -> Result<bool> {
     Ok(avail >= needed)
 }
 
+/// Fail-open stub for non-Windows (Step 0). Phase 2 adds `statfs` (macOS),
+/// Phase 3 `statvfs` (Linux); until then assume enough space (the download
+/// itself fails cleanly on ENOSPC via hf-hub's io error). Privacy §10.1: a
+/// byte count, no content.
+#[cfg(not(target_os = "windows"))]
+pub fn has_disk_space(_needed: u64) -> Result<bool> {
+    Ok(true)
+}
+
 /// Ensure the model is present on disk (download if missing), returning the
 /// model directory. `make_progress(cumulative_offset)` is called per file with
 /// the bytes already completed by prior files in the manifest; it returns an
@@ -352,6 +361,7 @@ mod tests {
         let _ = fs::remove_dir_all(&dir);
     }
 
+    #[cfg(target_os = "windows")]
     #[test]
     fn has_disk_space_is_sane() {
         // 0 needed -> always true (nothing to download)

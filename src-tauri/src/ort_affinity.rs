@@ -7,16 +7,15 @@
 //! E-cores) returns `None` and the caller skips. Never breaks startup over a
 //! perf optimization.
 
-use windows::Win32::System::SystemInformation::{
-    GetLogicalProcessorInformationEx, RelationProcessorCore,
-    SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX,
-};
-use windows::Win32::System::Threading::{GetCurrentProcess, SetProcessAffinityMask};
-
 /// Compute a process-affinity mask covering only P-cores (`EfficiencyClass ==
 /// 0`). Returns `None` when the CPU is homogeneous (no E-cores → affinity is
 /// pointless) or on any Win32/shape error (fail-open).
+#[cfg(target_os = "windows")]
 pub fn p_core_mask() -> Option<usize> {
+    use windows::Win32::System::SystemInformation::{
+        GetLogicalProcessorInformationEx, RelationProcessorCore,
+        SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX,
+    };
     // Grow-and-retry (verified windows 0.62.2 shape): the first call with no
     // buffer returns Err(ERROR_INSUFFICIENT_BUFFER) and writes the required
     // byte length; the second call with an allocated buffer returns Ok(()).
@@ -96,6 +95,11 @@ pub fn p_core_mask() -> Option<usize> {
     Some(mask)
 }
 
+#[cfg(not(target_os = "windows"))]
+pub fn p_core_mask() -> Option<usize> {
+    None
+}
+
 /// Apply the engine-appropriate process affinity, ONCE at startup:
 /// - Nemotron → leave affinity as-is. parakeet-rs uses the full 4P+4E set
 ///   (P-core pinning is measured ~40% slower), so no `SetProcessAffinityMask`
@@ -109,7 +113,9 @@ pub fn p_core_mask() -> Option<usize> {
 /// — the previous "restore original mask for Nemotron" arm was a no-op (it set
 /// the mask to what it already was), and `capture_process_affinity` existed
 /// only to feed that no-op. Both are gone.
+#[cfg(target_os = "windows")]
 pub fn apply_for_engine(is_nemotron: bool) {
+    use windows::Win32::System::Threading::{GetCurrentProcess, SetProcessAffinityMask};
     if is_nemotron {
         tracing::info!("process affinity: all-cores (nemotron — no pinning)");
         return;
@@ -126,6 +132,18 @@ pub fn apply_for_engine(is_nemotron: bool) {
         tracing::info!("process affinity set to p-cores (mask=0x{mask:X})");
     } else {
         tracing::warn!("SetProcessAffinityMask failed; affinity unchanged");
+    }
+}
+
+#[cfg(not(target_os = "windows"))]
+pub fn apply_for_engine(is_nemotron: bool) {
+    // ponytail: Apple Silicon P/E is scheduler-managed (no pinning); Linux
+    // sched_setaffinity is an optional Phase-3 follow-up. Logging mirrors the
+    // Windows path's info line so traces stay comparable across platforms.
+    if is_nemotron {
+        tracing::info!("process affinity: all-cores (nemotron — no pinning)");
+    } else {
+        tracing::info!("process affinity: not managed on this OS (fail-open)");
     }
 }
 

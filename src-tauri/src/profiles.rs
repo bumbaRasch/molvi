@@ -10,13 +10,6 @@
 //! Privacy (spec §10.1): logs metadata only (exe basename + Win32 error
 //! strings, debug level); never window title / transcript / text.
 
-use windows::Win32::Foundation::{CloseHandle, HANDLE};
-use windows::Win32::System::Threading::{
-    OpenProcess, PROCESS_NAME_WIN32, PROCESS_QUERY_LIMITED_INFORMATION, QueryFullProcessImageNameW,
-};
-use windows::Win32::UI::WindowsAndMessaging::{GetForegroundWindow, GetWindowThreadProcessId};
-use windows::core::PWSTR;
-
 use crate::errors::{MolviError, Result};
 use crate::settings::ProfileEntry;
 
@@ -26,7 +19,15 @@ use crate::settings::ProfileEntry;
 /// window, `OpenProcess` denied for an elevated proc, etc.); the caller treats
 /// `Err` as "no profile match, use global settings". Mirrors `ort_affinity`'s
 /// unsafe + SAFETY-comment + fail-open pattern.
+#[cfg(target_os = "windows")]
 pub fn foreground_exe() -> Result<String> {
+    use windows::Win32::Foundation::{CloseHandle, HANDLE};
+    use windows::Win32::System::Threading::{
+        OpenProcess, PROCESS_NAME_WIN32, PROCESS_QUERY_LIMITED_INFORMATION,
+        QueryFullProcessImageNameW,
+    };
+    use windows::Win32::UI::WindowsAndMessaging::{GetForegroundWindow, GetWindowThreadProcessId};
+    use windows::core::PWSTR;
     // SAFETY: GetForegroundWindow is a thread-safe query; no handles retained.
     let hwnd = unsafe { GetForegroundWindow() };
     if hwnd.0 as isize == 0 {
@@ -79,6 +80,16 @@ pub fn foreground_exe() -> Result<String> {
     // denies elevated windows routinely, so an Err here is not warn-worthy.
     tracing::debug!("foreground exe: {base}");
     Ok(base)
+}
+
+/// Non-Windows stub (Step 0). macOS (NSWorkspace) lands in Phase 2; Linux X11
+/// (_NET_WM_PID) in Phase 3. Fail-open: caller treats Err as "no profile match,
+/// use global settings" (pipeline.rs).
+#[cfg(not(target_os = "windows"))]
+pub fn foreground_exe() -> Result<String> {
+    Err(MolviError::Profile(
+        "foreground_exe not implemented on this OS yet".into(),
+    ))
 }
 
 /// First ENABLED profile whose `exe` matches `exe` case-insensitively (both

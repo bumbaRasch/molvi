@@ -3,8 +3,6 @@ use std::sync::atomic::{AtomicU32, AtomicUsize, Ordering};
 
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use cpal::{FromSample, Sample, SampleFormat};
-use windows::Win32::Media::Audio::{PlaySoundW, SND_ASYNC, SND_FILENAME};
-use windows::core::PCWSTR;
 
 use crate::errors::{MolviError, Result};
 
@@ -285,7 +283,10 @@ fn play_tone_blocking(kind: Tone) -> Result<()> {
 /// Play a user-chosen .wav via Win32 PlaySoundW. Fire-and-forget (SND_ASYNC),
 /// returns immediately. Best-effort — a fixed failure message is logged
 /// (metadata-only; no path/content interpolated) and swallowed.
+#[cfg(target_os = "windows")]
 pub fn play_sound_file(path: &str) {
+    use windows::Win32::Media::Audio::{PlaySoundW, SND_ASYNC, SND_FILENAME};
+    use windows::core::PCWSTR;
     let wide: Vec<u16> = path.encode_utf16().chain(std::iter::once(0u16)).collect();
     let flags = SND_FILENAME | SND_ASYNC;
     // SAFETY: pszsound is a valid PCWSTR to our owned null-terminated wide
@@ -296,6 +297,15 @@ pub fn play_sound_file(path: &str) {
     if !ok.as_bool() {
         tracing::warn!("sound file playback failed");
     }
+}
+
+/// Non-Windows: no-op (Step 0). `play_tone` (cpal) is the cross-platform
+/// default; only the custom-.wav path is silent off-Windows until Phase 2/3.
+#[cfg(not(target_os = "windows"))]
+pub fn play_sound_file(_path: &str) {
+    // ponytail: no portable wav player yet (Phase 2 CoreAudio / Phase 3 ALSA
+    // playback); best-effort no-op. `play_tone` (cpal) is the cross-platform
+    // default, so only the custom-.wav path is silent off-Windows.
 }
 
 /// Play the configured feedback: custom .wav if `custom_path` is set, else the
