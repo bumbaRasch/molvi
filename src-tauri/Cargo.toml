@@ -127,5 +127,5 @@ objc2-app-kit = { version = "0.3", features = ["NSWorkspace", "NSRunningApplicat
 # via feature-unification with enigo (randr/xinput/xtest); core xproto + connect
 # are all molvi uses.
 [target.'cfg(all(unix, not(target_os = "macos")))'.dependencies]
-x11rb = "0.13"
+x11rb = "0.14"
 libc = "0.2"
