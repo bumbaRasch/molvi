@@ -98,6 +98,15 @@ All molvi-pinned crates are at the **Aug-2026 latest** — nothing to bump.
 > CPU-only, no CoreML) or a from-source build. Apple Silicon is first-class (`aarch64-apple-darwin
 > +coreml` prebuilt). → Intel Mac is effectively **unsupported** without extra packaging work.
 | Tauri 2 | 2.11.5 | ✓ NSIS/MSI | ✓ `.app`/`.dmg` | ✓ | ✓ AppImage/deb/rpm/Flatpak | ✓ (bundles run) |
+| **tauri-nspanel** (macOS overlay, spike #3) | *(verify crates.io)* | n/a | **✓ REQUIRED** (non-activating `NSPanel`) | n/a | n/a | n/a |
+
+> **tauri-nspanel (NEW macOS dep, spike #3):** Tauri's `focusable:false` is
+> **broken on macOS** (tauri#14102 / tao#1210, open) — a plain overlay window
+> steals focus, breaking the §6.6 paste guard. Fix = convert the webview window
+> to a non-activating `NSPanel` (`canBecomeKey=false` +
+> `NSWindowStyleMaskNonactivatingPanel` + `set_hides_on_deactivate(false)` +
+> `full_screen_auxillary()`) via the `tauri-nspanel` plugin. This is a concrete
+> new macOS-only dependency + native glue the port must add.
 
 **AGENTS.md correction to record:** "enigo does NOT work on Wayland" is
 **stale** — enigo 0.6.x added experimental `libei_smol`/`libei_tokio` (reis +
@@ -120,12 +129,14 @@ concerns" upstream, but no longer impossible.
    no longer defensible as a complete Linux release. Mitigations for the hotkey
    itself: custom XDG-portal `GlobalShortcuts` via `ashpd`, or `evdev`+`uinput`
    (root/input group) — both heavy.
-2. **`Key::Other(0x56)` = Windows VK — per-platform re-keying.** molvi pastes
-   with `Key::Other(0x56)` (VK_V) and command-mode chords with
-   `Key::Other(<vk>)`. That `u32` is a Windows virtual-key code; on macOS it's a
-   CGEvent keycode, on X11 a keysym. `Key::Other(0x56)` will NOT type 'V' on
-   Mac/Linux. **Every paste/chord site must be re-keyed per-platform** (e.g.
-   `Key::Unicode('v')` for the paste char, or platform key tables).
+2. **`Key::Other(0x56)` + the paste MODIFIER differ per-platform (spike #3).**
+   molvi pastes with `Key::Other(0x56)` (VK_V) + `Key::Control` and chords with
+   `Key::Other(<vk>)`. That `u32` is a Windows VK; on macOS it's a CGEvent
+   keycode, on X11 a keysym — `Key::Other(0x56)` will NOT type 'V' on Mac/Linux.
+   AND the **paste modifier differs**: macOS paste is **⌘V** (`Key::Command` +
+   `Key::Unicode('v')`), NOT Ctrl+V; Linux/X11 + Windows stay Ctrl+V. **Every
+   paste/chord site must be re-keyed per-platform** via `paste_key()` /
+   `paste_modifier()` helpers. See Architecture.
 3. **ort on Intel Mac — BUILD FAILS by default (MEDIUM).** Verified: ort-sys
    dist.tsv has **no `x86_64-apple-darwin` row** → under default
    `download-binaries`, `cargo build` for Intel Mac **errors out**, not "runs
@@ -182,12 +193,13 @@ pub fn foreground_exe() -> Option<String> {
 ```
 
 Paste/chord re-keying (blocker #2) follows the same pattern: a per-platform
-`fn paste_key() -> enigo::Key` helper in `paste.rs` + platform key tables in
-`commands.rs`. **No backward-compat constraint** → refactor the existing Windows
-call sites to route through the helper too (cleaner than branching at every
-site). Per upstream enigo docs: `Key::Unicode('v')` + `Key::Control` on
-macOS/Linux; Windows keeps `Key::Other(0x56)` (SendInput/Unicode robustness —
-verified).
+`fn paste_key() -> enigo::Key` + `fn paste_modifier() -> enigo::Key` helper in
+`paste.rs` + platform key tables in `commands.rs`. **No backward-compat
+constraint** → refactor the existing Windows call sites to route through the
+helpers too. Per upstream enigo docs (spike #3, verified):
+- **Windows:** `Key::Other(0x56)` (VK_V) + `Key::Control` (SendInput/Unicode robustness).
+- **macOS:** `Key::Unicode('v')` + **`Key::Command`** (= `Key::Super`/`Key::Meta`) — **⌘V, NOT Ctrl+V** (macOS paste is ⌘V; `Key::Control`+V does not paste).
+- **Linux/X11:** `Key::Unicode('v')` + `Key::Control` (Ctrl+V).
 
 **What is NOT abstracted:** no `mod platform`, no trait objects, no dyn dispatch.
 Platform is known at compile time; zero cost; matches the codebase's existing
@@ -202,10 +214,21 @@ single cfg-gate.
   default); `load-dynamic`/source-build Intel support is a best-effort
   follow-up, not v1.
 - Hotkey: `tauri-plugin-global-shortcut` → Carbon. Works.
-- Paste: enigo CGEvent. Per-platform `paste_key()` helper — on macOS the
-  documented enigo idiom is `Key::Unicode('v')` + `Key::Control`; **no backward
-  compat needed → refactor the Windows call sites too** (see Architecture).
-  Verify focus-guard (spike #3).
+- **Overlay focus (spike #3 — CRITICAL):** Tauri `focusable:false` is **BROKEN on
+  macOS** (tauri#14102 / tao#1210, open) — the overlay **steals focus** and would
+  misroute paste. Fix = convert the webview window to a non-activating `NSPanel`
+  via the **`tauri-nspanel` plugin** (NEW macOS dependency) + `canBecomeKey=false`
+  + `NSWindowStyleMaskNonactivatingPanel` + `set_hides_on_deactivate(false)` +
+  `full_screen_auxiliary()`. Without this, the §6.6 guard can't rely on "focus
+  never changed."
+- Paste: enigo CGEvent. Per-platform helpers (Architecture): **macOS = ⌘V =
+  `Key::Unicode('v')` + `Key::Command`** (NOT Control). **enigo macOS also needs
+  Accessibility permission** (`AXIsProcessTrustedWithOptions`) — separate from mic
+  permission; request at first run.
+- Focus-guard shape (spike #3): `capture_target()` = `pid_t`
+  (`NSWorkspace.frontmostApplication.processIdentifier`); `ensure_focus()` =
+  **verify-only, NO restore** (a background/accessory app cannot reliably
+  re-activate another app on macOS) → mismatch falls straight to clipboard+toast.
 - Profiles: `foreground_exe()` via `NSWorkspace.frontmostApplication`. Works →
   **profiles fully functional on macOS**.
 - Paths: `~/Library/Application Support/com.molvi.app`.
@@ -219,8 +242,14 @@ single cfg-gate.
   there is no upstream global hotkey (verified, blocker #1) → requires the
   portal/evdev path. **X11 works as a free bonus** wherever the hotkey plugin
   runs; Wayland is the hard part and now the default session (blocker #1).
-- Paste: enigo x11rb (X11) / experimental libei (Wayland). Per-platform key via
-  `paste_key()` (`Key::Unicode('v')` + Control is the documented idiom).
+- Paste: enigo x11rb (X11) / experimental libei (Wayland). Per-platform key:
+  **X11 = `Key::Unicode('v')` + `Key::Control`** (Ctrl+V); Wayland via enigo
+  libei/portal (stability-flagged).
+- Focus-guard (spike #3): X11 `capture_target()` = active window id
+  (`_NET_ACTIVE_WINDOW` via x11rb); `ensure_focus()` = **verify + restore**
+  (send `_NET_ACTIVE_WINDOW` client message to the WM) + fallback. **Wayland: no
+  active-window API** → `capture_target()` = `None` → degrade to clipboard-only +
+  toast (the §6.6 safe fallback).
 - Profiles: `foreground_exe()` via X11 `_NET_WM_PID` → `/proc/<pid>/exe`.
   **Functional on X11. On Wayland: structurally impossible** → `None` →
   profiles degrade silently (all other features still work).
