@@ -163,6 +163,9 @@ pub fn paste_text(text: &str, target: Option<isize>, mode: PasteMode) -> Result<
     // combine with the held Ctrl → would type "v" instead of pasting.
     // Key::Other(u32) sends a Virtual_Key (ctx7/enigo docs) which respects the
     // modifier state → real Ctrl+V paste. Caught in Phase-1 smoke.
+    // macOS: Enigo::new fires the Accessibility-permission prompt on first use
+    // (Settings::default() sets open_prompt_to_get_permissions = true). The user
+    // grants it once; subsequent pastes work.
     let mut enigo =
         Enigo::new(&Settings::default()).map_err(|e| MolviError::Paste(format!("enigo: {e}")))?;
 

@@ -103,6 +103,28 @@ mod macos_overlay {
     }
 }
 
+/// True when another process holds Secure Event Input (password field, Terminal
+/// "Secure Keyboard Entry", 1Password, a stuck loginwindow). While held, macOS
+/// suppresses Carbon global hotkeys → molvi's PTT stops working with no error
+/// (Handy finding, issue #1578). Detection turns a mystifying failure into an
+/// explainable one. Off-macOS → always false (the API doesn't exist).
+#[cfg(target_os = "macos")]
+pub fn secure_input_held() -> bool {
+    #[link(name = "Carbon", kind = "framework")]
+    unsafe extern "C" {
+        // Carbon HIToolbox; `Boolean` is an unsigned char.
+        fn IsSecureEventInputEnabled() -> u8;
+    }
+    // SAFETY: IsSecureEventInputEnabled is a pure query of process-global
+    // HIToolbox state; no handles, no side effects, thread-safe.
+    unsafe { IsSecureEventInputEnabled() != 0 }
+}
+
+#[cfg(not(target_os = "macos"))]
+pub fn secure_input_held() -> bool {
+    false
+}
+
 /// Tauri-managed app state. `settings` is read by future settings-UI commands;
 /// `cmd_tx` lets the `cancel_operation` IPC command forward to the coordinator
 /// (filled in `setup` once the coordinator channel exists).
@@ -548,6 +570,20 @@ pub fn run() {
                     // silent no-op (nothing was registered).
                     if let Err(e) = hotkey::register(&app_handle, &settings.hotkey, cmd_tx) {
                         tracing::error!("hotkey register failed: {e}");
+                    }
+
+                    // macOS landmine: if another process holds Secure Event
+                    // Input at startup, the global hotkey is silently
+                    // suppressed (Handy #1578). Mid-session polling + a user
+                    // toast are a follow-up (need Mac UX testing); this catches
+                    // the held-at-startup case.
+                    #[cfg(target_os = "macos")]
+                    if secure_input_held() {
+                        tracing::warn!(
+                            "Secure Event Input is held — global hotkey may be \
+                             suppressed (password field / 1Password / Terminal \
+                             Secure Keyboard Entry)"
+                        );
                     }
 
                     // Drives the Status item text + tooltip (warming-up -> ready).
