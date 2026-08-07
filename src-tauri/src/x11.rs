@@ -8,7 +8,7 @@
 use x11rb::connection::Connection;
 #[cfg(all(unix, not(target_os = "macos")))]
 use x11rb::protocol::xproto::{
-    AtomEnum, CLIENT_MESSAGE_EVENT, ClientMessageData, ClientMessageEvent, EventMask,
+    AtomEnum, CLIENT_MESSAGE_EVENT, ClientMessageData, ClientMessageEvent, ConnectionExt, EventMask,
 };
 
 /// True when the session is Wayland (no X11 active-window API). Callers use this
