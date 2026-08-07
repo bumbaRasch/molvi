@@ -54,7 +54,9 @@ pub(crate) const fn letter_key(c: char) -> Key {
             // Only a/c/v/x/y/z command letters are used (PHRASES + paste
             // select-all). A non-letter here is a programmer error → fail
             // loudly (compile-time in the static table, runtime otherwise).
-            _ => unreachable!("letter_key: only a/c/v/x/y/z command letters are supported"),
+            // panic! not unreachable!: unreachable!(msg) expands to a formatted
+            // panic, which is non-const (E0015) in this const fn.
+            _ => panic!("letter_key: only a/c/v/x/y/z command letters are supported"),
         };
         Key::Other(vk)
     }
