@@ -42,10 +42,17 @@ pipeline that makes a release *possible* (cutting one is a manual step).
    repos/tauri-apps/tauri-action/tags` → `v1.0.0`, `v1`). The official docs
    use `@v1`; `cjpais/Handy` pins `@v0` (stale). molvi uses `@v1`.
 2. **`latest.json` auto-generation:** tauri-action generates `latest.json`
-   (`includeUpdaterJson` defaults `true`) with platform-specific entries +
+   (`uploadUpdaterJson` input defaults `true`) with platform-specific entries +
    signature refs, uploaded as a release asset. **CRITICAL:** if no `.sig`
    files are found, the action **skips the updater-JSON upload entirely**.
-   → ed25519 signing is *required*, not optional. molvi signs → OK.
+   → ed25519 signing is *required*, not optional. molvi signs → OK. **Known
+   sharp edge:** the 3-OS matrix jobs run in PARALLEL against one draft release;
+   each does a read-modify-write of `latest.json` (`upload-version-json.ts`),
+   so a simultaneous snapshot can leave the final manifest with only one
+   platform. A staggered finish (common) usually completes it; the plan's
+   Task 4 Step 3b verifies all 3 platforms are present + re-runs if the race
+   lost one. Set `updaterJsonPreferNsis: true` so `latest.json` serves the NSIS
+   `-setup.exe` (matches `installMode:"passive"`, an NSIS concept) instead of MSI.
 3. **`tauri signer generate`:** `npx tauri signer generate -w ~/.tauri/molvi.key`
    (or `npm run tauri signer generate -- -w …`). Writes the private key to the
    file; prints the public key to stdout (also writes `<path>.pub`).

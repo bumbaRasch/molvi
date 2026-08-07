@@ -48,10 +48,16 @@ includes these.
 - **`macos-14` = Apple Silicon** (default host `aarch64-apple-darwin`) — the
   release matrix uses `macos-14` with NO `--target` arg (matches molvi's CI;
   molvi is Intel-unsupported per D3). Do NOT add Intel Mac (`x86_64-apple-darwin`).
-- **Ubuntu deps mirror molvi's CI EXACTLY** (ci.yml:47): `libwebkit2gtk-4.1-dev
-  build-essential curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev
-  librsvg2-dev libasound2-dev pkg-config`. Use `libayatana-appindicator3-dev` (the
-  maintained fork), NOT the generic `libappindicator3-dev` from tauri-action docs.
+- **Ubuntu deps** = molvi's CI set (ci.yml:47: `libwebkit2gtk-4.1-dev build-essential
+  curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
+  libasound2-dev pkg-config`) **+ `patchelf xdg-utils`** — the latter are NOT in CI
+  (CI runs `cargo check`/`clippy`, never `cargo tauri build`), but the release
+  DOES bundle (AppImage via linuxdeploy needs patchelf). Use `libayatana-appindicator3-dev`
+  (the maintained fork), NOT the generic `libappindicator3-dev` from tauri-action docs.
+- **`latest.json` parallel-job race (KNOWN):** the 3-OS matrix writes `latest.json`
+  non-atomically (read-modify-write per job); a simultaneous snapshot can lose a
+  platform. Task 4 Step 3b verifies all 3 platforms + re-runs if incomplete. The
+  deterministic fallback (if it proves consistently flaky) is `needs:` job chaining.
 - **Verify against live docs, never memory:** `tauri-action@v1` is current stable
   (`gh api repos/tauri-apps/tauri-action/tags` → v1.0.0). The public key is a
   single-line base64 minisign-format string (NOT PEM) — verified empirically;
@@ -321,21 +327,24 @@ jobs:
       - name: Install JS deps
         run: npm ci
 
-      # Mirrors molvi's CI dep set EXACTLY (ci.yml:47): webkit2gtk-4.1 (Tauri 2),
-      # libayatana-appindicator3-dev (maintained fork, NOT generic libappindicator3),
-      # libasound2-dev (cpal ALSA), + build tooling. Proven to compile molvi.
-      - name: Install Linux system deps (Tauri 2 + ALSA)
+      # Mirrors molvi's CI dep set (ci.yml:47) + ADDS patchelf + xdg-utils,
+      # which CI never needed (it runs cargo check/clippy, not `cargo tauri
+      # build`). The release DOES bundle (targets:"all" → AppImage needs
+      # patchelf via linuxdeploy). Official tauri-action example lists both.
+      - name: Install Linux system deps (Tauri 2 + ALSA + bundling)
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev libasound2-dev pkg-config
+          sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev libasound2-dev pkg-config patchelf xdg-utils
 
       # tauri-action@v1 = current stable (gh api repos/tauri-apps/tauri-action/tags
       # → v1.0.0; Handy pins stale @v0). It builds all configured bundle types per
       # OS, signs updater artifacts (TAURI_SIGNING_PRIVATE_KEY present → emits .sig),
       # and creates ONE draft release with auto-generated latest.json. If no .sig
       # files are produced, tauri-action SKIPS the latest.json upload — so signing
-      # is load-bearing (the secret must be set).
+      # is load-bearing (the secret must be set). updaterJsonPreferNsis: true
+      # makes latest.json serve the NSIS -setup.exe (matches installMode:"passive",
+      # an NSIS concept) instead of the MSI.
       - uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -346,6 +355,7 @@ jobs:
           releaseBody: 'See the assets to download and install. Unsigned build — macOS: right-click → Open; Windows: SmartScreen → More info → Run anyway.'
           releaseDraft: true              # NOT public until manually published (safety gate)
           prerelease: false
+          updaterJsonPreferNsis: true     # serve NSIS setup.exe (aligns with installMode:passive)
 ```
 
 **Design notes (the invariant — do NOT deviate without re-verifying):**
@@ -465,9 +475,34 @@ Inspect `latest.json` content (it must reference the signed per-platform URLs):
 ```bash
 gh release download v0.2.0 latest.json --output - | head -c 500
 ```
+> Windows PowerShell equivalent (no `head`): `(gh release download v0.2.0 latest.json --output -).Substring(0,500)`.
 Expected: JSON with `"version": "0.2.0"`, `"pub_date"`, and per-platform entries
 (`platforms` object with `windows-x86_64` / `darwin-aarch64` / `linux-x86_64`)
 each pointing at a signed URL + signature.
+
+- [ ] **Step 3b: VERIFY all 3 platforms are in `latest.json` (race-condition gate)**
+
+> **KNOWN SHARP EDGE (verified in tauri-action source `upload-version-json.ts`):**
+> the 3 matrix jobs run in PARALLEL against the same draft release. Each job
+> does a read-modify-write of `latest.json` (snapshot existing → merge its own
+> platform → delete → re-upload). If two jobs snapshot within the same window,
+> the LAST upload can end up with only ONE platform (its own). A staggered
+> finish (the common case with 15-25min build variance) usually produces a
+> complete file — but it is NOT guaranteed. This step CATCHES the failure case.
+
+Check the `platforms` object has all 3 keys:
+```bash
+gh release download v0.2.0 latest.json --output - | python -c "import sys,json; p=json.load(sys.stdin)['platforms']; print(sorted(p.keys())); assert len(p)==3, f'ONLY {len(p)} platforms (race lost): {sorted(p.keys())}'"
+```
+> PowerShell: `(gh release download v0.2.0 latest.json --output - | ConvertFrom-Json).platforms.psobject.properties.name`
+Expected: all 3 of `darwin-aarch64`, `linux-x86_64`, `windows-x86_64` present.
+If FEWER than 3 → the race lost a platform. **Re-run the Release workflow**
+(`gh workflow run release.yml` after deleting the partial draft release, or
+just re-run — tauri-action re-uploads). The race is intermittent; a re-run with
+different job-timing almost always completes the manifest. If it proves
+consistently flaky, the deterministic fix is to serialize the matrix (chain the
+3 jobs with `needs:` — slower but race-free; ~60min vs ~25min). Document that as
+a follow-up if it bites.
 
 - [ ] **Step 4: Do NOT publish yet**
 
@@ -476,9 +511,23 @@ running molvi (v0.1.0) finds the update on next "Check for updates". Publish onl
 when ready (after the Mac/Linux runtime smokes, or accepting the unsigned-build
 risk). The draft can sit indefinitely.
 
-**Deliverable:** a verified draft release `v0.2.0` with `latest.json` + signed
-per-platform installers. The updater pipeline is PROVEN end-to-end. Publishing =
-one click when ready.
+**Deliverable:** a verified draft release `v0.2.0` with a COMPLETE `latest.json`
+(all 3 platforms, confirmed in Step 3b) + signed per-platform installers. The
+updater pipeline is PROVEN end-to-end (modulo the intermittent latest.json
+multi-job race, caught + remedied by re-run in Step 3b). Publishing = one click
+when ready.
+
+> **Pre-existing watch-item (not this plan's scope, but the released deb is
+> affected):** `tauri.conf.json:77` deb `depends: ["libasound2"]` may need
+> `libasound2t64` on Ubuntu 24.04+ (the time_t transition renamed the package).
+> The build succeeds (the runner has libasound2-dev); the resulting `.deb` may
+> fail `apt install` on stock 24.04. Verify at a real Linux install smoke; fix
+> in tauri.conf.json `bundle.linux.deb.depends` if it bites.
+>
+> **Version skew (cosmetic):** bumping `tauri.conf.json:4` to `0.2.0` leaves
+> `Cargo.toml:3` + `package.json:4` at `0.1.0`. Harmless — the updater + bundle
+> version read `tauri.conf.json` (`updater.rs:27`). Optionally sync all three
+> for tidiness; not required for the updater to work.
 
 ---
 
