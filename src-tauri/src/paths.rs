@@ -73,7 +73,12 @@ pub fn redact_appdata(path: &Path) -> String {
     }
 }
 
-#[cfg(test)]
+// Phase 1: the paths module is Windows-only until Task 5 (Phase 2) makes
+// `app_data_dir` cross-platform (macOS ~/Library/Application Support, Linux
+// $XDG_CONFIG_HOME) and restores these tests with cross-platform assertions.
+// Gating the module mirrors the `has_disk_space_is_sane` Windows-gate Task 2
+// added to model_store.rs — same class of platform-runtime-specific test.
+#[cfg(all(test, target_os = "windows"))]
 mod tests {
     use super::*;
 
