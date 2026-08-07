@@ -10,6 +10,39 @@ use enigo::{
 use crate::errors::{MolviError, Result};
 use crate::settings::PasteMode;
 
+/// The modifier held for a paste/replace/command chord. Windows + Linux = Ctrl;
+/// macOS = ⌘ (`Key::Meta`). (There is no `Key::Command` variant — `Key::Meta`
+/// IS Command on macOS, Super on Linux, Win on Windows.)
+pub fn paste_modifier() -> Key {
+    #[cfg(target_os = "macos")]
+    {
+        Key::Meta
+    }
+    #[cfg(not(target_os = "macos"))]
+    {
+        Key::Control
+    }
+}
+
+/// The key clicked for a paste. Windows = VK_V (`Key::Other(0x56)` — enigo's
+/// Unicode path is rejected as Ctrl+V by some Windows apps); macOS =
+/// `Key::Other(9)` (virtualKey 9 = physical V, layout-robust under ⌘ per
+/// cjpais/Handy + VoiceInk); Linux/X11 = `Key::Unicode('v')` (XKB keysym).
+pub fn paste_key() -> Key {
+    #[cfg(target_os = "windows")]
+    {
+        Key::Other(0x56)
+    }
+    #[cfg(target_os = "macos")]
+    {
+        Key::Other(9)
+    }
+    #[cfg(all(unix, not(target_os = "macos")))]
+    {
+        Key::Unicode('v')
+    }
+}
+
 /// Capture the current foreground window (the intended paste target).
 /// Called at hotkey-down, before the overlay could ever steal focus.
 /// HWND.0 is a public `*mut c_void` in windows 0.62; cast through isize for
@@ -22,10 +55,17 @@ pub fn capture_target() -> Option<isize> {
     if h == 0 { None } else { Some(h) }
 }
 
-/// Non-Windows stub (Step 0). macOS (pid_t) Phase 2; Linux
-/// (_NET_ACTIVE_WINDOW) Phase 3. None → paste_text/run_command_chord error at
-/// the target guard before any paste attempt (safe; text never misdelivered).
-#[cfg(not(target_os = "windows"))]
+/// macOS: capture the frontmost app pid (Task 8's helper). Verify-only guard
+/// in `ensure_focus` (spike #3) — no SetFrontmost attempt.
+#[cfg(target_os = "macos")]
+pub fn capture_target() -> Option<isize> {
+    crate::profiles::macos_frontmost_pid()
+}
+
+/// Linux stub. X11 (_NET_ACTIVE_WINDOW) lands in Phase 3; Wayland has no
+/// active-window API. None → paste_text errors at the target guard before any
+/// paste attempt (safe; text never misdelivered).
+#[cfg(not(any(target_os = "windows", target_os = "macos")))]
 pub fn capture_target() -> Option<isize> {
     None
 }
@@ -64,9 +104,26 @@ fn ensure_focus(target: isize) -> Result<()> {
     }
 }
 
-/// Non-Windows stub (Step 0). Real focus-guard (verify-only macOS / restore
-/// X11) in Phase 2/3.
-#[cfg(not(target_os = "windows"))]
+/// macOS focus guard (spike #3, verify-only). A background/accessory app
+/// cannot reliably re-activate another app on macOS. The non-activating
+/// NSPanel overlay (Task 7) keeps focus on the user's app, so a mismatch here
+/// means an explicit user ⌘-tab → refuse (leave text on the clipboard + toast),
+/// do NOT attempt SetFrontmost/FrontmostApplication restore.
+#[cfg(target_os = "macos")]
+fn ensure_focus(target: isize) -> Result<()> {
+    if crate::profiles::macos_frontmost_pid() == Some(target) {
+        Ok(())
+    } else {
+        tracing::warn!("paste: macOS frontmost app changed; left on clipboard");
+        Err(MolviError::Paste(
+            "focus mismatch; text left on clipboard".into(),
+        ))
+    }
+}
+
+/// Linux stub. ponytail: X11 verify+restore (_NET_ACTIVE_WINDOW client message)
+/// = Phase 3.
+#[cfg(not(any(target_os = "windows", target_os = "macos")))]
 fn ensure_focus(_target: isize) -> Result<()> {
     Ok(())
 }
@@ -98,49 +155,52 @@ pub fn paste_text(text: &str, target: Option<isize>, mode: PasteMode) -> Result<
         .map_err(|e| MolviError::Paste(format!("set clipboard: {e}")))?;
     drop(clip); // release before simulating keys
 
-    // Ctrl+V (verified enigo 0.6.1 API: Keyboard::key(Key, Direction) -> InputResult).
-    // ponytail: Key::Other(0x56) is VK_V, NOT Key::Unicode('v'). enigo's Unicode
-    // path on Windows sends SendInput KEYEVENTF_UNICODE, which types the literal
-    // char and does NOT combine with the held Ctrl → would type "v" instead of
-    // pasting. Key::Other(u32) sends a Virtual_Key (ctx7/enigo docs) which
-    // respects the modifier state → real Ctrl+V paste. Caught in Phase-1 smoke.
+    // Ctrl/⌘+V (verified enigo 0.6.1 API: Keyboard::key(Key, Direction) -> InputResult).
+    // The modifier + key are platform-resolved helpers: Windows = Ctrl+VK_V,
+    // macOS = ⌘+VK 9, Linux = Ctrl+'v'. ponytail: on Windows Key::Other(0x56)
+    // is VK_V, NOT Key::Unicode('v'). enigo's Unicode path on Windows sends
+    // SendInput KEYEVENTF_UNICODE, which types the literal char and does NOT
+    // combine with the held Ctrl → would type "v" instead of pasting.
+    // Key::Other(u32) sends a Virtual_Key (ctx7/enigo docs) which respects the
+    // modifier state → real Ctrl+V paste. Caught in Phase-1 smoke.
     let mut enigo =
         Enigo::new(&Settings::default()).map_err(|e| MolviError::Paste(format!("enigo: {e}")))?;
 
     // Replace mode: select the focused control's whole text first so the
-    // paste overwrites it. Ctrl+A in a form field selects just that field;
+    // paste overwrites it. Ctrl/⌘+A in a form field selects just that field;
     // in full-document editors (Word/Google Docs) it selects the whole doc —
     // the i18n hint (text.paste_replace_hint) names this caveat. No
     // exe-denylist: browser editors run as chrome.exe/msedge.exe and would
     // leak any denylist (false security); honest labeling is the real guard.
-    // ponytail: VK_A=0x41 per Win32 VK table; Key::Other(u32)=VK pattern
-    // proven at the Ctrl+V chord below (VK_V=0x56). Two separate chords
-    // (not one held Ctrl) — robust to apps that key off Ctrl transitions.
+    // ponytail: select-all key via letter_key (platform VK); two separate
+    // chords (not one held modifier) — robust to apps that key off Ctrl
+    // transitions.
     if mode == PasteMode::Replace {
+        let select_all_key = crate::commands::letter_key('a');
         enigo
-            .key(Key::Control, Press)
-            .map_err(paste_err("ctrl down (select-all)"))?;
+            .key(paste_modifier(), Press)
+            .map_err(paste_err("mod down (select-all)"))?;
         enigo
-            .key(Key::Other(0x41), Click)
+            .key(select_all_key, Click)
             .map_err(paste_err("a click"))?;
         enigo
-            .key(Key::Control, Release)
-            .map_err(paste_err("ctrl up (select-all)"))?;
+            .key(paste_modifier(), Release)
+            .map_err(paste_err("mod up (select-all)"))?;
         // Let the selection settle before the paste chord overwrites it.
         thread::sleep(Duration::from_millis(20));
-        tracing::info!("paste: Ctrl+A delivered (replace mode)");
+        tracing::info!("paste: select-all delivered (replace mode)");
     }
 
     enigo
-        .key(Key::Control, Press)
-        .map_err(paste_err("ctrl down"))?;
+        .key(paste_modifier(), Press)
+        .map_err(paste_err("mod down"))?;
     enigo
-        .key(Key::Other(0x56), Click)
-        .map_err(paste_err("v click"))?;
+        .key(paste_key(), Click)
+        .map_err(paste_err("paste key click"))?;
     enigo
-        .key(Key::Control, Release)
-        .map_err(paste_err("ctrl up"))?;
-    tracing::info!("paste: Ctrl+V delivered");
+        .key(paste_modifier(), Release)
+        .map_err(paste_err("mod up"))?;
+    tracing::info!("paste: paste chord delivered");
     Ok(())
 }
 
@@ -156,16 +216,16 @@ pub fn run_command_chord(chord: &crate::commands::KeyChord, target: Option<isize
         Enigo::new(&Settings::default()).map_err(|e| MolviError::Paste(format!("enigo: {e}")))?;
     if chord.hold_ctrl {
         enigo
-            .key(Key::Control, Press)
-            .map_err(paste_err("ctrl down"))?;
+            .key(paste_modifier(), Press)
+            .map_err(paste_err("mod down"))?;
     }
     for k in &chord.keys {
         enigo.key(*k, Click).map_err(paste_err("key click"))?;
     }
     if chord.hold_ctrl {
         enigo
-            .key(Key::Control, Release)
-            .map_err(paste_err("ctrl up"))?;
+            .key(paste_modifier(), Release)
+            .map_err(paste_err("mod up"))?;
     }
     Ok(())
 }
@@ -213,5 +273,33 @@ mod tests {
     fn missing_target_errors_regardless_of_mode() {
         // Type mode hits the same target-None guard (it precedes the mode branch).
         assert!(paste_text("test", None, PasteMode::Type).is_err());
+    }
+
+    #[test]
+    fn paste_modifier_matches_platform() {
+        #[cfg(target_os = "macos")]
+        {
+            assert_eq!(paste_modifier(), Key::Meta);
+        }
+        #[cfg(not(target_os = "macos"))]
+        {
+            assert_eq!(paste_modifier(), Key::Control);
+        }
+    }
+
+    #[test]
+    fn paste_key_matches_platform() {
+        #[cfg(target_os = "windows")]
+        {
+            assert_eq!(paste_key(), Key::Other(0x56));
+        }
+        #[cfg(target_os = "macos")]
+        {
+            assert_eq!(paste_key(), Key::Other(9));
+        }
+        #[cfg(all(unix, not(target_os = "macos")))]
+        {
+            assert_eq!(paste_key(), Key::Unicode('v'));
+        }
     }
 }

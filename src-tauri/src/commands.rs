@@ -12,12 +12,53 @@
 use enigo::Key;
 
 /// A simulated key combination. `keys` are clicked in order; when `hold_ctrl`
-/// is true `Key::Control` is held (Press) before and released after the clicks.
-/// `Clone, Debug` only — `Vec` is not `Copy` (DECISION 1).
+/// is true the platform command modifier is held (Press) before and released
+/// after the clicks — Ctrl on Windows/Linux, ⌘ on macOS (routed via
+/// `paste::paste_modifier()` in `run_command_chord`). The field name `hold_ctrl`
+/// is kept for stability; semantically it means "hold the platform command
+/// modifier". `Clone, Debug` only — `Vec` is not `Copy` (DECISION 1).
 #[derive(Debug, Clone, PartialEq)]
 pub struct KeyChord {
     pub keys: Vec<Key>,
     pub hold_ctrl: bool,
+}
+
+/// Resolve a command chord's letter key per platform. Windows + macOS use the
+/// platform VIRTUAL key (layout-robust: Ctrl/⌘-shortcuts ignore the active
+/// layout); Linux/X11 uses `Key::Unicode` (XKB keysym via the layout). macOS
+/// uses the QWERTY `kVK_ANSI_*` codes — NOT `Key::Unicode`, which under a
+/// non-QWERTY layout would map to the wrong physical key (AZERTY 'z'→keycode
+/// 0x10 → ⌘Y redo instead of ⌘Z undo). `const` so the static PHRASES table can
+/// call it.
+pub(crate) const fn letter_key(c: char) -> Key {
+    #[cfg(target_os = "windows")]
+    {
+        // Win32 VK: A=0x41..Z=0x5A = (lowercase ascii) - 0x20.
+        let vk = if c.is_ascii_lowercase() {
+            (c as u32) - 0x20
+        } else {
+            c as u32
+        };
+        Key::Other(vk)
+    }
+    #[cfg(target_os = "macos")]
+    {
+        // macOS QWERTY virtual key codes (HIToolbox kVK_ANSI_*).
+        let vk = match c {
+            'a' | 'A' => 0x00,
+            'c' | 'C' => 0x08,
+            'v' | 'V' => 0x09,
+            'x' | 'X' => 0x07,
+            'y' | 'Y' => 0x10,
+            'z' | 'Z' => 0x06,
+            _ => c as u32, // fallback — no non-letter command chord reaches here
+        };
+        Key::Other(vk)
+    }
+    #[cfg(all(unix, not(target_os = "macos")))]
+    {
+        Key::Unicode(c)
+    }
 }
 
 /// Normalize `input` for table lookup (DECISION 4):
@@ -66,9 +107,10 @@ pub fn parse(text: &str) -> Option<KeyChord> {
 // Static grammar: (phrase, hold_ctrl, static key slice). Phrases are stored
 // PRE-normalized (lowercase, single internal spaces, ё already folded, no
 // trailing punctuation). Adding a language or phrase = adding rows. Bare keys
-// (Enter/Tab/Backspace) use the named `Key` variants; Ctrl+letter uses
-// `Key::Other(VK)` — `Key::Unicode('z')` would type the literal char and NOT
-// combine with held Ctrl (see paste.rs:73-77). Win32 VK: A=0x41..Z=0x5A.
+// (Enter/Tab/Backspace) use the named `Key` variants; Ctrl/⌘+letter uses
+// `letter_key(c)` — `Key::Unicode('z')` would type the literal char and NOT
+// combine with the held modifier on Windows (see paste.rs Ctrl+V note), and on
+// macOS would mis-key under non-QWERTY layouts (see `letter_key` doc).
 //
 // ponytail: `capital`/`lowercase` (spec §6.2) are DEFERRED — there is no
 // universal directional case-change chord on Windows (Shift+F3 is toggle-only
@@ -83,48 +125,48 @@ static PHRASES: &[(&str, bool, &[Key])] = &[
     ("nouvelle ligne", false, &[Key::Return]),
     ("новая строка", false, &[Key::Return]),
     ("nueva línea", false, &[Key::Return]),
-    // ── undo: Ctrl+Z (VK 0x5A) ──
-    ("undo", true, &[Key::Other(0x5A)]),
-    ("rückgängig", true, &[Key::Other(0x5A)]),
-    ("annuler", true, &[Key::Other(0x5A)]),
-    ("отмена", true, &[Key::Other(0x5A)]),
-    ("deshacer", true, &[Key::Other(0x5A)]),
-    // ── redo: Ctrl+Y (VK 0x59) ──
-    ("redo", true, &[Key::Other(0x59)]),
-    ("wiederherstellen", true, &[Key::Other(0x59)]),
-    ("rétablir", true, &[Key::Other(0x59)]),
-    ("повтор", true, &[Key::Other(0x59)]),
-    ("rehacer", true, &[Key::Other(0x59)]),
-    // ── select all: Ctrl+A (VK 0x41) ──
-    ("select all", true, &[Key::Other(0x41)]),
-    ("alles markieren", true, &[Key::Other(0x41)]),
-    ("tout sélectionner", true, &[Key::Other(0x41)]),
-    ("выделить все", true, &[Key::Other(0x41)]),
-    ("seleccionar todo", true, &[Key::Other(0x41)]),
-    // ── delete last word: Ctrl+Backspace ──
+    // ── undo: Ctrl/⌘+Z ──
+    ("undo", true, &[letter_key('z')]),
+    ("rückgängig", true, &[letter_key('z')]),
+    ("annuler", true, &[letter_key('z')]),
+    ("отмена", true, &[letter_key('z')]),
+    ("deshacer", true, &[letter_key('z')]),
+    // ── redo: Ctrl/⌘+Y ──
+    ("redo", true, &[letter_key('y')]),
+    ("wiederherstellen", true, &[letter_key('y')]),
+    ("rétablir", true, &[letter_key('y')]),
+    ("повтор", true, &[letter_key('y')]),
+    ("rehacer", true, &[letter_key('y')]),
+    // ── select all: Ctrl/⌘+A ──
+    ("select all", true, &[letter_key('a')]),
+    ("alles markieren", true, &[letter_key('a')]),
+    ("tout sélectionner", true, &[letter_key('a')]),
+    ("выделить все", true, &[letter_key('a')]),
+    ("seleccionar todo", true, &[letter_key('a')]),
+    // ── delete last word: Ctrl/⌘+Backspace ──
     ("delete last word", true, &[Key::Backspace]),
     ("letztes wort löschen", true, &[Key::Backspace]),
     ("supprimer le dernier mot", true, &[Key::Backspace]),
     ("удалить последнее слово", true, &[Key::Backspace]),
     ("borrar última palabra", true, &[Key::Backspace]),
-    // ── copy: Ctrl+C (VK 0x43) ──
-    ("copy", true, &[Key::Other(0x43)]),
-    ("kopieren", true, &[Key::Other(0x43)]),
-    ("copier", true, &[Key::Other(0x43)]),
-    ("копировать", true, &[Key::Other(0x43)]),
-    ("copiar", true, &[Key::Other(0x43)]),
-    // ── paste: Ctrl+V (VK 0x56) ──
-    ("paste", true, &[Key::Other(0x56)]),
-    ("einfügen", true, &[Key::Other(0x56)]),
-    ("coller", true, &[Key::Other(0x56)]),
-    ("вставить", true, &[Key::Other(0x56)]),
-    ("pegar", true, &[Key::Other(0x56)]),
-    // ── cut: Ctrl+X (VK 0x58) ──
-    ("cut", true, &[Key::Other(0x58)]),
-    ("ausschneiden", true, &[Key::Other(0x58)]),
-    ("couper", true, &[Key::Other(0x58)]),
-    ("вырезать", true, &[Key::Other(0x58)]),
-    ("cortar", true, &[Key::Other(0x58)]),
+    // ── copy: Ctrl/⌘+C ──
+    ("copy", true, &[letter_key('c')]),
+    ("kopieren", true, &[letter_key('c')]),
+    ("copier", true, &[letter_key('c')]),
+    ("копировать", true, &[letter_key('c')]),
+    ("copiar", true, &[letter_key('c')]),
+    // ── paste: Ctrl/⌘+V ──
+    ("paste", true, &[letter_key('v')]),
+    ("einfügen", true, &[letter_key('v')]),
+    ("coller", true, &[letter_key('v')]),
+    ("вставить", true, &[letter_key('v')]),
+    ("pegar", true, &[letter_key('v')]),
+    // ── cut: Ctrl/⌘+X ──
+    ("cut", true, &[letter_key('x')]),
+    ("ausschneiden", true, &[letter_key('x')]),
+    ("couper", true, &[letter_key('x')]),
+    ("вырезать", true, &[letter_key('x')]),
+    ("cortar", true, &[letter_key('x')]),
     // ── tab: Tab (no modifier) ──
     ("tab", false, &[Key::Tab]),
     ("tabulator", false, &[Key::Tab]),
@@ -154,25 +196,25 @@ mod tests {
         ch(&[Key::Return], false)
     }
     fn undo_chord() -> KeyChord {
-        ch(&[Key::Other(0x5A)], true)
+        ch(&[letter_key('z')], true)
     }
     fn redo_chord() -> KeyChord {
-        ch(&[Key::Other(0x59)], true)
+        ch(&[letter_key('y')], true)
     }
     fn selall_chord() -> KeyChord {
-        ch(&[Key::Other(0x41)], true)
+        ch(&[letter_key('a')], true)
     }
     fn delword_chord() -> KeyChord {
         ch(&[Key::Backspace], true)
     }
     fn copy_chord() -> KeyChord {
-        ch(&[Key::Other(0x43)], true)
+        ch(&[letter_key('c')], true)
     }
     fn paste_chord() -> KeyChord {
-        ch(&[Key::Other(0x56)], true)
+        ch(&[letter_key('v')], true)
     }
     fn cut_chord() -> KeyChord {
-        ch(&[Key::Other(0x58)], true)
+        ch(&[letter_key('x')], true)
     }
     fn tab_chord() -> KeyChord {
         ch(&[Key::Tab], false)
