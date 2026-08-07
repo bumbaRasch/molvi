@@ -89,7 +89,10 @@ pub fn foreground_exe() -> Result<String> {
 pub fn macos_frontmost_pid() -> Option<isize> {
     use objc2_app_kit::NSWorkspace;
     let app = NSWorkspace::sharedWorkspace().frontmostApplication()?;
-    Some(app.processIdentifier() as isize)
+    // processIdentifier() can return -1 (kNoProcess); treat non-positive as
+    // "no valid frontmost app" so callers get a clean None (not Some(-1)).
+    let pid = app.processIdentifier() as isize;
+    (pid > 0).then_some(pid)
 }
 
 /// macOS foreground app basename via NSWorkspace (Phase 2, D5). Mirrors the
