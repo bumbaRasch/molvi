@@ -1,40 +1,40 @@
 # Resume prompt — paste into the fresh session
 
-> Copy everything in the block below (starting at "СТАРТ") and paste it as your
+> Copy everything in the block below (starting at "START") and paste it as your
 > first message in the new session. The fresh session has no memory of this one —
 > this prompt + the committed docs carry all the state.
 
 ---
 
-СТАРТ
+START
 
-Продолжаем работу над molvi (Windows 11 push-to-talk dictation, Tauri 2 + local CPU ASR). Это — свежая сессия после брейнсторма Track A (мульти-платформенный порт, OSS). Дизайн-фаза ПОЛНОСТЬЮ завершена и закоммичена. Сейчас — фаза ПЛАНА.
+Continuing work on **molvi** (Windows 11 push-to-talk dictation app — Tauri 2 webview shell + local CPU ASR). This is a fresh session after the Track A brainstorm (multi-platform port, open source). The **design phase is COMPLETE and committed**. We are now in the **PLANNING phase**.
 
-## Что прочитать ПЕРВЫМ делом (по порядку, обязательно)
-1. `AGENTS.md` — библия проекта (toolchain, deps, архитектура, privacy §10.1, blaze NFR, правила верификации доков). Она уже поправлена в этом брейнсторме.
-2. `docs/next-session-handoff.md` — карта восстановления. Содержит: что сделано, точные следующие шаги, gate-команды, binary-lock caveat, OPEN-решения.
-3. `docs/superpowers/specs/2026-08-07-molvi-multiplatform-port-design.md` — **THE spec** (Track A дизайн: решения D1–D6, doc-верифицированная crate-матрица на август 2026, 3 блокера, 3 спайка, inline-cfg архитектура, per-platform specifics, Wayland scoping OPEN, NFR).
-4. `docs/superpowers/specs/2026-08-07-paste-focus-guard-spike.md` — спайк #3 (paste focus-guard: macOS ⌘V, tauri-nspanel, verify/restore/no-restore форма).
-5. `docs/mobile-strategy.md` — мобайл = отдельный продукт (не сейчас).
+## READ FIRST (in this order, mandatory)
+1. `AGENTS.md` — the project bible (toolchain, dependencies, architecture, privacy §10.1, blaze NFRs, doc-verification rules). Already corrected during this brainstorm.
+2. `docs/next-session-handoff.md` — the recovery map. Contains: what's done, exact next steps, gate commands, binary-lock caveat, OPEN decisions.
+3. `docs/superpowers/specs/2026-08-07-molvi-multiplatform-port-design.md` — **THE spec** (Track A design: decisions D1–D6, doc-verified crate matrix as of August 2026, 3 blockers, 3 spikes, inline-cfg architecture, per-platform specifics, Wayland scoping OPEN, NFRs).
+4. `docs/superpowers/specs/2026-08-07-paste-focus-guard-spike.md` — spike #3 (paste focus-guard: macOS ⌘V, tauri-nspanel, verify/restore/no-restore shape).
+5. `docs/mobile-strategy.md` — mobile = separate product (not now).
 
-## Главные правила (HARD)
-- **НИЧЕГО не делай по памяти.** Каждый crate/API/сигнатуру — перепроверяй через skill `find-docs` (ctx7: `npx ctx7@latest …`) + docs.rs/crates.io на август 2026. AGENTS.md перечисляет живые ctx7-id: `/pykeio/ort` (НЕ `/pyke.io/ort`), `/enigo-rs/enigo`, `/websites/v2_tauri_app`, `/cjpais/transcribe-rs`, `/altunenes/parakeet-rs`. Для multi-model crate'ов ctx7-autodocs ненадёжны — сверяй с исходником в `~/.cargo/registry`.
-- **Не пиши код до плана.** Последовательность: brainstorm → spec (✅ готов) → **writing-plans** → execute.
-- **Blaze = PERFORMANCE NFR, не совместимость.** Главный код можно рефакторить (обратная совместимость не нужна), но дефолтный RU/PTT/Smart путь держит RTF ≤ 0.03 + hot-loop без аллокаций/локов/blocking — замером на каждой платформе. Nemotron feeds ONLY на 8960-sample boundary (не трогать).
-- **Privacy §10.1 HARD RULE:** никогда не логировать transcript/partials/post-proc/dict/history/snippet/command/prompt — никакой уровень. 6 `log_privacy` субстратов держать зелёными.
-- **Архитектура D2:** inline `#[cfg(target_os=...)]` per feature module + `[target.'cfg(windows)'.dependencies]` в Cargo.toml. **НЕТ `mod platform`** (doc-верерифицировано как premature для 6 single-use fn).
+## HARD rules
+- **NEVER work from memory.** Re-verify every crate/API/signature against the `find-docs` skill (ctx7: `npx ctx7@latest …`) + docs.rs/crates.io as of August 2026. AGENTS.md lists the live ctx7 IDs: `/pykeio/ort` (NOT `/pyke.io/ort`), `/enigo-rs/enigo`, `/websites/v2_tauri_app`, `/cjpais/transcribe-rs`, `/altunenes/parakeet-rs`. For multi-model crates ctx7 autodocs are unreliable — cross-check against the pinned source in `~/.cargo/registry`.
+- **Do NOT write code before the plan exists.** Sequence: brainstorm → spec (✅ done) → **writing-plans** → execute.
+- **Blaze = PERFORMANCE NFR, not compatibility.** The main/Windows code may be refactored freely (backward compatibility is not required), but the default RU/PTT/Smart path holds RTF ≤ 0.03 + a hot loop free of allocations/locks/blocking — verified by measurement on each platform. Nemotron feeds ONLY at the 8960-sample boundary (do not change).
+- **Privacy §10.1 HARD RULE:** never log transcript/partials/post-proc/dict/history/snippet/command/prompt text at any level. Keep the 6 `log_privacy` substrates green.
+- **Architecture D2:** inline `#[cfg(target_os = "...")]` per feature module + `[target.'cfg(windows)'.dependencies]` in Cargo.toml. **NO `mod platform`** (doc-verified as premature for 6 single-use functions).
 
-## СЛЕДУЮЩИЙ ШАГ = вызвать skill `writing-plans`
-Превратить spec в пофазный план реализации → `docs/superpowers/plans/2026-08-07-molvi-multiplatform-port.md`. Предложенное секционирование (из handoff §3):
-- **Phase 1** — разблокировать кросс-платформенные сборки: файлы лицензии (`MIT OR Apache-2.0`); **Step 0** (cfg-gate 4 Win32-сайтов: `audio.rs:6-7`, `ort_affinity.rs:10,14`, `profiles.rs:13-18`, `paste.rs:9-10`; `model_store.rs:214` уже сделан); **CI matrix** (`.github/workflows`: windows/macos-14/ubuntu — CI ЕСТЬ механизм спайков #1/#2).
-- **Phase 2** — macOS порт (Apple Silicon): tauri-nspanel (overlay focusable:false сломан, tauri#14102), enigo Accessibility-permission, paste ⌘V (Key::Command).
+## NEXT STEP = invoke the `writing-plans` skill
+Turn the spec into a phased implementation plan → `docs/superpowers/plans/2026-08-07-molvi-multiplatform-port.md`. Suggested phasing (from handoff §3):
+- **Phase 1** — unblock cross-platform builds: license files (`MIT OR Apache-2.0`); **Step 0** (cfg-gate the 4 unconditional Win32 sites: `audio.rs:6-7`, `ort_affinity.rs:10,14`, `profiles.rs:13-18`, `paste.rs:9-10`; `model_store.rs:214` is already gated); **CI matrix** (`.github/workflows`: windows/macos-14/ubuntu — the CI **IS** the mechanism for spikes #1/#2; green on mac(Apple Silicon)/linux = engine spikes pass).
+- **Phase 2** — macOS port (Apple Silicon): needs `tauri-nspanel` (overlay `focusable:false` is broken — tauri#14102), enigo Accessibility permission, paste = ⌘V (`Key::Command`, NOT Control).
 - **Phase 3** — Linux/Wayland (Wayland scoping OPEN: portal vs evdev).
-После плана — execute (через `executing-plans` / `subagent-driven-development`).
+After the plan is written → execute it (via `executing-plans` / `subagent-driven-development`).
 
-## Gate-команды (для любого кода)
-`cargo fmt` + `cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings` + `cargo test --manifest-path src-tauri/Cargo.toml --lib` + (binary-unlocked) `cargo test --test log_privacy` + `npx tsc --noEmit` + `npm run build`. Binary-lock: НЕ убивай запущенный `cargo tauri dev` — если держит molvi.exe, юзай `cargo check --all-targets` + `cargo test --lib`.
+## Gate commands (for any code work)
+`cargo fmt` + `cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings` + `cargo test --manifest-path src-tauri/Cargo.toml --lib` + (binary-unlocked) `cargo test --test log_privacy` + `npx tsc --noEmit` + `npm run build`. Binary-lock: do NOT kill a running `cargo tauri dev` — if it holds molvi.exe, use `cargo check --all-targets` + `cargo test --lib`.
 
-## СТАРТ
-Прочитай AGENTS.md + handoff + spec + spike #3, подтверди мне понимание плана в 5–7 строках, затем вызови skill `writing-plans` и начни превращать spec в пофазный план. Задавай уточняющие вопросы по ходу. Ничего по памяти — всё верифицируй через find-docs/ctx7.
+## START
+Read `AGENTS.md` + handoff + spec + spike #3, confirm your understanding of the plan back to me in 5–7 lines, then invoke the `writing-plans` skill and begin turning the spec into a phased plan. Ask clarifying questions as you go. Verify everything via find-docs/ctx7 — never from memory.
 
-КОНЕЦ
+END
