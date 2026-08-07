@@ -51,7 +51,10 @@ pub(crate) const fn letter_key(c: char) -> Key {
             'x' | 'X' => 0x07,
             'y' | 'Y' => 0x10,
             'z' | 'Z' => 0x06,
-            _ => c as u32, // fallback — no non-letter command chord reaches here
+            // Only a/c/v/x/y/z command letters are used (PHRASES + paste
+            // select-all). A non-letter here is a programmer error → fail
+            // loudly (compile-time in the static table, runtime otherwise).
+            _ => unreachable!("letter_key: only a/c/v/x/y/z command letters are supported"),
         };
         Key::Other(vk)
     }

@@ -62,7 +62,7 @@ pub fn capture_target() -> Option<isize> {
     crate::profiles::macos_frontmost_pid()
 }
 
-/// Linux stub. X11 (_NET_ACTIVE_WINDOW) lands in Phase 3; Wayland has no
+/// Linux stub. ponytail: X11 (_NET_ACTIVE_WINDOW) lands in Phase 3; Wayland has no
 /// active-window API. None → paste_text errors at the target guard before any
 /// paste attempt (safe; text never misdelivered).
 #[cfg(not(any(target_os = "windows", target_os = "macos")))]
