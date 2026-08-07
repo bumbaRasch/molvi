@@ -44,6 +44,65 @@ pub mod updater;
 pub use engine::Engine;
 pub use settings::Settings;
 
+// macOS overlay focus fix (spike #3; tauri#14102). Converts the "overlay"
+// webview window into a non-activating NSPanel so show/hide never steals
+// keyboard focus from the user's app (paste routes correctly).
+// `can_become_key_window: false` is the whole point. Idempotent + best-effort:
+// any error logs + skips (the app still runs with Tauri's default
+// focus-stealing window — better than a startup crash). Verified against
+// tauri-nspanel rev a3122e8.
+#[cfg(target_os = "macos")]
+mod macos_overlay {
+    use tauri::Manager;
+    use tauri_nspanel::{CollectionBehavior, PanelLevel, StyleMask, WebviewWindowExt, tauri_panel};
+
+    tauri_panel! {
+        panel!(OverlayPanel {
+            config: {
+                // The panel MUST NOT take keyboard focus (paste → user's app).
+                can_become_key_window: false,
+                can_become_main_window: false,
+                is_floating_panel: true,
+                // An accessory app is permanently "deactivated"; the default
+                // hide-on-deactivate would vanish the overlay.
+                hides_on_deactivate: false,
+            }
+        })
+    }
+
+    /// Convert the "overlay" window to a non-activating NSPanel, ONCE at
+    /// startup. Also sets Accessory activation policy (no Dock icon; required
+    /// for the non-activating model). Idempotent + best-effort.
+    pub fn init_overlay_panel(app: &tauri::AppHandle) {
+        // Accessory policy = background/accessory app (no Dock icon). The
+        // bundle's LSUIElement (Task 9) is the declarative equivalent for
+        // release builds.
+        let _ = app.set_activation_policy(tauri::ActivationPolicy::Accessory);
+        let Some(win) = app.get_webview_window("overlay") else {
+            tracing::warn!("macOS overlay panel: window not found");
+            return;
+        };
+        let panel = match win.to_panel::<OverlayPanel>() {
+            Ok(p) => p,
+            Err(e) => {
+                tracing::warn!("macOS overlay to_panel failed: {e}");
+                return;
+            }
+        };
+        // Non-activating style; Status level (above normal windows, over the
+        // menu bar region); show alongside fullscreen; join all spaces.
+        panel.set_style_mask(StyleMask::empty().nonactivating_panel().into());
+        panel.set_level(PanelLevel::Status.value());
+        panel.set_collection_behavior(
+            CollectionBehavior::new()
+                .full_screen_auxiliary()
+                .can_join_all_spaces()
+                .into(),
+        );
+        tracing::info!("macOS overlay panel initialized (non-activating, Status level)");
+    }
+}
+
 /// Tauri-managed app state. `settings` is read by future settings-UI commands;
 /// `cmd_tx` lets the `cancel_operation` IPC command forward to the coordinator
 /// (filled in `setup` once the coordinator channel exists).
@@ -235,7 +294,7 @@ pub fn run() {
         None => None,
     };
 
-    tauri::Builder::default()
+    let builder = tauri::Builder::default()
         .plugin(tauri_plugin_single_instance::init(|app, _argv, _cwd| {
             // second launch: surface the settings window if it exists
             if let Some(w) = app.get_webview_window("settings") {
@@ -310,6 +369,11 @@ pub fn run() {
             // "warming up" to "molvi" once the bg load + hotkey register
             // complete (driven by tray::set_status below).
             let _tray = tray::build(app.handle())?;
+
+            // macOS: convert the overlay window to a non-activating NSPanel
+            // (focus fix). Best-effort; logs + skips on any error.
+            #[cfg(target_os = "macos")]
+            macos_overlay::init_overlay_panel(app.handle());
 
             let settings = app.state::<AppState>().settings.lock().unwrap().clone();
 
@@ -496,7 +560,10 @@ pub fn run() {
                 })?;
 
             Ok(())
-        })
+        });
+    #[cfg(target_os = "macos")]
+    let builder = builder.plugin(tauri_nspanel::init());
+    builder
         .run(tauri::generate_context!())
         .expect("error while running molvi");
 }
