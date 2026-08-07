@@ -114,3 +114,9 @@ parakeet-rs = { version = "0.3.7", default-features = false, features = ["cpu", 
 # cjpais/Handy). Task 7 consumes it; Task 4 only wired the dep.
 [target.'cfg(target_os = "macos")'.dependencies]
 tauri-nspanel = { git = "https://github.com/ahkohd/tauri-nspanel", branch = "v2.1" }
+# profiles::foreground_exe + macos_frontmost_pid (Task 8). Per-class features
+# verified against objc2-app-kit 0.3.2 Cargo.toml; bare "0.3" does NOT enable
+# NSWorkspace/NSRunningApplication. NSString: Display → .to_string() works.
+objc2 = "0.6"
+objc2-foundation = { version = "0.3", features = ["NSURL", "NSString"] }
+objc2-app-kit = { version = "0.3", features = ["NSWorkspace", "NSRunningApplication"] }

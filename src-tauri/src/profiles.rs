@@ -82,11 +82,55 @@ pub fn foreground_exe() -> Result<String> {
     Ok(base)
 }
 
-/// Non-Windows stub (Step 0). macOS (NSWorkspace) lands in Phase 2; Linux X11
-/// (_NET_WM_PID) in Phase 3. Fail-open: caller treats Err as "no profile match,
-/// use global settings" (pipeline.rs).
-#[cfg(not(target_os = "windows"))]
+/// Frontmost app's process id (macOS), for the paste focus-guard. None when
+/// there is no frontmost app (headless / no GUI session). Pure metadata
+/// (privacy §10.1: a pid is not content).
+#[cfg(target_os = "macos")]
+pub fn macos_frontmost_pid() -> Option<isize> {
+    use objc2_app_kit::NSWorkspace;
+    let app = NSWorkspace::sharedWorkspace().frontmostApplication()?;
+    Some(app.processIdentifier() as isize)
+}
+
+/// macOS foreground app basename via NSWorkspace (Phase 2, D5). Mirrors the
+/// Windows arm's UPPERCASED-basename contract so `resolve()` matches
+/// unchanged. Fail-open on every step; caller treats Err as "no profile
+/// match, use global settings" (pipeline.rs).
+#[cfg(target_os = "macos")]
 pub fn foreground_exe() -> Result<String> {
+    use objc2_app_kit::NSWorkspace;
+    let app = NSWorkspace::sharedWorkspace()
+        .frontmostApplication()
+        .ok_or_else(|| MolviError::Profile("no frontmost app".into()))?;
+    // bundleURL → path → basename, UPPERCASED (e.g. "SAFARI.APP"). Fail-open on
+    // a missing/odd URL. Tolerate both separators (mirrors the Windows arm).
+    let url = app
+        .bundleURL()
+        .ok_or_else(|| MolviError::Profile("no bundleURL".into()))?;
+    // NSURL::path() returns Option<Retained<NSString>>; NSString: Display.
+    let path_nsstr = url
+        .path()
+        .ok_or_else(|| MolviError::Profile("bundleURL has no path".into()))?;
+    let path = path_nsstr.to_string();
+    let base = path
+        .rsplit(['/', '\\'])
+        .next()
+        .unwrap_or(&path)
+        .to_ascii_uppercase();
+    if base.is_empty() {
+        return Err(MolviError::Profile("empty app basename".into()));
+    }
+    tracing::debug!("foreground exe: {base}");
+    Ok(base)
+}
+
+/// Linux stub (Step 0). macOS (NSWorkspace) is implemented above; Linux X11
+/// (_NET_WM_PID) lands in Phase 3. Fail-open: caller treats Err as "no profile
+/// match, use global settings" (pipeline.rs).
+#[cfg(not(any(target_os = "windows", target_os = "macos")))]
+pub fn foreground_exe() -> Result<String> {
+    // ponytail: Linux X11 (_NET_WM_PID) lands in Phase 3; Wayland per-compositor
+    // adapter is a follow-up. Fail-open: caller treats Err as "no profile match".
     Err(MolviError::Profile(
         "foreground_exe not implemented on this OS yet".into(),
     ))
