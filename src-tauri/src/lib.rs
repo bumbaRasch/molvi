@@ -40,6 +40,9 @@ pub mod snippets;
 pub mod tray;
 pub mod tray_locales;
 pub mod updater;
+/// X11 EWMH helpers (Linux only): active-window/pid queries + focus restore.
+#[cfg(all(unix, not(target_os = "macos")))]
+pub mod x11;
 
 pub use engine::Engine;
 pub use settings::Settings;

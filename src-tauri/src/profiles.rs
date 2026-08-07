@@ -127,16 +127,37 @@ pub fn foreground_exe() -> Result<String> {
     Ok(base)
 }
 
-/// Linux stub (Step 0). macOS (NSWorkspace) is implemented above; Linux X11
-/// (_NET_WM_PID) lands in Phase 3. Fail-open: caller treats Err as "no profile
-/// match, use global settings" (pipeline.rs).
+/// Linux foreground app basename (Phase 3, Task 12). X11: `_NET_ACTIVE_WINDOW`
+/// → `_NET_WM_PID` → `/proc/<pid>/exe` → basename. Mirrors the Windows/macOS
+/// arms' UPPERCASED-basename contract so `resolve()` matches unchanged. Fail-open
+/// on every step; caller treats Err as "no profile match, use global settings".
+/// Wayland: no EWMH active-window API → Err (per-compositor adapter = follow-up).
 #[cfg(not(any(target_os = "windows", target_os = "macos")))]
 pub fn foreground_exe() -> Result<String> {
-    // ponytail: Linux X11 (_NET_WM_PID) lands in Phase 3; Wayland per-compositor
-    // adapter is a follow-up. Fail-open: caller treats Err as "no profile match".
-    Err(MolviError::Profile(
-        "foreground_exe not implemented on this OS yet".into(),
-    ))
+    // Wayland: no EWMH active-window API. Per-compositor adapters (hyprctl/
+    // swaymsg/niri msg) are a follow-up. Fail-open: caller uses global settings.
+    if crate::x11::is_wayland() {
+        return Err(MolviError::Profile(
+            "Wayland foreground_exe: per-compositor adapter not yet implemented".into(),
+        ));
+    }
+    // X11: _NET_ACTIVE_WINDOW → _NET_WM_PID → /proc/<pid>/exe → basename.
+    let pid = crate::x11::active_window_id()
+        .and_then(crate::x11::window_pid)
+        .ok_or_else(|| MolviError::Profile("X11: no active window pid".into()))?;
+    let exe = std::fs::read_link(format!("/proc/{pid}/exe"))
+        .map_err(|e| MolviError::Profile(format!("readlink /proc/{pid}/exe: {e}")))?;
+    let base = exe
+        .to_string_lossy()
+        .rsplit(['/', '\\'])
+        .next()
+        .unwrap_or(&exe.to_string_lossy())
+        .to_ascii_uppercase();
+    if base.is_empty() {
+        return Err(MolviError::Profile("empty exe basename".into()));
+    }
+    tracing::debug!("foreground exe: {base}");
+    Ok(base)
 }
 
 /// First ENABLED profile whose `exe` matches `exe` case-insensitively (both

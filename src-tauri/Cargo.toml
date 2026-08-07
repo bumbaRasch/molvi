@@ -120,3 +120,12 @@ tauri-nspanel = { git = "https://github.com/ahkohd/tauri-nspanel", branch = "v2.
 objc2 = "0.6"
 objc2-foundation = { version = "0.3", features = ["NSURL", "NSString"] }
 objc2-app-kit = { version = "0.3", features = ["NSWorkspace", "NSRunningApplication"] }
+
+# Linux X11 EWMH helpers (x11.rs) + statvfs disk-space check (model_store.rs).
+# Both already in the lockfile transitively (enigo pulls x11rb; cpal/etc pull
+# libc) — promoting to direct deps makes them importable. x11rb features come
+# via feature-unification with enigo (randr/xinput/xtest); core xproto + connect
+# are all molvi uses.
+[target.'cfg(all(unix, not(target_os = "macos")))'.dependencies]
+x11rb = "0.13"
+libc = "0.2"

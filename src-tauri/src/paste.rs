@@ -62,12 +62,16 @@ pub fn capture_target() -> Option<isize> {
     crate::profiles::macos_frontmost_pid()
 }
 
-/// Linux stub. ponytail: X11 (_NET_ACTIVE_WINDOW) lands in Phase 3; Wayland has no
-/// active-window API. None → paste_text errors at the target guard before any
-/// paste attempt (safe; text never misdelivered).
+/// Linux: capture the active X11 window id (Task 12). Wayland has no active-
+/// window API → None (paste_text bypasses to the Wayland clipboard path before
+/// the target guard).
 #[cfg(not(any(target_os = "windows", target_os = "macos")))]
 pub fn capture_target() -> Option<isize> {
-    None
+    if crate::x11::is_wayland() {
+        None // Wayland: no active-window id; paste_text bypasses to paste_wayland.
+    } else {
+        crate::x11::active_window_id().map(|w| w as isize)
+    }
 }
 
 #[cfg(target_os = "windows")]
@@ -121,11 +125,17 @@ fn ensure_focus(target: isize) -> Result<()> {
     }
 }
 
-/// Linux stub. ponytail: X11 verify+restore (_NET_ACTIVE_WINDOW client message)
-/// = Phase 3.
+/// Linux focus guard (Task 12). X11: verify the active window is still the
+/// captured target, request activation if not, re-verify (mirrors xdotool/
+/// wmctrl). Wayland: no restore (paste_text bypasses here before this is
+/// reached; defensive Ok). Err leaves text on the clipboard (§6.6).
 #[cfg(not(any(target_os = "windows", target_os = "macos")))]
-fn ensure_focus(_target: isize) -> Result<()> {
-    Ok(())
+fn ensure_focus(target: isize) -> Result<()> {
+    if crate::x11::is_wayland() {
+        Ok(()) // Wayland: no restore (paste_text bypasses here; defensive Ok).
+    } else {
+        crate::x11::ensure_active_window(target as u32)
+    }
 }
 
 /// Paste per spec §6.6. Clipboard-paste primary, type fallback, focus-guarded.
@@ -134,6 +144,14 @@ pub fn paste_text(text: &str, target: Option<isize>, mode: PasteMode) -> Result<
     if text.is_empty() {
         tracing::info!("paste: empty transcript, nothing to do");
         return Ok(());
+    }
+
+    // Wayland (Linux): no active-window API + enigo inject only reaches XWayland
+    // apps. Bypass to the clipboard-primary path before the X11/Win/macOS target
+    // + focus-guard logic below.
+    #[cfg(all(unix, not(target_os = "macos")))]
+    if crate::x11::is_wayland() {
+        return paste_wayland(text, mode);
     }
 
     // No captured target (capture_target returned NULL): no window to paste
@@ -155,20 +173,26 @@ pub fn paste_text(text: &str, target: Option<isize>, mode: PasteMode) -> Result<
         .map_err(|e| MolviError::Paste(format!("set clipboard: {e}")))?;
     drop(clip); // release before simulating keys
 
-    // Ctrl/⌘+V (verified enigo 0.6.1 API: Keyboard::key(Key, Direction) -> InputResult).
-    // The modifier + key are platform-resolved helpers: Windows = Ctrl+VK_V,
-    // macOS = ⌘+VK 9, Linux = Ctrl+'v'. ponytail: on Windows Key::Other(0x56)
-    // is VK_V, NOT Key::Unicode('v'). enigo's Unicode path on Windows sends
-    // SendInput KEYEVENTF_UNICODE, which types the literal char and does NOT
-    // combine with the held Ctrl → would type "v" instead of pasting.
-    // Key::Other(u32) sends a Virtual_Key (ctx7/enigo docs) which respects the
-    // modifier state → real Ctrl+V paste. Caught in Phase-1 smoke.
     // macOS: Enigo::new fires the Accessibility-permission prompt on first use
     // (Settings::default() sets open_prompt_to_get_permissions = true). The user
     // grants it once; subsequent pastes work.
     let mut enigo =
         Enigo::new(&Settings::default()).map_err(|e| MolviError::Paste(format!("enigo: {e}")))?;
 
+    deliver_paste_chord(&mut enigo, mode)?;
+    Ok(())
+}
+
+/// Deliver the paste chord: optional select-all (Replace mode) then the
+/// platform paste key combo. Shared by the focus-guarded path (X11/Win/macOS)
+/// and the Wayland clipboard-primary path.
+//
+// Platform paste keys (verified enigo 0.6.1 API: Keyboard::key(Key, Direction)):
+// Windows = Ctrl+VK_V (`Key::Other(0x56)` — enigo's Unicode path sends
+// KEYEVENTF_UNICODE which types the literal char and does NOT combine with held
+// Ctrl → would type "v" instead of pasting; Key::Other respects modifier state
+// → real Ctrl+V. Caught in Phase-1 smoke); macOS = ⌘+VK 9; Linux = Ctrl+'v'.
+fn deliver_paste_chord(enigo: &mut Enigo, mode: PasteMode) -> Result<()> {
     // Replace mode: select the focused control's whole text first so the
     // paste overwrites it. Ctrl/⌘+A in a form field selects just that field;
     // in full-document editors (Word/Google Docs) it selects the whole doc —
@@ -205,6 +229,41 @@ pub fn paste_text(text: &str, target: Option<isize>, mode: PasteMode) -> Result<
         .map_err(paste_err("mod up"))?;
     tracing::info!("paste: paste chord delivered");
     Ok(())
+}
+
+/// Wayland clipboard-primary paste (Linux only). Wayland has no active-window
+/// API + enigo's keystroke inject only reaches XWayland apps (native Wayland
+/// apps reject it). Path: arboard sets the clipboard (shells out to wl-copy),
+/// blast-release all modifiers (can't read modifier state on Wayland — the PTT
+/// key may still be logically held; mirrors wdotool --clearmodifiers), then
+/// best-effort Ctrl+V. On enigo failure the caller's paste-failed recovery
+/// surfaces "text on clipboard, press Ctrl+V". Privacy §10.1: logs metadata
+/// only (char count), never the text.
+#[cfg(all(unix, not(target_os = "macos")))]
+fn paste_wayland(text: &str, mode: PasteMode) -> Result<()> {
+    if mode == PasteMode::Type {
+        // Best-effort enigo text inject (XWayland only). Native Wayland apps
+        // may reject it; the caller handles Err via paste-failed recovery.
+        return type_text(text);
+    }
+    let mut clip = Clipboard::new().map_err(|e| MolviError::Paste(format!("clipboard: {e}")))?;
+    clip.set_text(text)
+        .map_err(|e| MolviError::Paste(format!("set clipboard: {e}")))?;
+    drop(clip);
+    let mut enigo =
+        Enigo::new(&Settings::default()).map_err(|e| MolviError::Paste(format!("enigo: {e}")))?;
+    blast_modifiers(&mut enigo);
+    deliver_paste_chord(&mut enigo, mode)
+}
+
+/// Release every modifier unconditionally (Wayland: can't read modifier state;
+/// the PTT key may still be logically held after the compositor keybinding).
+/// Releasing an un-held key is a harmless no-op. (espanso/wdotool pattern.)
+#[cfg(all(unix, not(target_os = "macos")))]
+fn blast_modifiers(enigo: &mut Enigo) {
+    for key in [Key::Shift, Key::Control, Key::Alt, Key::Meta] {
+        let _ = enigo.key(key, Release);
+    }
 }
 
 /// Emit a command-mode key chord into the captured target window (spec §6.5.4).

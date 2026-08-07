@@ -3198,6 +3198,7 @@ dependencies = [
  "cpal",
  "enigo",
  "hf-hub",
+ "libc",
  "log",
  "objc2",
  "objc2-app-kit",
@@ -3226,6 +3227,7 @@ dependencies = [
  "transcribe-rs",
  "ureq",
  "windows 0.62.2",
+ "x11rb",
 ]
 
 [[package]]

@@ -240,11 +240,33 @@ pub fn has_disk_space(needed: u64) -> Result<bool> {
     Ok(avail >= needed)
 }
 
-/// Fail-open stub for non-Windows (Step 0). Phase 2 adds `statfs` (macOS),
-/// Phase 3 `statvfs` (Linux); until then assume enough space (the download
-/// itself fails cleanly on ENOSPC via hf-hub's io error). Privacy §10.1: a
-/// byte count, no content.
-#[cfg(not(target_os = "windows"))]
+/// Linux: statvfs free-space check (Phase 3, Task 12). Fail-open (assume enough)
+/// on any statvfs error — the download itself fails cleanly on ENOSPC via
+/// hf-hub's io error. Privacy §10.1: a byte count, no content.
+#[cfg(all(unix, not(target_os = "macos")))]
+pub fn has_disk_space(needed: u64) -> Result<bool> {
+    use std::ffi::CString;
+    use std::mem::MaybeUninit;
+    let dir = paths::models_dir()?;
+    let cpath = CString::new(dir.to_string_lossy().as_bytes().to_vec())
+        .map_err(|e| MolviError::ModelStore(format!("statvfs path: {e}")))?;
+    let mut buf: MaybeUninit<libc::statvfs> = MaybeUninit::uninit();
+    // SAFETY: statvfs writes to buf via a valid *const c_char path; no aliasing.
+    // Returns 0 on success. On failure, leave buf uninitialized (never read).
+    let r = unsafe { libc::statvfs(cpath.as_ptr(), buf.as_mut_ptr()) };
+    if r != 0 {
+        tracing::warn!("statvfs failed (r={r}); assuming enough space");
+        return Ok(true);
+    }
+    // SAFETY: r == 0 → statvfs initialized buf.
+    let buf = unsafe { buf.assume_init() };
+    let avail = (buf.f_frsize as u64).saturating_mul(buf.f_bavail as u64);
+    Ok(avail >= needed)
+}
+
+/// macOS stub (deferred to Task 10 blaze measurement). Assume enough space.
+/// Privacy §10.1: a byte count, no content.
+#[cfg(target_os = "macos")]
 pub fn has_disk_space(_needed: u64) -> Result<bool> {
     Ok(true)
 }
@@ -361,7 +383,7 @@ mod tests {
         let _ = fs::remove_dir_all(&dir);
     }
 
-    #[cfg(target_os = "windows")]
+    #[cfg(any(target_os = "windows", all(unix, not(target_os = "macos"))))]
     #[test]
     fn has_disk_space_is_sane() {
         // 0 needed -> always true (nothing to download)
