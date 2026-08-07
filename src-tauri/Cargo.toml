@@ -97,3 +97,20 @@ transcribe-rs = { git = "https://github.com/cjpais/transcribe-rs", rev = "efc661
 # wire per-OS equivalents). Windows behavior unchanged (same version+features).
 [target.'cfg(windows)'.dependencies]
 windows = { version = "0.62", features = ["Win32_UI_WindowsAndMessaging", "Win32_Foundation", "Win32_System_Threading", "Win32_System_SystemInformation", "Win32_Media_Audio", "Win32_Storage_FileSystem"] }
+
+# CoreML EP for both engines, Apple Silicon only (D3). ort-sys dist.tsv has no
+# x86_64-apple-darwin row → Intel Mac unsupported without load-dynamic.
+# Feature names verified against the resolved crate sources
+# (~/.cargo/registry/.../transcribe-rs-0.3.11 + parakeet-rs-0.3.7):
+#   transcribe-rs `ort-coreml` = ["onnx", "ort/coreml"]  (onnx pulls audio-features)
+#   parakeet-rs   `coreml`     = ["ort/coreml"]           (defaults re-declared below)
+[target.'cfg(all(target_os = "macos", target_arch = "aarch64"))'.dependencies]
+transcribe-rs = { version = "0.3.11", features = ["ort-coreml"] }
+parakeet-rs = { version = "0.3.7", default-features = false, features = ["cpu", "ort-defaults", "api-28", "coreml"] }
+
+# Overlay focus fix (spike #3; tauri#14102): Tauri focusable:false is broken on
+# macOS. tauri-nspanel converts the webview window to a non-activating NSPanel.
+# NOT published to crates.io (verified 2026-08-07) → git branch v2.1 (mirrors
+# cjpais/Handy). Task 7 consumes it; Task 4 only wired the dep.
+[target.'cfg(target_os = "macos")'.dependencies]
+tauri-nspanel = { git = "https://github.com/ahkohd/tauri-nspanel", branch = "v2.1" }
