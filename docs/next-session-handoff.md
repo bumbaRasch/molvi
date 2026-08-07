@@ -1,176 +1,122 @@
-# molvi — next-session handoff (briefing for brainstorm)
+# molvi — next-session handoff (briefing for the multi-platform port, Phase 3)
 
 > Purpose: a self-contained briefing so a FRESH session (after a clean context)
-> can pick up molvi and run a brainstorm without re-discovering the state. Read
-> **AGENTS.md first** (the project bible — toolchain, deps, architecture,
-> privacy §10.1, blaze NFRs), then this file.
+> can pick up the **multi-platform port** and run Phase 3 (Linux) without
+> re-discovering the state. Read **AGENTS.md first** (the project bible —
+> toolchain, deps, architecture, privacy §10.1, blaze NFRs, "Multi-platform
+> port status" section), then this file.
 
-## Where molvi is now
+## Where the multi-platform port is now
 
-v0.1.0 — Windows 11 push-to-talk dictation app (Tauri 2 + local CPU ASR).
-Two engines: **GigaAM-v3** (Russian, default, fast + punctuated) and **Nemotron
-3.5 ASR** (multilingual streaming). UI fully internationalized (36 languages).
+molvi v0.1.0 = Windows 11 push-to-talk dictation (Tauri 2 + local CPU ASR:
+GigaAM Russian + Nemotron multilingual). The **multi-platform port** (branch
+`multiplatform-port`, PR #1 → `main`) is taking it to macOS (Apple Silicon) +
+Linux. UI is 36-language.
 
-Commit history (branch `main`, newest first):
-- `b3dc890` — docs: platform portability vision (Vosk + Linux/macOS/Pi/mobile)
-- `7c5bbe1` — settings: drop dead CommandModeSettings + native snippets translations (8 langs)
-- `d863ce9` — review: correctness fixes, complete snippets feature, prune dead code
-- `de1a065` — init: molvi v0.1.0
+**Execution state lives in the SDD ledger** — read it FIRST:
+`.superpowers/sdd/2026-08-07-molvi-multiplatform-port/progress.md` (per-task
+commits, review outcomes, fix rounds, spike results — the recovery map).
 
-All gates green at last check: `cargo fmt` + `clippy --all-targets -D warnings`
-+ `cargo test --lib` (185) + `cargo test --test log_privacy` (6) + `tsc --noEmit`
-+ `npm run build`. Full `cargo build` (release) NOT yet verified end-to-end.
+- **Phase 1 COMPLETE & CI-green:** dual license (MIT OR Apache-2.0); Step-0
+  cfg-gate (5 Win32 sites + `windows`→target-dep + paths tests Windows-gated);
+  CI matrix `.github/workflows/ci.yml` (windows-latest + macos-14 + ubuntu-latest
+  = fmt + clippy `-D warnings` + `test --lib` + tsc + build). Spikes #1 (Linux
+  ort-CPU build) + #2 (macOS aarch64 ort/CoreML build) PASS. See
+  `docs/spike-results.md`.
+- **Phase 2 CODE COMPLETE & CI-green (Tasks 4-9):** macOS Cargo deps (CoreML
+  engines + tauri-nspanel git + objc2 with per-class features); paths
+  cross-platform; NSWorkspace `foreground_exe` + `macos_frontmost_pid`;
+  per-platform paste keys (⌘V = `Key::Meta` + `Key::Other(9)`) + verify-only
+  focus guard + command-chord `letter_key` (kVK_ANSI); NSPanel overlay
+  (tauri-nspanel, `can_become_key_window:false`); `src-tauri/Info.plist`
+  (NSMicrophoneUsageDescription + LSUIElement) + `minimumSystemVersion` + Secure
+  Input detection (`IsSecureEventInputEnabled`). All compile-verified on macos-14.
+- **Deferred (hardware-blocked): Task 10** — macOS blaze RTF ≤0.03 measurement +
+  full feature smoke. Needs a Mac + the on-device model. NOT doable from Windows
+  or CI (CI only compiles). This is the ONE remaining macOS gate.
 
-## Done this session (the work behind the 3 post-init commits)
-
-1. **Whole-codebase code review** (6 parallel review subagents, doc-grounded).
-   0 Critical found. Applied: resampler cross-session FFT reset; history
-   enable/disable now live; model_store AggregateProgress handler + pct clamp;
-   history.ts query race guard; onboarding listener cleanup; empty-entry guards;
-   dead `original_affinity` removed.
-2. **Snippets feature completed** (was half-shipped: store+expand wired, no
-   IPC/UI). Added 5 IPC commands + Settings section + sidebar/icon + i18n ×36
-   (en+ru proper, 8 more native, 27 en-baseline).
-3. **Dead-code prune** (ponytail-audit): `MolviError::Command/PostProc`,
-   `ort_affinity` no-op Nemotron arm, `history::open_at`, `set_status` dead
-   branch, `Store.sub`, `mountToaster`, dead CSS/exports, orphan i18n ×36.
-4. **CommandModeSettings cut** (dead config; command-mode feature stays working
-   via `recognition_mode==Command` + commands.rs).
-5. **Universal-adapter research → DECISION: don't build.** molvi already has
-   the `SpeechEngine` adapter trait; a runtime plugin system is a distraction
-   from the blaze+accuracy core, breaks the pinned-revision supply-chain
-   posture, and the whole ecosystem (MacWhisper/Talon/sherpa-onnx) converges on
-   curated 2–3 engine lists. See research notes.
+Tip of `multiplatform-port` (newest first): Task 9 (Info.plist + Secure Input) →
+Task 7 (NSPanel overlay) → Task 6 (per-platform paste) → Task 8 (NSWorkspace
+profiles) → Task 5 (paths) → Task 4 (macOS deps) → Task 3 (CI) → Task 2
+(cfg-gate) → Task 1 (license). All gates green at last check: `cargo fmt` +
+`clippy --all-targets -D warnings` + `cargo test --lib` (187) + `npx tsc
+--noEmit` + `npm run build`, on all 3 OSes.
 
 ## Hard context (do not re-litigate)
 
 - **Privacy §10.1 (HARD RULE):** never log transcript/partials/dict/history/
   snippet/command/prompt text — any level. Enforced by 6 `log_privacy` substrates.
 - **Blaze NFRs:** default RU/PTT/Smart RTF ≤0.03; hot loop (capture→engine→
-  finalize→paste) must stay allocation/lock/blocking-free. Nemotron feeds ONLY
-  at the 8960-sample boundary (load-bearing — do not change).
-- **Adapter already exists** (`SpeechEngine` trait + `load_engine` dispatch) —
-  adding an engine is ~1 file, not a rewrite. Decision: stay curated.
-- **Platform-portability doc** (`docs/platform-portability.md`) records the
-  multi-platform vision + Vosk as the low-resource engine + the capability-
-  filtered engine picker.
+  finalize→paste) must stay allocation/lock/blocking-free + NO runtime platform
+  branches (compile-time `#[cfg]` only). Nemotron feeds ONLY at the 8960-sample
+  boundary (load-bearing — do not change).
+- **Inline cfg, NO `mod platform`:** platform dispatch is compile-time
+  `#[cfg(target_os=…)]` per feature module. NO trait objects, NO dyn dispatch.
+  (decision D2 — ponytail: a central trait for ~6 single-call-site helpers is
+  cargo-cult.)
+- **ort-pin `[patch]` is load-bearing** (Cargo.toml `[patch.crates-io]`
+  transcribe-rs rev `efc66111…`). A clean resolve on all 3 OSes relies on it. Do
+  NOT remove.
+- **macOS paste = `Key::Meta` + `Key::Other(9)`** (NOT `Key::Unicode('v')` +
+  `Key::Command` — no such variant; the spec/old-handoff were wrong). macOS
+  command chords use `kVK_ANSI` VKs (NOT Unicode — AZERTY bug). See AGENTS.md
+  Hotkey.
+- **macOS overlay = tauri-nspanel NSPanel** (`can_become_key_window:false`),
+  NOT Tauri's `focusable:false` (broken on macOS, tauri#14102).
+- **macOS/Linux code can only be COMPILE-verified from the Windows box** (only
+  the Windows cfg arm compiles here); each macOS arm is verified by the macos-14
+  CI job, each Linux arm by ubuntu. Runtime behavior (overlay focus, ⌘V paste,
+  CoreML RTF, Wayland paste) = human smoke on the target OS (Task 10 for Mac;
+  a Linux smoke for Phase 3).
 
-## Open execution items (the "finish / ship" track — NOT brainstorm)
+## The 8 plan corrections (the plan text is WRONG here — these are verified)
 
-- **Task 13 — brand mark** (waveform-`m` monogram). Last Phase-3 plan task.
-  Pure UI, no Rust/perf/logging surface. Closes Phase-3 → merge decision.
-- **Updater pubkey/endpoint** (`tauri.conf.json`) — RELEASE BLOCKER. Currently a
-  placeholder; auto-update can't work until real ed25519 keys + a release feed
-  are set. Deployment work, not code.
-- **`cargo tauri build`** — NSIS/MSI installer not verified end-to-end this
-  session (release profile: lto=thin, codegen-units=1, strip, panic=unwind).
-- **Blaze RTF controlled re-measurement** — empirical confirmation the cuts
-  didn't regress the default path; fills the AGENTS.md NFR row. Human-run.
-- **Remaining 27 locale translations** for snippets.* (en-baseline pending a
-  native pass). 9 are native (en/ru/de/es/fr/ja/zh/ko/ar/he).
+1. tauri-nspanel is NOT on crates.io → git `branch="v2.1"`.
+2. objc2-app-kit needs per-class features `NSWorkspace`+`NSRunningApplication`.
+3. macOS command chords use `kVK_ANSI` VKs (NOT Unicode); macOS paste `Key::Other(9)`+`Key::Meta`.
+4. `.plugin(tauri_nspanel::init())` is required (plan's Task 7 omitted it).
+5. Tauri 2 has NO `bundle.macOS.infoPlist` → `src-tauri/Info.plist` file.
+6. `NSURL::path()` returns `Option<Retained<NSString>>`.
+7. edition 2024 → `unsafe extern "C"`.
+8. Any Windows-only platform boundary breaks `cargo test --lib` on other OSes
+   (the paths.rs lesson) — gate the tests or make cross-platform in the same task.
 
-## Brainstorm menu (the "grow" track — pick one to explore in the fresh session)
+(All already applied in Phase 1/2. Listed so a fresh session doesn't re-discover them.)
 
-These are the strategic forks worth a brainstorm. They are NOT committed plans.
+## How to resume (Phase 3 — Linux)
 
-### A. Multi-platform port (most strategically exciting, best-seeded)
-molvi is Windows-only; the vision (in `docs/platform-portability.md`) is Linux
-(desktop UI + headless daemon), macOS, Raspberry Pi, mobile. Brainstorm angles:
-- **Which target first?** (Linux desktop is closest to the current Tauri shell;
-  headless daemon is the biggest architecture change; mobile is the biggest
-  reach.)
-- **Engine:** Vosk integration as the low-resource/mobile engine behind the
-  existing `SpeechEngine` trait (~1 file). Streaming contract fits `feed_chunk`.
-- **Headless daemon:** what's "molvi with no window"? IPC surface, hotkey on
-  Linux (evdev?), audio capture (cpal is cross-platform), config UI via CLI/web?
-- **Mobile:** Tauri 2 mobile (Android/iOS) — does the webview-shell + capture +
-  clipboard model translate? Or a native rewrite?
+1. Read `AGENTS.md` (now corrected) + this file + the ledger
+   (`.superpowers/sdd/2026-08-07-molvi-multiplatform-port/progress.md`).
+2. Read the plan: `docs/superpowers/plans/2026-08-07-molvi-multiplatform-port.md`
+   (Phase 3 = Tasks 11-13). And `docs/superpowers/specs/2026-08-07-molvi-multiplatform-port-design.md`.
+3. **NEXT = Task 11** (Wayland PTT via `molvi record toggle` IPC subcommand +
+   compositor-keybinding docs in `docs/linux-install.md`). The Wayland decision
+   is RESOLVED (not open): compositor-keybinding → CLI subcommand → single-instance
+   IPC signal (the `ashpd` GlobalShortcuts portal is BROKEN for overlay apps —
+   ashpd#213; voxtype/whisrs/hyprwhspr converged on keybindings).
+4. Use **superpowers:subagent-driven-development** (fresh subagent per task,
+   review between tasks, fix ALL findings incl. Minor). Load it first.
+5. **VERIFY every crate/API live** (the #1 rule): x11rb (EWMH `_NET_ACTIVE_WINDOW`/
+   `_NET_WM_PID`), wl-clipboard, ashpd, the Tauri single-instance argv-forwarding
+   API — via the `find-docs` skill (ctx7) + docs.rs + the resolved source in
+   `~/.cargo/registry` + `~/.cargo/git/checkouts` before coding. The SDD scripts
+   are bash; on Windows PowerShell, replicate their logic (git + gh + write files).
+6. Gates per code task: `cargo fmt` + `clippy --all-targets -D warnings` + `test
+   --lib` + (binary-unlocked) `test --test log_privacy` + `tsc --noEmit` + `npm
+   run build`. Push → ubuntu CI verifies the Linux arms compile. Never kill a
+   running `cargo tauri dev`. Do NOT remove the `[patch]` override.
 
-### B. v0.2 features
-- **Profiles UI editor** — `profiles` exist server-side (per-app post-proc
-  override, `profiles.rs`) but there's NO Settings UI to manage them. Building
-  the editor completes a shipped-but-unexposed feature (the snippets pattern).
-- **Command-mode growth** — user-defined commands, more grammars, the dedicated
-  command hotkey (the `CommandModeSettings` that was just cut could come back as
-  a real feature).
-- **LLM post-proc** — the Polished mode hits an OpenAI-compatible endpoint;
-  richer prompt management, model choice, local-LLM integration.
-- **Multi-utterance context / vocabulary learning.**
+## Open execution items (NOT Phase 3)
 
-### C. Product differentiation
-The competitor research says molvi wins on **speed (blaze) + accuracy + language
-coverage + command grammar** — not plugin ecosystems. Brainstorm: which axis to
-double down on for v0.2 to widen the lead over Dragon/Talon/Superwhisper.
+- **Task 10 (macOS blaze smoke)** — hardware-blocked (Mac + model). The ONE
+  remaining macOS gate.
+- **Updater pubkey/endpoint** (`tauri.conf.json`) — RELEASE BLOCKER (placeholder
+  ed25519 + endpoint). Deployment work, not code. Out of scope for the port.
+- **v0.1 Phase-3 Task 13** (brand mark) — separate effort (branch `phase3`).
 
-## How to resume (for the fresh session)
+## Brainstorm menu
 
-> **Session 2026-08-07 outcome — Track A brainstorm COMPLETE.** Track A
-> (multi-platform port, OSS) was chosen and designed to a doc-verified spec.
-> Commits: `03348e8` (spec + mobile-strategy + AGENTS.md corrections),
-> `d1759c6` (spike #3 paste focus-guard + spec fixes). The design phase is done;
-> **the next work is IMPLEMENTATION: Step 0 + CI (below).**
-
-1. Read `AGENTS.md` (project bible, now corrected) + this file.
-2. **Read the spec: `docs/superpowers/specs/2026-08-07-molvi-multiplatform-port-design.md`**
-   — the full Track A design (decisions D1–D6, crate matrix, 3 blockers, 3 spikes,
-   inline-cfg architecture, per-platform specifics, Wayland scoping OPEN, NFRs).
-   Also `docs/superpowers/specs/2026-08-07-paste-focus-guard-spike.md` (spike #3).
-3. **NEXT STEP = invoke the `writing-plans` skill** to turn the spec into a phased
-   implementation plan. **Do NOT write code before the plan exists** (the
-   brainstorm → spec → plan → execute sequence; jumping to code skips the plan).
-   Suggested phasing for the plan:
-   - **Phase 1 — unblock cross-platform builds:** license files (`MIT OR
-     Apache-2.0`); **Step 0** (move `windows` to `[target.'cfg(windows)'.dependencies]`
-     + cfg-gate the 4 unconditional Win32 import sites — see below); **CI matrix**
-     (`.github/workflows` windows/macos-14/ubuntu). The CI **IS** the engine-spike
-     mechanism — green CI on mac(macos-14=Apple Silicon)/linux = spikes #1/#2 pass.
-   - **Phase 2 — macOS port** (Apple Silicon): per spec per-platform specifics.
-     Needs `tauri-nspanel` (overlay `focusable:false` broken — tauri#14102), enigo
-     Accessibility permission, paste = ⌘V (`Key::Command`).
-   - **Phase 3 — Linux / Wayland** (Wayland scoping OPEN — decide portal vs evdev).
-   - **Phase 0.5 (parallel, cheap):** spike #3 is DONE; its findings are in the spec.
-   The `writing-plans` skill produces `docs/superpowers/plans/2026-08-07-molvi-multiplatform-port.md`;
-   THEN execute it (e.g. via `executing-plans` / `subagent-driven-development`).
-4. **Step 0 detail (for the plan's Phase 1):** cfg-gate these 4 unconditional Win32
-   sites (model_store.rs:214 already done; main.rs:1 `windows_subsystem` is
-   harmless cross-OS):
-     - `src-tauri/src/audio.rs:6-7` (`PlaySoundW`/`SND_*`/`PCWSTR`)
-     - `src-tauri/src/ort_affinity.rs:10,14` (`SystemInformation`/`Threading`)
-     - `src-tauri/src/profiles.rs:13-18` (`Foundation`/`Threading`/`WindowsAndMessaging`/`PWSTR`)
-     - `src-tauri/src/paste.rs:9-10` (`HWND`/`GetForegroundWindow`/`SetForegroundWindow`)
-     Per spec D2: inline `#[cfg(target_os=...)]`, NO `mod platform`. Non-Windows
-     bodies = stubs returning `None`/no-op for now (real macOS/Linux impls come
-     in the port). `foreground_exe()`→`None`, `capture_target()`→`None`,
-     `play_sound_file`→no-op, `ort_affinity`→no-op fail-open. **Keep the blaze
-     hot loop free of runtime platform branches** (compile-time `#[cfg]` only).
-   - **CI matrix** — `.github/workflows/ci.yml`: windows/macos-14/ubuntu runners
-     running `cargo fmt --check` + `clippy --all-targets -D warnings` +
-     `cargo test --lib` + `npx tsc --noEmit` + `npm run build`. macOS runner =
-     Apple Silicon (runs spike #2 engine build — does ort/CoreML accept GigaAM/
-     Nemotron?); ubuntu runner = spike #1 (Linux ort-CPU build). The CI **IS**
-     the engine-spike mechanism — green CI on mac/linux = spikes #1/#2 passed.
- 4. **After the plan is written + Phase 1 executed (Step 0 + CI green):** execute
-    Phase 2 (macOS port) per spec. macOS needs `tauri-nspanel` (overlay
-    `focusable:false` broken — tauri#14102) + enigo Accessibility permission;
-    paste = ⌘V (`Key::Command`, NOT Control).
- 5. Gates for any code work: `cargo fmt` + `clippy --all-targets -D warnings` +
-    `cargo test --lib` + (binary-unlocked) `cargo test --test log_privacy` +
-    `npx tsc --noEmit` + `npm run build`. Binary-lock note: don't kill a running
-    `cargo tauri dev` — use `cargo check --all-targets` + `cargo test --lib` if
-    the dev app holds molvi.exe.
- 6. **Verify crates live (AGENTS.md rule):** use the `find-docs` skill (ctx7) +
-    docs.rs/crates.io before coding — IDs `/pykeio/ort` (NOT `/pyke.io/ort`),
-    `/enigo-rs/enigo`, `/websites/v2_tauri_app`, `/cjpais/transcribe-rs`,
-    `/altunenes/parakeet-rs` (autodocs unreliable — verify against registry source).
-    **Never code from memory — always re-check current docs/APIs.**
-
-### OPEN decisions (resolve during/after macOS port)
-- **Wayland scoping** (spec §"Wayland scoping — OPEN"): Wayland is now the
-  default/only session on current distros (KDE Plasma 6.8 removed X11; GNOME
-  Wayland-default), but global-hotkey is X11-only upstream. Lean: Wayland-in-v1
-  via `ashpd` GlobalShortcuts portal, gated on a Wayland-hotkey spike. Decide
-  after macOS ships.
-- **transcribe-rs ort-pin landmine:** `transcribe-rs 0.3.11` pins `ort ="=2.0.0-rc.12"`
-  (exact), `parakeet-rs 0.3.7` wants rc.13 — mutually unsatisfiable; molvi's
-  Cargo.lock=rc.13 ⇒ a `[patch]` override exists. **Confirm the override before
-  any fresh Cargo.lock re-resolution** (a clean resolve may fail).
+After Phase 3 lands + the Mac/Linux smokes pass: v0.2 features (Profiles UI
+editor, command-mode growth, LLM post-proc, multi-utterance context); or
+double down on the blaze+accuracy moat. The competitor research in the plan's
+Appendix is the reference.
