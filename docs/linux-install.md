@@ -10,8 +10,9 @@ signals the already-running tray app via single-instance argv forwarding.
 ## Prerequisite
 
 molvi must already be running (the tray app). The CLI subcommand **signals the
-running instance** — it does not start one. Enable **Settings → General →
-Start on login** so molvi is always in the tray.
+running instance** — it does not start one. Ensure molvi is running by adding
+it to your desktop environment's autostart (e.g. a `molvi.desktop` entry in
+`~/.config/autostart/`), or launch it on login.
 
 ## Two modes
 
@@ -23,6 +24,10 @@ Start on login** so molvi is always in the tray.
 
 `toggle`/`start` = key press; `stop` = key release. The `recognition_mode`
 setting is read live, so changing it in Settings takes effect without a restart.
+
+Choose a key that doesn't clash with your existing compositor binds — the
+`Super+V` / `Mod+V` examples below are common defaults (e.g. niri binds
+`Mod+V` to `toggle-window-floating` by default).
 
 ## Hyprland
 
@@ -57,17 +62,14 @@ bindsym --release $mod+V exec molvi record stop
 `~/.config/niri/config.kdl`:
 
 ```kdl
-// Toggle mode
 binds {
     Mod+V { spawn "molvi" "record" "toggle"; }
 }
-
-// Push-to-talk mode
-binds {
-    Mod+V { spawn-at-press   "molvi" "record" "start";
-            spawn-at-release "molvi" "record" "stop"; }
-}
 ```
+
+niri's binds support only `spawn` / `spawn-sh` (no key-release mechanism), so
+**Toggle mode only** — push-to-talk mode is not usable via compositor
+keybinding on niri.
 
 ## River
 
