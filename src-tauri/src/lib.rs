@@ -273,6 +273,45 @@ fn open_history(app: tauri::AppHandle) {
     let _ = app.emit("navigate-history", ());
 }
 
+/// Parse `record <verb>` from a single-instance argv. `args` is
+/// `std::env::args()` (includes argv[0] = exe path), so the subcommand is in
+/// args[1..]. Returns `(verb, is_pressed)` for exactly `record start|stop|toggle`;
+/// None for anything else (bare launch, `--autostarted`, deep-link). Factored
+/// out of `forward_record_subcommand` for unit testing.
+fn parse_record_argv(args: &[String]) -> Option<(&'static str, bool)> {
+    match (
+        args.get(1).map(String::as_str),
+        args.get(2).map(String::as_str),
+    ) {
+        (Some("record"), Some("start")) => Some(("start", true)),
+        (Some("record"), Some("toggle")) => Some(("toggle", true)),
+        (Some("record"), Some("stop")) => Some(("stop", false)),
+        _ => None,
+    }
+}
+
+/// Wayland PTT (Task 11): `molvi record toggle|start|stop` from a compositor
+/// keybinding forwards to the coordinator as the SAME `Command::Input` the
+/// hotkey sends. `start`/`toggle` = press; `stop` = release. Mode is read live
+/// so flipping recognition_mode in settings takes effect without a restart
+/// (mirrors the hotkey handler in hotkey.rs). Returns true when the argv was a
+/// record subcommand (caller skips the default settings-surface behavior).
+fn forward_record_subcommand(app: &tauri::AppHandle, args: &[String]) -> bool {
+    let Some((verb, is_pressed)) = parse_record_argv(args) else {
+        return false;
+    };
+    let state = app.state::<AppState>();
+    let mode = state.settings.lock().unwrap().recognition_mode;
+    let tx = state.cmd_tx.lock().unwrap();
+    if let Some(tx) = tx.as_ref() {
+        let _ = tx.send(coordinator::Command::Input { is_pressed, mode });
+        tracing::info!("record {verb}: forwarded via single-instance argv");
+    } else {
+        tracing::warn!("record {verb}: coordinator not ready (engine warming up)");
+    }
+    true
+}
+
 /// Tauri app entrypoint: logging, settings, tray, mic capture are set up
 /// synchronously (tray interactive immediately); the model download, engine
 /// worker, coordinator thread, and hotkey registration run on a background
@@ -317,7 +356,14 @@ pub fn run() {
     };
 
     let builder = tauri::Builder::default()
-        .plugin(tauri_plugin_single_instance::init(|app, _argv, _cwd| {
+        .plugin(tauri_plugin_single_instance::init(|app, argv, _cwd| {
+            // Wayland PTT (Task 11): a compositor-keybinding launch with
+            // `record <verb>` forwards to the coordinator and returns; any
+            // other 2nd launch (bare, --autostarted) falls through to surface
+            // the settings window.
+            if forward_record_subcommand(app, &argv) {
+                return;
+            }
             // second launch: surface the settings window if it exists
             if let Some(w) = app.get_webview_window("settings") {
                 let _ = w.show();
@@ -602,4 +648,42 @@ pub fn run() {
     builder
         .run(tauri::generate_context!())
         .expect("error while running molvi");
+}
+
+#[cfg(test)]
+mod record_argv_tests {
+    use super::parse_record_argv;
+
+    #[test]
+    fn parses_toggle_start_stop() {
+        let exe = "molvi".to_string();
+        assert_eq!(
+            parse_record_argv(&[exe.clone(), "record".into(), "toggle".into()]),
+            Some(("toggle", true))
+        );
+        assert_eq!(
+            parse_record_argv(&[exe.clone(), "record".into(), "start".into()]),
+            Some(("start", true))
+        );
+        assert_eq!(
+            parse_record_argv(&[exe.clone(), "record".into(), "stop".into()]),
+            Some(("stop", false))
+        );
+    }
+
+    #[test]
+    fn rejects_non_record_argv() {
+        let exe = "molvi".to_string();
+        assert_eq!(parse_record_argv(std::slice::from_ref(&exe)), None);
+        assert_eq!(
+            parse_record_argv(&[exe.clone(), "--autostarted".into()]),
+            None
+        );
+        assert_eq!(
+            parse_record_argv(&[exe.clone(), "record".into(), "frobnicate".into()]),
+            None
+        );
+        assert_eq!(parse_record_argv(&[exe.clone(), "settings".into()]), None);
+        assert_eq!(parse_record_argv(&[]), None);
+    }
 }
