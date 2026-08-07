@@ -115,11 +115,25 @@ double down on for v0.2 to widen the lead over Dragon/Talon/Superwhisper.
    — the full Track A design (decisions D1–D6, crate matrix, 3 blockers, 3 spikes,
    inline-cfg architecture, per-platform specifics, Wayland scoping OPEN, NFRs).
    Also `docs/superpowers/specs/2026-08-07-paste-focus-guard-spike.md` (spike #3).
-3. **NEXT WORK = Step 0 + CI matrix** (the implementation entry point):
-   - **Step 0 — make it compile on Linux/macOS:** move `windows` to
-     `[target.'cfg(windows)'.dependencies]` in `src-tauri/Cargo.toml`, then
-     cfg-gate the 4 unconditional Win32 import sites (model_store.rs:214 already
-     done; main.rs:1 `windows_subsystem` is harmless cross-OS):
+3. **NEXT STEP = invoke the `writing-plans` skill** to turn the spec into a phased
+   implementation plan. **Do NOT write code before the plan exists** (the
+   brainstorm → spec → plan → execute sequence; jumping to code skips the plan).
+   Suggested phasing for the plan:
+   - **Phase 1 — unblock cross-platform builds:** license files (`MIT OR
+     Apache-2.0`); **Step 0** (move `windows` to `[target.'cfg(windows)'.dependencies]`
+     + cfg-gate the 4 unconditional Win32 import sites — see below); **CI matrix**
+     (`.github/workflows` windows/macos-14/ubuntu). The CI **IS** the engine-spike
+     mechanism — green CI on mac(macos-14=Apple Silicon)/linux = spikes #1/#2 pass.
+   - **Phase 2 — macOS port** (Apple Silicon): per spec per-platform specifics.
+     Needs `tauri-nspanel` (overlay `focusable:false` broken — tauri#14102), enigo
+     Accessibility permission, paste = ⌘V (`Key::Command`).
+   - **Phase 3 — Linux / Wayland** (Wayland scoping OPEN — decide portal vs evdev).
+   - **Phase 0.5 (parallel, cheap):** spike #3 is DONE; its findings are in the spec.
+   The `writing-plans` skill produces `docs/superpowers/plans/2026-08-07-molvi-multiplatform-port.md`;
+   THEN execute it (e.g. via `executing-plans` / `subagent-driven-development`).
+4. **Step 0 detail (for the plan's Phase 1):** cfg-gate these 4 unconditional Win32
+   sites (model_store.rs:214 already done; main.rs:1 `windows_subsystem` is
+   harmless cross-OS):
      - `src-tauri/src/audio.rs:6-7` (`PlaySoundW`/`SND_*`/`PCWSTR`)
      - `src-tauri/src/ort_affinity.rs:10,14` (`SystemInformation`/`Threading`)
      - `src-tauri/src/profiles.rs:13-18` (`Foundation`/`Threading`/`WindowsAndMessaging`/`PWSTR`)
@@ -135,18 +149,20 @@ double down on for v0.2 to widen the lead over Dragon/Talon/Superwhisper.
      Apple Silicon (runs spike #2 engine build — does ort/CoreML accept GigaAM/
      Nemotron?); ubuntu runner = spike #1 (Linux ort-CPU build). The CI **IS**
      the engine-spike mechanism — green CI on mac/linux = spikes #1/#2 passed.
-4. **After Step 0 + CI green:** the macOS port is next (spec per-platform
-   specifics). Note macOS needs `tauri-nspanel` (overlay `focusable:false` broken
-   — tauri#14102) + enigo Accessibility permission; paste = ⌘V (`Key::Command`).
-5. Gates for any code work: `cargo fmt` + `clippy --all-targets -D warnings` +
-   `cargo test --lib` + (binary-unlocked) `cargo test --test log_privacy` +
-   `npx tsc --noEmit` + `npm run build`. Binary-lock note: don't kill a running
-   `cargo tauri dev` — use `cargo check --all-targets` + `cargo test --lib` if
-   the dev app holds molvi.exe.
-6. **Verify crates live (AGENTS.md rule):** use the `find-docs` skill (ctx7) +
-   docs.rs/crates.io before coding — IDs `/pykeio/ort` (NOT `/pyke.io/ort`),
-   `/enigo-rs/enigo`, `/websites/v2_tauri_app`, `/cjpais/transcribe-rs`,
-   `/altunenes/parakeet-rs` (autodocs unreliable — verify against registry source).
+ 4. **After the plan is written + Phase 1 executed (Step 0 + CI green):** execute
+    Phase 2 (macOS port) per spec. macOS needs `tauri-nspanel` (overlay
+    `focusable:false` broken — tauri#14102) + enigo Accessibility permission;
+    paste = ⌘V (`Key::Command`, NOT Control).
+ 5. Gates for any code work: `cargo fmt` + `clippy --all-targets -D warnings` +
+    `cargo test --lib` + (binary-unlocked) `cargo test --test log_privacy` +
+    `npx tsc --noEmit` + `npm run build`. Binary-lock note: don't kill a running
+    `cargo tauri dev` — use `cargo check --all-targets` + `cargo test --lib` if
+    the dev app holds molvi.exe.
+ 6. **Verify crates live (AGENTS.md rule):** use the `find-docs` skill (ctx7) +
+    docs.rs/crates.io before coding — IDs `/pykeio/ort` (NOT `/pyke.io/ort`),
+    `/enigo-rs/enigo`, `/websites/v2_tauri_app`, `/cjpais/transcribe-rs`,
+    `/altunenes/parakeet-rs` (autodocs unreliable — verify against registry source).
+    **Never code from memory — always re-check current docs/APIs.**
 
 ### OPEN decisions (resolve during/after macOS port)
 - **Wayland scoping** (spec §"Wayland scoping — OPEN"): Wayland is now the
