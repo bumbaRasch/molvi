@@ -1,0 +1,10 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "onboarding",
+  "description": "Onboarding window (Task 10): 3-step first-run. Listens to engine-ready/engine-error/mic-level/stream-text/practice-result (core:event:allow-listen). core:app:default mirrors settings.json (getVersion in error copy is plausible). Custom #[tauri::command]s (complete_onboarding, set_onboarding_practice) are allowed from all windows by default — proven by overlay.json (cancel_operation works with only event:listen).",
+  "windows": ["onboarding"],
+  "permissions": [
+    "core:event:allow-listen",
+    "core:app:default"
+  ]
+}

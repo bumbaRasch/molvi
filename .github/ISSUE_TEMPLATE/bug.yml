@@ -1,0 +1,80 @@
+name: Bug Report
+description: File a bug report for molvi.
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report for **molvi**!
+        Please **search existing issues first** to avoid duplicates.
+  - type: checkboxes
+    id: search
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please search https://github.com/bumbaRasch/molvi/issues for a duplicate before submitting.
+      options:
+        - label: I searched existing issues and did not find a duplicate
+          required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Windows
+        - macOS (Apple Silicon)
+        - Linux
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: molvi version
+      placeholder: "e.g. 0.1.0"
+  - type: dropdown
+    id: engine
+    attributes:
+      label: ASR engine
+      description: Which recognition engine was active when the bug happened?
+      options:
+        - Nemotron 3.5
+        - GigaAM-v3
+        - Not applicable
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: A minimal, step-by-step way to trigger the bug.
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+    validations:
+      required: false
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What happened instead?
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: molvi logs are metadata-only and %APPDATA% is redacted — safe to paste. Do NOT paste settings.json or dictionary contents.
+      render: shell
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy check
+      options:
+        - label: I will NOT paste transcripts, audio, dictionary entries, snippets, or settings — molvi never logs them and they're private. I'll describe the bug with synthetic examples.
+          required: true

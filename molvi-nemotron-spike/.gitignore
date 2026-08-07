@@ -1,0 +1,11 @@
+/target/
+
+# Model dirs (human downloads; never committed — large).
+/nemotron/
+/nemotron-*/
+*.onnx
+*.onnx.data
+*.onnx_data
+tokenizer.model
+
+# Keep report/ tracked (small JSON/MD) — do NOT ignore it.

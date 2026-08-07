@@ -1,0 +1,891 @@
+/* spec §7.2 visual tokens — from design doc lines 405-428. --muted corrected
+   #6B7280 → #4B5563 (2026-08 WCAG fix: failed AA on canvas 4.43 → 6.93:1). */
+:root {
+  /* Neutrals (Fluent: lighter = primary surface) */
+  --bg: #FFFFFF;          /* cards, primary surfaces */
+  --canvas: #F4F5F7;      /* app background (recedes) */
+  --border: #E5E7EB;
+  --text: #1A1A1A;
+  --muted: #4B5563;       /* gray-600 — AA on canvas (was #6B7280, 4.43:1) */
+
+  /* Brand accent — CTAs, selected state, focus ring ONLY (Fluent: never large surfaces) */
+  --accent: #0E7C86;      /* calm teal — distinctive, matches serene/privacy ethos */
+  --accent-hover: #0a6670;
+  --on-accent: #FFFFFF;
+
+  /* Semantic — STATUS ONLY, never decoration (Fluent rule) */
+  --success: #16A34A;
+  --warning: #D97706;
+  --destructive: #DC2626; /* Clear all, Disable & erase */
+
+  /* Radius + motion */
+  --radius-control: 6px;
+  --radius-card: 8px;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* ── Reset ─────────────────────────────────────────────────────────────── */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ── Base ──────────────────────────────────────────────────────────────── */
+
+html,
+body {
+  height: 100%;
+  font-family: system-ui, "Segoe UI", "Segoe UI Variable", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--canvas);
+}
+
+/* ── App shell: sidebar rail + content pane (spec §7.1) ────────────────── */
+
+#app {
+  display: flex;
+  height: 100vh;
+}
+
+/* ponytail: alignment — sidebar block-start padding (32) = content pad (24) +
+   card pad (16) − item pad (8), so the first item's text top lands at the same
+   Y as the first card's <h3> title (both ≈ 40px). Item centers also coincide.
+   Logical props used here as this IS the flow-alignment rule. */
+#sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 0 0 auto;
+  width: 200px;
+  padding-block: 32px 8px;
+  padding-inline: 8px;
+  overflow-y: auto;
+  border-inline-end: 1px solid var(--border);
+  background: var(--bg);
+}
+
+#sidebar .item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: background 150ms var(--ease), color 150ms var(--ease);
+}
+
+/* Fluent interaction rule: hover = lighter surface; selected = brand fill. */
+#sidebar .item:hover {
+  background: var(--canvas);
+}
+
+#sidebar .item.selected {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+#sidebar .item svg {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+}
+
+/* Pinned language picker: margin-block-start:auto pushes it to the bottom of
+   the flex-column sidebar. Logical props mirror automatically under RTL. */
+.lang-row {
+  margin-block-start: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-block: 8px;
+  padding-inline: 10px;
+  border-block-start: 1px solid var(--border);
+}
+
+.lang-row select {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+#content {
+  flex: 1 1 auto;
+  max-width: 640px;          /* ui-ux-pro-max: line length 65–75ch */
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+/* ── Form controls: shared radius + brand focus ring (spec §7.2) ────────── */
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+  border-radius: var(--radius-control);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="range"],
+select,
+textarea {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+}
+
+input[type="range"] {
+  padding: 0;
+}
+
+button:focus-visible,
+.item:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* ── SettingsGroup card (spec §7.2) ────────────────────────────────────── */
+
+.settings-group {
+  /* Flex column + uniform gap: every direct child (toggle, select, button row,
+     alert, ...) gets consistent vertical spacing — no more "stuck" controls. */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-block-end: 16px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--bg);
+}
+
+/* ── Control kit: self-labeled controls + grid rows (ui.ts) ────────────── */
+
+/* Toggle: inline label+checkbox. */
+.toggle-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Select / TextInput / Slider / Textarea: stacked label+control. */
+.field-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field-label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Two equal labeled fields on one row (History retention: entries-count + days).
+   Each .field-wrap shares the row equally — flex:1 (MDN equal-width flex items);
+   min-width:0 lets them shrink on narrow viewports (MDN: flex items default to
+   min-width:auto, which would block shrinking). */
+.field-pair {
+  display: flex;
+  gap: 12px;
+}
+.field-pair > .field-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Slider: the range input + its live <output> value sit on one row (the MDN
+   range+output pairing). min-inline-size on the value keeps the layout stable
+   as the number changes (no thumb jitter). */
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.slider-row input[type="range"] {
+  flex: 1 1 auto;
+}
+
+.slider-value {
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  color: var(--muted);
+  flex: 0 0 auto;
+  min-inline-size: 4ch;
+  text-align: end;
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────────── */
+
+.btn {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: background 150ms var(--ease);
+}
+
+.btn:hover {
+  background: var(--canvas);
+}
+
+.btn.primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.btn.primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn.destructive {
+  border-color: var(--destructive);
+  background: var(--destructive);
+  color: var(--on-accent);
+}
+
+/* ── Layout helpers: action rows ───────────────────────────────────────── */
+
+.row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.row-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Labeled-field + buttons row: align-items:flex-end keeps the input BOX on the
+   same baseline as the label-less buttons (center would float the buttons up
+   toward the label). Used by Microphone (device select) and Hotkey. */
+.field-row,
+.device-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+/* Microphone: the device Select grows so it matches the level-bar width. */
+.device-row > div:first-child {
+  flex: 1 1 auto;
+}
+
+/* Hotkey: the shortcut input stays natural-width and the buttons pin to the FAR
+   right (space-between). With the input filling the row, the buttons sat right
+   against the input box and read as "one and the same" control. */
+.field-row {
+  justify-content: space-between;
+}
+
+/* ponytail: Microphone-only — equal right-button width (25ch fits "Проверить
+   громкость"+padding) so the device Select and the level-bar share the same
+   right edge, and the preview button keeps a stable width across its
+   Стоп/Проверить toggle. Scoped to .device-row so it doesn't hit Hotkey. */
+.device-row .btn,
+.row-between .meter ~ .btn {
+  min-width: 25ch;
+}
+
+/* Overlay sound rows: the path input grows to fill the row (paths can be long)
+   — unlike Hotkey's .field-row, which keeps its shortcut input natural-width. */
+.field-row.sound-row > .field-wrap {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* ── Alerts: semantic status only (Fluent rule) ────────────────────────── */
+
+.alert {
+  padding: 10px 12px;
+  border-inline-start: 3px solid var(--border);
+  border-radius: var(--radius-control);
+  background: var(--bg);
+}
+
+.alert.info {
+  border-color: var(--accent);
+}
+
+.alert.warning {
+  border-color: var(--warning);
+}
+
+.alert.error {
+  border-color: var(--destructive);
+}
+
+/* ── Utilities ─────────────────────────────────────────────────────────── */
+
+/* Reveal toggle for conditional blocks (dictionary cancel, history pager, …). */
+.hidden {
+  display: none !important;
+}
+
+/* ── Collapsible Advanced (native <details> — zero JS) ─────────────────── */
+
+details.advanced > summary {
+  padding-block: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+details.advanced[open] > summary {
+  margin-block-end: 8px;
+}
+
+/* ── Microphone: live level meter ──────────────────────────────────────── */
+
+.meter {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.level-bar {
+  height: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  background: var(--canvas);
+  overflow: hidden;
+}
+
+.level-fill {
+  width: 0%;
+  height: 100%;
+  background: var(--accent);
+  transition: width 60ms linear;  /* ~30fps smoothing; nuked by reduced-motion. */
+}
+
+/* ── Text section: PostMode radio + conditional reveals ────────────────── */
+
+/* Radio group: label on the LEFT, options stacked in a column on the RIGHT.
+   A <div> grid (not fieldset — fieldset's anonymous box breaks display:grid in
+   some WebView2 builds); role="radiogroup"+aria-label on the div carries the
+   grouping semantics for AT. Shared by all 3 groups (recognition/paste/post). */
+.radio-group {
+  display: grid;
+  /* Label in column 1 (left), options stacked in column 2 (right). Fixed 200px
+     label column (matches .setting-row) so the options line up at the same X
+     across all 3 groups regardless of each label's length. */
+  grid-template-columns: 200px 1fr;
+  align-items: start;
+  gap: 6px 16px;
+}
+
+/* Label spans all option rows so it sits on the left beside the stack,
+   top-aligned with option 1 (align-items: start on the grid). */
+.radio-group > .field-label {
+  grid-column: 1;
+  grid-row: 1 / -1;
+  padding-block-start: 2px;
+}
+
+.radio-opt {
+  grid-column: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: normal;
+}
+
+/* ⓘ InfoTip: an always-on hover/focus tooltip for option caveats. Instant
+   visibility toggle (no transition) → reduced-motion-safe. Logical props keep
+   the bubble anchored to the inline-start edge under RTL. */
+.info-tip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-inline-start: 4px;
+  color: var(--muted);
+  cursor: help;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.info-tip-bubble {
+  position: absolute;
+  inset-block-start: 100%;
+  inset-inline-start: 0;
+  visibility: hidden;
+  margin-block-start: 6px;
+  padding: 6px 10px;
+  width: 300px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 400; /* normal — overrides bold inherited from <h3> section titles */
+  line-height: 1.4;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  z-index: 10;
+}
+
+.info-tip:hover > .info-tip-bubble,
+.info-tip:focus-visible > .info-tip-bubble {
+  visibility: visible;
+}
+
+/* Single-column conditional reveal (polished mode). */
+.reveal {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-inline-start: 12px;
+  border-inline-start: 2px solid var(--border);
+}
+
+/* Two-column smart-toggle grid — the Text section has 9 toggles; a single
+   column overflowed the viewport, two keep it scroll-free. */
+.reveal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+  padding-inline-start: 12px;
+  border-inline-start: 2px solid var(--border);
+}
+
+/* Smart-toggles block: visible title + the reveal-grid, toggled together.
+   The title is a .field-label so it shares row styling with radio labels. */
+.smart-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── Dictionary ────────────────────────────────────────────────────────── */
+
+.dic-tools {
+  display: flex;
+  gap: 8px;
+}
+
+.dic-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dic-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-block: 6px;
+  border-block-end: 1px solid var(--border);
+}
+
+.dic-pair {
+  flex: 1 1 auto;
+  cursor: pointer;
+  /* was a <span>; reset <button> chrome so it reads as text but is keyboard-focusable */
+  border: none;
+  background: inherit;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  padding: 0;
+}
+
+.dic-pair:hover,
+.dic-pair:focus-visible {
+  color: var(--accent);
+}
+
+.dic-pair:focus {
+  outline: none; /* :focus-visible carries the color cue; suppress the mouse-click ring */
+}
+
+.dic-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto auto;
+  gap: 8px;
+  align-items: end;
+}
+
+/* Dictionary live filter (Task 12.5) */
+.dic-list .muted { padding: 8px 0; }
+
+/* Import preview confirm panel (Task 12.5) */
+.import-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 8px 0;
+}
+.import-preview .muted { margin-inline-end: auto; }
+
+/* ── History ───────────────────────────────────────────────────────────── */
+
+.hist-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* History rows (Task 12.3: focusable + expandable; 12.4 adds keyboard nav + bulk) */
+.hist-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 12px;
+  border-block-end: 1px solid var(--border);
+}
+.hist-row:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  background: var(--canvas);
+}
+.hist-row.expanded .hist-text {
+  white-space: pre-wrap; /* show full text incl. newlines */
+  -webkit-line-clamp: unset;
+}
+.hist-main {
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+.hist-meta {
+  color: var(--muted);
+  font-size: 0.85em;
+  margin-block-end: 2px;
+}
+.hist-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1; /* collapsed: 1 line + ellipsis */
+}
+.hist-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+/* History filter row: search input (flex:1) + lang/date Selects. Mirrors
+   .field-pair but the first .field-wrap takes all remaining width while the
+   Selects size to content; wraps gracefully on narrow viewports. */
+.hist-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.hist-filters > .field-wrap:first-child {
+  flex: 1;
+  min-width: 160px;
+}
+
+/* Inline two-step confirm row. */
+.confirm-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.confirm-warning {
+  color: var(--destructive);
+  font-size: 13px;
+}
+
+.hist-danger-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* History bulk select (Task 12.4) */
+.hist-select {
+  flex-shrink: 0;
+  margin-block-start: 2px;
+  accent-color: var(--accent);
+}
+.bulk-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: var(--canvas);
+  border-block-end: 1px solid var(--border);
+}
+.bulk-bar.hidden { display: none; }
+.bulk-label { color: var(--muted); font-size: 0.9em; margin-inline-end: auto; }
+
+/* ── Toaster: transient notifications (spec §7.3) ───────────────────────── */
+
+.toaster {
+  position: fixed;
+  inset-block-end: 16px;
+  inset-inline-end: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1000;
+}
+
+.toast {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 10px 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  min-width: 240px;
+  max-width: 360px;
+  display: flex;
+  align-items: start;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 180ms var(--ease), transform 180ms var(--ease);
+}
+
+.toast.shown {
+  opacity: 1;
+  transform: none;
+}
+
+.toast.leaving {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.toast > span {
+  flex: 1 1 auto;
+}
+
+.toast.success { border-inline-start: 3px solid var(--success); }
+.toast.info    { border-inline-start: 3px solid var(--accent); }
+.toast.warning { border-inline-start: 3px solid var(--warning); }
+.toast.error   { border-inline-start: 3px solid var(--destructive); }
+
+.toast-close {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0 4px;
+  font-size: 16px;
+  line-height: 1;
+  min-width: 24px;
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toast-close:hover {
+  color: var(--text);
+}
+
+.toast-action {
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-weight: 600;
+  padding: 2px 6px;
+  margin-inline-start: 8px;
+  border-radius: var(--radius-control);
+  cursor: pointer;
+  text-align: start;
+}
+.toast-action:hover {
+  color: var(--accent-hover);
+}
+.toast-action:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* ── Model picker (recognition section) ────────────────────────────────── */
+
+.model-picker { display: flex; flex-direction: column; gap: 8px; }
+
+.model-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 12px;
+  background: var(--bg);
+}
+
+.model-card.selected { border-color: var(--accent); }
+.model-card.clickable { cursor: pointer; }
+.model-card.clickable:hover,
+.model-card.clickable:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.model-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.model-name { font-weight: 600; }
+
+.model-card-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.model-card-status .btn-block { width: 100%; }
+
+.model-desc {
+  color: var(--muted);
+  font-size: 13px;
+  margin-block-start: 4px;
+}
+
+.badge-active { color: var(--accent); font-weight: 500; }
+
+.progress-bar {
+  flex: 1;
+  min-inline-size: 120px;
+  block-size: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  block-size: 100%;
+  background: var(--accent);
+  transition: width 250ms ease;
+}
+
+.progress-text {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ── Motion: respect user preference (spec §7.2) ──────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  /* ponytail: single media query zeroes all transitions/animations. */
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ── Federated settings search (Task 11) ──────────────────────────────── */
+
+.search-box {
+  position: relative;          /* anchor for the absolute dropdown */
+  margin-block-end: 8px;
+}
+
+/* input[type="text"] inherits the global input baseline (border/padding/radius)
+   + :focus-visible outline via --accent. Only width needed here. */
+.search-input {
+  inline-size: 100%;
+}
+
+.search-dropdown {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 100%;     /* directly below the input */
+  inline-size: 100%;           /* match the 200px sidebar */
+  max-block-size: 60vh;
+  overflow-y: auto;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  z-index: 10;                 /* above sidebar items */
+  padding-block: 4px;
+}
+
+.search-group {
+  padding-block: 2px;
+}
+
+.search-group-title {
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.search-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  margin-inline: 4px;
+  border-radius: var(--radius-control);
+  cursor: pointer;
+}
+
+.search-item svg {
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+
+.search-item-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.search-item-sub {
+  margin-inline-start: auto;
+  font-size: 12px;
+  color: var(--muted);
+  flex: 0 0 auto;
+}
+
+/* Mouse hover AND keyboard .active share the same accent treatment. */
+.search-item:hover,
+.search-item.active {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.search-item:hover svg,
+.search-item.active svg,
+.search-item:hover .search-item-sub,
+.search-item.active .search-item-sub {
+  color: var(--on-accent);
+}
+
+.search-no-results {
+  padding: 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .search-dropdown,
+  .search-item {
+    transition: none;
+  }
+}

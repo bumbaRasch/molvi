@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>molvi</title>
+    <link rel="stylesheet" href="/src/overlay.css" />
+  </head>
+  <body>
+    <div id="bubble" class="bubble">
+      <div id="caption" class="caption"></div>
+      <div class="status">
+        <span id="dot" class="dot">
+          <!-- The check SVG is always in the DOM; CSS reveals it only when the
+               dot gains .check (success phase). White stroke on the teal disc. -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5 12 10 17 19 8"></polyline></svg>
+        </span>
+        <div id="wave" class="wave"></div>
+        <span id="timer" class="timer">0:00</span>
+        <button id="cancel" class="cancel" type="button" aria-label="Отмена">×</button>
+      </div>
+      <!-- Actions row: Polished edit affordance + paste-failed recovery.
+           Populated in TS; hidden until a state needs it. -->
+      <div id="actions" class="actions hidden"></div>
+    </div>
+    <script type="module" src="/src/overlay.ts"></script>
+  </body>
+</html>

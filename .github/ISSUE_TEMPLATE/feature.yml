@@ -1,0 +1,34 @@
+name: Feature Request
+description: Suggest a new feature or improvement for molvi.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: checkboxes
+    id: search
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please search https://github.com/bumbaRasch/molvi/issues for a duplicate before submitting.
+      options:
+        - label: I searched existing issues and did not find a duplicate
+          required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem you're solving
+      description: What are you trying to do? What's missing or painful today?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: What would you like molvi to do? Be as specific as you can.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any other approaches you've thought about or tried.
+    validations:
+      required: false

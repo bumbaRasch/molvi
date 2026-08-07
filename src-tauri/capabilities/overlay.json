@@ -1,0 +1,9 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "overlay",
+  "description": "Overlay window: needs only core:event:allow-listen for its 5 streaming-caption listen() calls (show-overlay, stream-text, phase, mic-level, hide-overlay). Hotkey registration is Rust-side (GlobalShortcutExt, not JS IPC) so no global-shortcut capability is needed. Custom #[tauri::command]s (cancel_operation) are allowed from all windows by default.",
+  "windows": ["overlay"],
+  "permissions": [
+    "core:event:allow-listen"
+  ]
+}

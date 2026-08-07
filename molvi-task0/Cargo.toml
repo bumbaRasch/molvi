@@ -1,0 +1,10 @@
+[package]
+name = "molvi-task0"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+transcribe-rs = { version = "0.3.11", features = ["onnx", "audio-features"] }
+
+[profile.release]
+opt-level = 3

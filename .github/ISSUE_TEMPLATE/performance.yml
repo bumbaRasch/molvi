@@ -1,0 +1,69 @@
+name: Performance / blaze
+description: Report a slowdown, high latency, or a real-time regression.
+title: "[Perf]: "
+labels: ["performance", "triage"]
+body:
+  - type: checkboxes
+    id: search
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please search https://github.com/bumbaRasch/molvi/issues for a duplicate before submitting.
+      options:
+        - label: I searched existing issues and did not find a duplicate
+          required: true
+  - type: dropdown
+    id: path
+    attributes:
+      label: Dictation path
+      options:
+        - Nemotron (default — multilingual streaming)
+        - GigaAM Russian / PTT / Smart (fastest, punctuated)
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: symptom
+    attributes:
+      label: What's slow / the symptom
+      description: Describe the slowdown as concretely as possible (when it happens, how long it takes).
+    validations:
+      required: true
+  - type: input
+    id: hardware
+    attributes:
+      label: CPU / hardware
+      placeholder: "e.g. Intel i7-12700H"
+  - type: input
+    id: latency
+    attributes:
+      label: Approximate latency or RTF (if measured)
+      placeholder: "e.g. ~0.3s after release, RTF ~0.2"
+  - type: textarea
+    id: regression
+    attributes:
+      label: Regression?
+      description: If this used to be faster, note the version/commit where you saw it faster.
+      placeholder: "Was faster before version/commit X"
+    validations:
+      required: false
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Windows
+        - macOS (Apple Silicon)
+        - Linux
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: molvi version
+      placeholder: "e.g. 0.1.0"
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: molvi logs are metadata-only and %APPDATA% is redacted — safe to paste.
+      render: shell
