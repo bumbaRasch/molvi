@@ -104,12 +104,57 @@ double down on for v0.2 to widen the lead over Dragon/Talon/Superwhisper.
 
 ## How to resume (for the fresh session)
 
-1. Read `AGENTS.md` (project bible) + this file.
-2. Optionally: `docs/platform-portability.md` (the seed for Track A).
-3. Invoke the **brainstorming** skill; ask the user which track (A / B / C, or
-   "finish/ship v0.1 first"); explore that one to a spec.
-4. Gates for any code work: `cargo fmt` + `clippy --all-targets -D warnings` +
+> **Session 2026-08-07 outcome — Track A brainstorm COMPLETE.** Track A
+> (multi-platform port, OSS) was chosen and designed to a doc-verified spec.
+> Commits: `03348e8` (spec + mobile-strategy + AGENTS.md corrections),
+> `d1759c6` (spike #3 paste focus-guard + spec fixes). The design phase is done;
+> **the next work is IMPLEMENTATION: Step 0 + CI (below).**
+
+1. Read `AGENTS.md` (project bible, now corrected) + this file.
+2. **Read the spec: `docs/superpowers/specs/2026-08-07-molvi-multiplatform-port-design.md`**
+   — the full Track A design (decisions D1–D6, crate matrix, 3 blockers, 3 spikes,
+   inline-cfg architecture, per-platform specifics, Wayland scoping OPEN, NFRs).
+   Also `docs/superpowers/specs/2026-08-07-paste-focus-guard-spike.md` (spike #3).
+3. **NEXT WORK = Step 0 + CI matrix** (the implementation entry point):
+   - **Step 0 — make it compile on Linux/macOS:** move `windows` to
+     `[target.'cfg(windows)'.dependencies]` in `src-tauri/Cargo.toml`, then
+     cfg-gate the 4 unconditional Win32 import sites (model_store.rs:214 already
+     done; main.rs:1 `windows_subsystem` is harmless cross-OS):
+     - `src-tauri/src/audio.rs:6-7` (`PlaySoundW`/`SND_*`/`PCWSTR`)
+     - `src-tauri/src/ort_affinity.rs:10,14` (`SystemInformation`/`Threading`)
+     - `src-tauri/src/profiles.rs:13-18` (`Foundation`/`Threading`/`WindowsAndMessaging`/`PWSTR`)
+     - `src-tauri/src/paste.rs:9-10` (`HWND`/`GetForegroundWindow`/`SetForegroundWindow`)
+     Per spec D2: inline `#[cfg(target_os=...)]`, NO `mod platform`. Non-Windows
+     bodies = stubs returning `None`/no-op for now (real macOS/Linux impls come
+     in the port). `foreground_exe()`→`None`, `capture_target()`→`None`,
+     `play_sound_file`→no-op, `ort_affinity`→no-op fail-open. **Keep the blaze
+     hot loop free of runtime platform branches** (compile-time `#[cfg]` only).
+   - **CI matrix** — `.github/workflows/ci.yml`: windows/macos-14/ubuntu runners
+     running `cargo fmt --check` + `clippy --all-targets -D warnings` +
+     `cargo test --lib` + `npx tsc --noEmit` + `npm run build`. macOS runner =
+     Apple Silicon (runs spike #2 engine build — does ort/CoreML accept GigaAM/
+     Nemotron?); ubuntu runner = spike #1 (Linux ort-CPU build). The CI **IS**
+     the engine-spike mechanism — green CI on mac/linux = spikes #1/#2 passed.
+4. **After Step 0 + CI green:** the macOS port is next (spec per-platform
+   specifics). Note macOS needs `tauri-nspanel` (overlay `focusable:false` broken
+   — tauri#14102) + enigo Accessibility permission; paste = ⌘V (`Key::Command`).
+5. Gates for any code work: `cargo fmt` + `clippy --all-targets -D warnings` +
    `cargo test --lib` + (binary-unlocked) `cargo test --test log_privacy` +
    `npx tsc --noEmit` + `npm run build`. Binary-lock note: don't kill a running
    `cargo tauri dev` — use `cargo check --all-targets` + `cargo test --lib` if
    the dev app holds molvi.exe.
+6. **Verify crates live (AGENTS.md rule):** use the `find-docs` skill (ctx7) +
+   docs.rs/crates.io before coding — IDs `/pykeio/ort` (NOT `/pyke.io/ort`),
+   `/enigo-rs/enigo`, `/websites/v2_tauri_app`, `/cjpais/transcribe-rs`,
+   `/altunenes/parakeet-rs` (autodocs unreliable — verify against registry source).
+
+### OPEN decisions (resolve during/after macOS port)
+- **Wayland scoping** (spec §"Wayland scoping — OPEN"): Wayland is now the
+  default/only session on current distros (KDE Plasma 6.8 removed X11; GNOME
+  Wayland-default), but global-hotkey is X11-only upstream. Lean: Wayland-in-v1
+  via `ashpd` GlobalShortcuts portal, gated on a Wayland-hotkey spike. Decide
+  after macOS ships.
+- **transcribe-rs ort-pin landmine:** `transcribe-rs 0.3.11` pins `ort ="=2.0.0-rc.12"`
+  (exact), `parakeet-rs 0.3.7` wants rc.13 — mutually unsatisfiable; molvi's
+  Cargo.lock=rc.13 ⇒ a `[patch]` override exists. **Confirm the override before
+  any fresh Cargo.lock re-resolution** (a clean resolve may fail).
