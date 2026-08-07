@@ -36,7 +36,7 @@ build + CI) + Phase 2 (macOS code, Tasks 4-9) COMPLETE & CI-green**; Phase 3
 - `cargo build --manifest-path src-tauri/Cargo.toml` — Rust only (the CI gate)
 - `cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings` — lint (must be warning-clean)
 - `cargo fmt --manifest-path src-tauri/Cargo.toml` — format
-- `cargo test --manifest-path src-tauri/Cargo.toml --lib` — unit tests (**187 model-free**; engine test is feature-gated `--features engine-model-test`, needs the ~2.6 GB model)
+- `cargo test --manifest-path src-tauri/Cargo.toml --lib` — unit tests (**189 model-free**; engine test is feature-gated `--features engine-model-test`, needs the ~2.6 GB model)
 - `cargo test --manifest-path src-tauri/Cargo.toml --test log_privacy` — privacy-substrate integration tests (6; needs no live model, but needs the exe NOT binary-locked)
 - `npx tsc --noEmit` + `npm run build` — frontend gate (no JS test runner; TS correctness = tsc + build + human GUI smoke)
 - **Binary lock:** if a live `molvi.exe` (running `cargo tauri dev`) locks the debug binary, `cargo build`/full `cargo test` fail at link — use `cargo test --lib` + `cargo check --all-targets` (compiles test code without linking `molvi.exe`). Do NOT kill the human's running app.
@@ -140,7 +140,9 @@ Design spec + 13-task plan + competitor research: `docs/superpowers/{specs,plans
 
 **Deferred (hardware-blocked):** **Task 10** (macOS blaze RTF ≤0.03 measurement + full feature smoke) needs a Mac + the on-device model — NOT doable from Windows or CI (CI only compiles). This is the ONE remaining macOS gate.
 
-**Phase 3 (Linux) = NEXT:** Task 11 (Wayland PTT via `molvi record toggle` IPC + compositor-keybinding docs), Task 12 (Linux platform bodies: X11 `foreground_exe`/focus-guard + statvfs; Wayland paste = wl-clipboard + blast-release modifiers), Task 13 (Linux packaging AppImage/deb/rpm). Verify x11rb/wl-clipboard/ashpd APIs live before each.
+**Phase 3 (Linux) COMPLETE & CI-green (Tasks 11-13):** Task 11 (Wayland PTT via `molvi record toggle` → single-instance argv → `Command::Input`; + `docs/linux-install.md` compositor-keybinding card); Task 12 (X11 `foreground_exe`/focus-guard via `_NET_ACTIVE_WINDOW`/`_NET_WM_PID` (new `x11.rs` module, x11rb); `statvfs` disk-space; Wayland clipboard-primary paste via arboard→wl-copy + `blast_modifiers` + best-effort Ctrl+V); Task 13 (`bundle.linux` deb/rpm deps). All 3 OSes CI-green (windows + macos-14 + ubuntu). **x11rb API note:** the xproto request methods (`intern_atom`/`get_property`/`send_event`) live on `x11rb::protocol::xproto::ConnectionExt` (NOT the core `Connection` trait) — must be imported explicitly; `GetPropertyReply.value` is `Vec<u8>` (parse LE u32).
+
+**Deferred (hardware-blocked, not code):** Task 10 (macOS blaze smoke, needs Mac + model); **Linux human smoke** (X11 foreground_exe/paste + Wayland paste/compositor-keybinding PTT, needs Linux desktop + model — parallel to Mac Task 10); **Wayland foreground-app per-compositor adapters** (Task 12 Step 5 follow-up: hyprctl/swaymsg/niri msg); **command-mode on Wayland** (documented v1 limitation — fails gracefully at target guard). **Linux bundle watch-item:** `libasound2` deb dep may need `libasound2t64` on Ubuntu 24.04+ (time_t transition) — verify at the Linux bundle smoke. **Updater pubkey/endpoint** (tauri.conf.json) = RELEASE BLOCKER (placeholder).
 
 **Plan corrections discovered (the plan is authoritative where it matches reality; these are the verified corrections — the plan text is WRONG here):**
 1. **tauri-nspanel is NOT on crates.io** → `git = "https://github.com/ahkohd/tauri-nspanel", branch = "v2.1"` (plan's `="2"` would fail).

@@ -39,7 +39,7 @@ Tip of `multiplatform-port` (newest first): Task 9 (Info.plist + Secure Input) �
 Task 7 (NSPanel overlay) → Task 6 (per-platform paste) → Task 8 (NSWorkspace
 profiles) → Task 5 (paths) → Task 4 (macOS deps) → Task 3 (CI) → Task 2
 (cfg-gate) → Task 1 (license). All gates green at last check: `cargo fmt` +
-`clippy --all-targets -D warnings` + `cargo test --lib` (187) + `npx tsc
+`clippy --all-targets -D warnings` + `cargo test --lib` (189) + `npx tsc
 --noEmit` + `npm run build`, on all 3 OSes.
 
 ## Hard context (do not re-litigate)

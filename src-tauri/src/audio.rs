@@ -299,11 +299,12 @@ pub fn play_sound_file(path: &str) {
     }
 }
 
-/// Non-Windows: no-op (Step 0). `play_tone` (cpal) is the cross-platform
-/// default; only the custom-.wav path is silent off-Windows until Phase 2/3.
+/// Non-Windows: no-op. `play_tone` (cpal) is the cross-platform default; only
+/// the custom-.wav path is silent off-Windows (a portable wav player is a
+/// follow-up; not v1-blocking — the cpal tone path covers beep feedback).
 #[cfg(not(target_os = "windows"))]
 pub fn play_sound_file(_path: &str) {
-    // ponytail: no portable wav player yet (Phase 2 CoreAudio / Phase 3 ALSA
+    // ponytail: no portable wav player yet (CoreAudio/ALSA playback is a
     // playback); best-effort no-op. `play_tone` (cpal) is the cross-platform
     // default, so only the custom-.wav path is silent off-Windows.
 }
