@@ -1,0 +1,257 @@
+:root {
+  --mic: 20%;
+  /* One teal accent drives all three phases + the check + the waveform
+     (Task 9 redesign: drop the old red #e23b3b / blue #4a9eff). */
+  --accent: #2dd4bf;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  /* transparent body so the WebView2 surface itself is see-through; the
+     bubble div carries the only visible paint. */
+  font-family: "Segoe UI", system-ui, sans-serif;
+  overflow: hidden;
+  user-select: none;
+}
+
+body {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+}
+
+.bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 700px;
+  max-width: 98%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(20, 20, 22, 0.82);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+
+.caption {
+  min-height: 1.4em;
+  color: #fff;
+  /* ponytail: the .bubble's 0.82 scrim is already darker/more legible than the
+     plan's proposed 0.55 (Ruling 3 — do NOT regress the bubble alpha). This
+     text-shadow is the only additive polish: helps white text over busy
+     backgrounds within the already-dark bubble. */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  font-size: 18px;
+  line-height: 1.4;
+  word-break: break-word;
+  white-space: pre-wrap;
+  outline: none;
+}
+
+/* Inline edit (Polished edit-window): make the caption a real input surface.
+   The caret pseudo-element is suppressed (see below) so the native text cursor
+   takes over. user-select:text + a faint teal wash mark the editable region. */
+.caption[contenteditable="true"] {
+  background: rgba(45, 212, 191, 0.12);
+  border-radius: 4px;
+  padding: 2px 4px;
+  margin: -2px -4px;
+  cursor: text;
+  user-select: text;
+}
+
+/* blinking caret after the growing transcript */
+.caption::after {
+  content: "▌";
+  margin-inline-start: 1px;
+  color: #fff;
+  animation: caret 1s step-end infinite;
+}
+
+/* Hide the trailing caret while the caption is an active input (the native
+   text caret renders instead). */
+.caption[contenteditable="true"]::after {
+  content: "";
+}
+
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dot svg {
+  display: none;
+  width: 12px;
+  height: 12px;
+}
+
+/* Breathe (listening / recording): gentle 1→1.15 sine-ish pulse. */
+.dot.breathing {
+  animation: breathe 1.6s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+/* Ring shimmer (polishing): a spinning teal ring. ponytail: border-circle
+   fallback (not conic+mask) — one fewer GPU layer, identical visual at 14px,
+   and robust across every WebView2 build. The brief explicitly allows this
+   fallback with a naming comment. */
+.dot.ring {
+  width: 14px;
+  height: 14px;
+  background: transparent;
+  border: 2px solid rgba(45, 212, 191, 0.25);
+  border-top-color: var(--accent);
+  animation: ring-spin 1.4s linear infinite;
+}
+
+@keyframes ring-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Check (success): teal disc + white SVG check, scale/fade-in. The SVG lives
+   in the DOM always; .check reveals it. */
+.dot.check {
+  width: 18px;
+  height: 18px;
+  background: var(--accent);
+}
+
+.dot.check svg {
+  display: block;
+  animation: check-in 0.4s ease-out both;
+}
+
+@keyframes check-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.wave {
+  flex: 1 1 auto;
+  height: 10px;
+  /* ponytail: physical — intentional, decorative mic meter (quiet→loud
+     left→right); does not flip under RTL */
+  background: linear-gradient(
+    to right,
+    rgba(45, 212, 191, 0.15),
+    rgba(45, 212, 191, 0.55) var(--mic),
+    rgba(45, 212, 191, 0.15)
+  );
+  border-radius: 4px;
+  transition: background 0.05s linear;
+}
+
+.timer {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  flex: 0 0 auto;
+}
+
+.cancel {
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+
+.cancel:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* Actions row: edit affordance + paste-failed recovery. Hidden by default;
+   TS reveals per state. */
+.actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  border: 1px solid rgba(45, 212, 191, 0.5);
+  background: rgba(45, 212, 191, 0.15);
+  color: #fff;
+  font-size: 13px;
+  line-height: 1;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn:hover {
+  background: rgba(45, 212, 191, 0.3);
+}
+
+.edit-hint {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Accessibility: respect reduced-motion — kill every infinite animation and
+   the check fade-in (plan §7.1 / spec a11y basics). */
+@media (prefers-reduced-motion: reduce) {
+  .dot.breathing,
+  .dot.ring,
+  .dot.check svg {
+    animation: none;
+  }
+  .caption::after {
+    animation: none;
+  }
+}

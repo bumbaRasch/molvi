@@ -1,0 +1,80 @@
+name: ASR / Engine issue
+description: Report a speech-recognition (transcription quality / model loading) problem.
+title: "[ASR]: "
+labels: ["asr", "triage"]
+body:
+  - type: checkboxes
+    id: search
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please search https://github.com/bumbaRasch/molvi/issues for a duplicate before submitting.
+      options:
+        - label: I searched existing issues and did not find a duplicate
+          required: true
+  - type: dropdown
+    id: engine
+    attributes:
+      label: ASR engine
+      options:
+        - Nemotron 3.5 (multilingual)
+        - GigaAM-v3 (Russian)
+    validations:
+      required: true
+  - type: input
+    id: language
+    attributes:
+      label: Recognition language
+      placeholder: "e.g. ru-RU, en-US, auto"
+  - type: dropdown
+    id: model-status
+    attributes:
+      label: Model status
+      options:
+        - Downloaded & loaded
+        - Downloading
+        - Download failed
+        - Not downloaded
+    validations:
+      required: true
+  - type: textarea
+    id: what-went-wrong
+    attributes:
+      label: What went wrong?
+      description: e.g. "said X, recognized as Y". **Do NOT paste real transcripts** — use synthetic/non-private examples.
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy check
+      options:
+        - label: I will NOT paste real transcripts or audio — I'm using synthetic examples only. (MOLVI never logs them — they're private.)
+          required: true
+  - type: textarea
+    id: sanitized-example
+    attributes:
+      label: Sanitized example
+      description: A short, non-private example that illustrates the issue.
+    validations:
+      required: false
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Windows
+        - macOS (Apple Silicon)
+        - Linux
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: MOLVI version
+      placeholder: "e.g. 0.1.0"
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: MOLVI logs are metadata-only and %APPDATA% is redacted — safe to paste.
+      render: shell

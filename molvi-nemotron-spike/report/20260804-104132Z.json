@@ -1,0 +1,61 @@
+{
+  "generated_at_utc": "20260804-104132Z",
+  "model_dir": ".\\nemotron",
+  "model_id": "nemotron-3.5-asr-streaming-0.6b-onnx",
+  "nemotron_mode": "Multilingual",
+  "target_lang": "auto",
+  "affinity": "all",
+  "p_core_mask": null,
+  "cold_load_ms": 3897,
+  "warm_load_ms": 4786,
+  "peak_rss_bytes": 2696081408,
+  "median_rtf": 0.482371789193977,
+  "mean_rtf": 0.481128263129494,
+  "max_rtf": 0.5146371323688188,
+  "mean_wer": 0.09186666666666667,
+  "verdict": "VERDICT: GO (median RTF 0.482) — Nemotron-3.5-ASR-0.6B real-time headroom; viable for default-on CPU path. [spec §10.3]",
+  "clips": [
+    {
+      "clip": "de",
+      "lang": "de",
+      "clip_len_sec": 5.4284375,
+      "rtf": 0.44637586782568645,
+      "wer": 0.0833,
+      "cold_load_ms": 3897,
+      "warm_load_ms": 4786,
+      "peak_rss_bytes": 2695471104,
+      "cpu_pct": 310.8075176523194,
+      "model_id": "nemotron-3.5-asr-streaming-0.6b-onnx",
+      "nemotron_mode": "Multilingual",
+      "error": null
+    },
+    {
+      "clip": "en",
+      "lang": "en",
+      "clip_len_sec": 5.78875,
+      "rtf": 0.5146371323688188,
+      "wer": 0.0,
+      "cold_load_ms": 3897,
+      "warm_load_ms": 4786,
+      "peak_rss_bytes": 2695471104,
+      "cpu_pct": 331.4753148906398,
+      "model_id": "nemotron-3.5-asr-streaming-0.6b-onnx",
+      "nemotron_mode": "Multilingual",
+      "error": null
+    },
+    {
+      "clip": "ru",
+      "lang": "ru",
+      "clip_len_sec": 11.29,
+      "rtf": 0.482371789193977,
+      "wer": 0.1923,
+      "cold_load_ms": 3897,
+      "warm_load_ms": 4786,
+      "peak_rss_bytes": 2696081408,
+      "cpu_pct": 325.6417236391447,
+      "model_id": "nemotron-3.5-asr-streaming-0.6b-onnx",
+      "nemotron_mode": "Multilingual",
+      "error": null
+    }
+  ]
+}

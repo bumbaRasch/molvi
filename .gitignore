@@ -1,0 +1,41 @@
+# Rust build artifacts
+target/
+**/target/
+__pycache__/
+
+# Tauri / Vite frontend build output
+dist/
+src-dist/
+**/dist/
+
+# Node
+node_modules/
+
+# The ~225MB GigaAM model — never commit (GitHub >100MB block). Stays on disk only.
+molvi-task0/models/
+**/*.onnx
+
+# SDD plan workspace (per-plan scratch: briefs, reports, review packages, ledger)
+.superpowers/
+
+# Agent tooling (personal/editor, not project source)
+.claude/
+.agents/skills/astro/
+.agents/skills/seo/
+
+# tauri icon regenerates mobile icons we don't ship (desktop-only app)
+src-tauri/icons/android/
+src-tauri/icons/ios/
+
+# Tauri build artifacts
+src-tauri/WixTools/
+src-tauri/.cargo/
+
+# OS / editor noise
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
