@@ -1,0 +1,122 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "molvi" [ref=e5] [cursor=pointer]:
+        - /url: /molvi-website/
+      - navigation "molvi" [ref=e8]:
+        - link "How it works" [ref=e9] [cursor=pointer]:
+          - /url: "#how"
+        - link "Privacy" [ref=e10] [cursor=pointer]:
+          - /url: "#privacy"
+        - link "Download" [ref=e11] [cursor=pointer]:
+          - /url: "#download"
+      - generic [ref=e12]:
+        - link "molvi on GitHub (opens in a new tab)" [ref=e13] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi
+        - button "Choose language" [ref=e17] [cursor=pointer]:
+          - generic [ref=e21]: EN
+        - 'button "Theme: System" [ref=e23] [cursor=pointer]'
+  - generic [ref=e28]:
+    - generic [ref=e29]:
+      - heading "Speak freely. It stays here." [level=1] [ref=e30]
+      - paragraph [ref=e31]: molvi turns your speech into text on your computer, and nothing is sent anywhere.
+    - generic [ref=e90]:
+      - generic [ref=e91]:
+        - link "Download for Windows" [ref=e92] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_x64-setup.exe
+        - link "Download for macOS" [ref=e97] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_aarch64.dmg
+          - generic [ref=e101]: macOS
+        - link "Download for Linux" [ref=e102] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_amd64.AppImage
+          - generic [ref=e107]: Linux
+      - paragraph [ref=e108]: Free · open source · no account
+  - main [ref=e109]:
+    - generic [ref=e111]:
+      - heading "How it works" [level=2] [ref=e113]
+      - list [ref=e114]:
+        - listitem [ref=e115]:
+          - generic [ref=e116]: "01"
+          - heading "Hold the hotkey" [level=3] [ref=e122]
+          - generic [ref=e123]: "Alt + `"
+          - paragraph [ref=e124]: Opens the overlay
+        - listitem [ref=e125]:
+          - generic [ref=e126]: "02"
+          - heading "Speak" [level=3] [ref=e132]
+          - paragraph [ref=e133]: Words appear as you talk
+        - listitem [ref=e150]:
+          - generic [ref=e151]: "03"
+          - heading "Release to paste" [level=3] [ref=e156]
+          - paragraph [ref=e157]: Text lands at your cursor
+      - list [ref=e158]:
+        - listitem [ref=e159]:
+          - generic [ref=e163]: Commands
+        - listitem [ref=e164]:
+          - generic [ref=e168]: Snippets & dict
+        - listitem [ref=e169]:
+          - generic [ref=e174]: History
+        - listitem [ref=e175]:
+          - generic [ref=e179]: Overlay
+        - listitem [ref=e180]:
+          - generic [ref=e184]: Auto-update
+    - generic [ref=e186]:
+      - heading "Your words stay on your computer." [level=2] [ref=e187]
+      - list [ref=e188]:
+        - listitem [ref=e189]:
+          - generic [ref=e192]: On-device recognition
+        - listitem [ref=e193]:
+          - generic [ref=e196]: No account needed
+        - listitem [ref=e197]:
+          - generic [ref=e200]: Nothing sent to the cloud
+        - listitem [ref=e201]:
+          - generic [ref=e204]: Open source
+    - paragraph [ref=e207]:
+      - generic [ref=e208]: 40+ recognition languages · 36 UI languages
+      - generic [ref=e209]: RU — native
+    - generic [ref=e211]:
+      - heading "Get molvi" [level=2] [ref=e213]
+      - generic [ref=e214]:
+        - article [ref=e215]:
+          - heading "Windows" [level=3] [ref=e219]
+          - link "Download" [ref=e220] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_x64-setup.exe
+        - article [ref=e221]:
+          - heading "macOS" [level=3] [ref=e225]
+          - link "Download" [ref=e226] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_aarch64.dmg
+        - article [ref=e227]:
+          - heading "Linux" [level=3] [ref=e232]
+          - link "Download" [ref=e233] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_amd64.AppImage
+    - generic [ref=e235]:
+      - heading "FAQ" [level=2] [ref=e237]
+      - group [ref=e238]:
+        - generic "Does my audio get sent anywhere?" [ref=e239] [cursor=pointer]
+        - paragraph [ref=e244]: No. Recognition runs on your CPU; the engine makes zero network requests while dictating. Audio is never written to disk.
+      - group [ref=e245]:
+        - generic "Is it really free?" [ref=e246] [cursor=pointer]
+      - group [ref=e250]:
+        - generic "Which languages?" [ref=e251] [cursor=pointer]
+      - group [ref=e255]:
+        - generic "Which OSes?" [ref=e256] [cursor=pointer]
+  - contentinfo [ref=e260]:
+    - generic [ref=e261]:
+      - generic [ref=e262]:
+        - link "molvi" [ref=e263] [cursor=pointer]:
+          - /url: /molvi-website/
+        - paragraph [ref=e266]: Free, offline dictation — your speech stays on your machine.
+      - navigation "Footer" [ref=e267]:
+        - link "GitHub" [ref=e268] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi
+        - link "Changelog" [ref=e269] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi/releases
+    - generic [ref=e270]:
+      - generic [ref=e271]: © 2026 molvi
+      - generic [ref=e272]: MIT OR Apache-2.0
+  - generic [ref=e275]:
+    - button [ref=e276]
+    - button [ref=e282]
+    - button [ref=e286]
+    - button [ref=e291]

@@ -1,0 +1,112 @@
+name: Translation / Locale issue
+description: Report a wrong, missing, or unnatural translation in a specific language.
+title: "[i18n]: "
+labels: ["i18n", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping make **MOLVI**'s translations better!
+        MOLVI ships in 36 languages — if a string reads wrong, is misleading, or is missing in your language, let us know.
+        Please **search existing issues first** to avoid duplicates.
+  - type: checkboxes
+    id: search
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please search https://github.com/bumbaRasch/molvi/issues for a duplicate before submitting.
+      options:
+        - label: I searched existing issues and did not find a duplicate
+          required: true
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language
+      description: Which language has the problem?
+      options:
+        - Arabic (ar)
+        - Bulgarian (bg)
+        - Chinese, Simplified (zh)
+        - Croatian (hr)
+        - Czech (cs)
+        - Danish (da)
+        - Dutch (nl)
+        - English (en)
+        - Estonian (et)
+        - Finnish (fi)
+        - French (fr)
+        - German (de)
+        - Greek (el)
+        - Hebrew (he)
+        - Hindi (hi)
+        - Hungarian (hu)
+        - Italian (it)
+        - Japanese (ja)
+        - Korean (ko)
+        - Latvian (lv)
+        - Lithuanian (lt)
+        - Maltese (mt)
+        - Norwegian Bokmål (nb)
+        - Norwegian Nynorsk (nn)
+        - Polish (pl)
+        - Portuguese (pt)
+        - Romanian (ro)
+        - Russian (ru)
+        - Slovak (sk)
+        - Slovenian (sl)
+        - Spanish (es)
+        - Swedish (sv)
+        - Thai (th)
+        - Turkish (tr)
+        - Ukrainian (uk)
+        - Vietnamese (vi)
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where did you see it?
+      description: Which part of the app shows the text? (Translations are identical across Windows / macOS / Linux.)
+      options:
+        - Settings — About
+        - Settings — Recognition (model & language)
+        - Settings — Microphone
+        - Settings — Text processing
+        - Settings — Dictionary
+        - Settings — Snippets
+        - Settings — History
+        - Settings — Hotkey
+        - Settings — Overlay
+        - Settings — Updates
+        - Onboarding (first-run setup)
+        - Overlay (recording indicator)
+        - System tray menu
+        - Other / not sure
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: The text as it currently appears
+      description: Paste the exact string you saw, in the language above.
+    validations:
+      required: true
+  - type: textarea
+    id: suggested
+    attributes:
+      label: Suggested correction
+      description: What should it say instead? Optional, but very helpful — a native phrasing is ideal.
+      placeholder: "e.g. should read \"…\" instead"
+    validations:
+      required: false
+  - type: textarea
+    id: why
+    attributes:
+      label: Why is the current translation wrong?
+      description: e.g. grammatically incorrect, wrong meaning, too literal / unnatural, too long for the UI, inconsistent with another part of the app, etc.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: MOLVI version
+      placeholder: "e.g. 0.1.0"

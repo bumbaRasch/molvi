@@ -1,0 +1,204 @@
+- generic [active] [ref=f128e1]:
+  - link "Перейти к содержимому" [ref=f128e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=f128e3]:
+    - generic [ref=f128e4]:
+      - link "molvi" [ref=f128e5] [cursor=pointer]:
+        - /url: /molvi-website/
+      - navigation "molvi" [ref=f128e8]:
+        - link "Как это работает" [ref=f128e9] [cursor=pointer]:
+          - /url: "#how"
+        - link "Возможности" [ref=f128e10] [cursor=pointer]:
+          - /url: "#features"
+        - link "Приватность" [ref=f128e11] [cursor=pointer]:
+          - /url: "#privacy"
+        - link "Скачать" [ref=f128e12] [cursor=pointer]:
+          - /url: "#download"
+      - generic [ref=f128e13]:
+        - link "molvi на GitHub (открывается в новой вкладке)" [ref=f128e14] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi
+          - generic [ref=f128e17]: На GitHub
+        - button "Выбрать язык" [ref=f128e19] [cursor=pointer]:
+          - generic [ref=f128e23]: Русский
+        - group "Тема" [ref=f128e24]:
+          - button "Системная" [ref=f128e25] [cursor=pointer]
+          - button "Светлая" [pressed] [ref=f128e29] [cursor=pointer]
+          - button "Тёмная" [ref=f128e33] [cursor=pointer]
+  - generic [ref=f128e37]:
+    - generic [ref=f128e38]:
+      - heading "Говорите свободно. Ничего не уходит." [level=1] [ref=f128e39]
+      - paragraph [ref=f128e40]: molvi превращает вашу речь в текст на вашем компьютере, и ничего не покидает его.
+    - generic [ref=f128e99]:
+      - generic [ref=f128e100]:
+        - link "Скачать для Windows" [ref=f128e101] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_x64-setup.exe
+        - link "Скачать для macOS" [ref=f128e106] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_aarch64.dmg
+          - generic [ref=f128e110]: macOS
+        - link "Скачать для Linux" [ref=f128e111] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_amd64.AppImage
+          - generic [ref=f128e116]: Linux
+      - paragraph [ref=f128e117]: Бесплатно · открытый исходный код · без аккаунта
+  - main [ref=f128e118]:
+    - generic [ref=f128e120]:
+      - heading "Как это работает" [level=2] [ref=f128e122]
+      - list [ref=f128e123]:
+        - listitem [ref=f128e124]:
+          - generic [ref=f128e125]: "01"
+          - heading "Удерживайте горячую клавишу" [level=3] [ref=f128e126]
+          - paragraph [ref=f128e127]: "Нажмите и удерживайте горячую клавишу (по умолчанию: Alt + `) — появится окно диктовки."
+        - listitem [ref=f128e128]:
+          - generic [ref=f128e129]: "02"
+          - heading "Говорите" [level=3] [ref=f128e130]
+          - paragraph [ref=f128e131]: molvi расшифровывает речь на вашем процессоре. Слова появляются в окне в реальном времени, пока вы говорите.
+        - listitem [ref=f128e132]:
+          - generic [ref=f128e133]: "03"
+          - heading "Отпустите" [level=3] [ref=f128e134]
+          - paragraph [ref=f128e135]: Готовый текст вставляется там, где установлен курсор — в любое приложение, в любое поле.
+    - generic [ref=f128e138]:
+      - generic [ref=f128e139]:
+        - heading "Приватность по конструкции, а не по обещанию." [level=2] [ref=f128e140]
+        - paragraph [ref=f128e141]: Распознавание работает на 100% на вашем процессоре. Ваш голос не покидает ваш компьютер — и это утверждение подкреплено набором тестов, а не маркетинговым заявлением.
+        - list [ref=f128e142]:
+          - listitem [ref=f128e143]:
+            - generic [ref=f128e147]: Вся обработка происходит на вашем устройстве. Движок распознавания не делает ни одного сетевого запроса.
+          - listitem [ref=f128e148]:
+            - generic [ref=f128e152]: Никакой телеметрии, никакой аналитики, никакой отправки отчётов об ошибках. Никакой.
+          - listitem [ref=f128e153]:
+            - generic [ref=f128e157]: Логи содержат только метаданные — текст расшифровки, аудио, словарь, история и сниппеты никогда не записываются в логи.
+          - listitem [ref=f128e158]:
+            - generic [ref=f128e162]: "Ваши данные остаются локальными: история, словарь и сниппеты хранятся в файле SQLite в каталоге данных приложения. Аудио никогда не записывается на диск."
+      - complementary [ref=f128e163]:
+        - paragraph [ref=f128e164]: "Заблокируйте molvi в брандмауэре и надиктуйте: распознавание продолжит работать, доказывая, что ничего не покинуло компьютер. Или следите за сетевым монитором во время сессии — он остаётся тихим. Или прочитайте набор тестов приватности, который ломает сборку, если какой-либо текст расшифровки попадает в лог."
+        - link "Читать набор тестов приватности" [ref=f128e165] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi/blob/main/src-tauri/tests/log_privacy.rs
+          - text: Читать набор тестов приватности
+          - generic [ref=f128e166]: →
+        - paragraph [ref=f128e167]: Единственный исходящий вызов — необязательная проверка обновлений (запрос latest.json с GitHub — отключается в настройках), а также разовая загрузка модели с Hugging Face.
+    - generic [ref=f128e169]:
+      - heading "Любой язык — на ваших условиях" [level=2] [ref=f128e171]
+      - generic [ref=f128e172]:
+        - generic [ref=f128e173]:
+          - generic [ref=f128e174]: "36"
+          - generic [ref=f128e175]: Интерфейс на 36 языках
+          - generic [ref=f128e176]: Включая арабский и иврит (письмо справа налево).
+        - generic [ref=f128e177]:
+          - generic [ref=f128e178]: 40+
+          - generic [ref=f128e179]: Более 40 языков распознавания
+          - generic [ref=f128e180]: Мультиязычная потоковая транскрипция через Nemotron 3.5 ASR.
+          - generic [ref=f128e181]:
+            - generic [ref=f128e182]: EN
+            - generic [ref=f128e183]: ES
+            - generic [ref=f128e184]: FR
+            - generic [ref=f128e185]: DE
+            - generic [ref=f128e186]: IT
+            - generic [ref=f128e187]: PT
+            - generic [ref=f128e188]: RU
+            - generic [ref=f128e189]: ZH
+            - generic [ref=f128e190]: JA
+            - generic [ref=f128e191]: KO
+            - generic [ref=f128e192]: AR
+            - generic [ref=f128e193]: HI
+        - generic [ref=f128e194]:
+          - generic [ref=f128e195]: RU
+          - generic [ref=f128e196]: Движок для русского языка
+          - generic [ref=f128e197]: GigaAM-v3 — быстрый и с собственной пунктуацией. Не запоздалая мультиязычная надстройка.
+    - generic [ref=f128e199]:
+      - heading "Скачать molvi" [level=2] [ref=f128e201]
+      - generic [ref=f128e202]:
+        - article [ref=f128e203]:
+          - heading "Windows 11" [level=3] [ref=f128e207]
+          - paragraph [ref=f128e208]:
+            - code [ref=f128e209]: molvi_0.1.0_x64-setup.exe
+          - paragraph [ref=f128e210]: Установщик ~11 MB · Версия 0.1.0
+          - link "Скачать" [ref=f128e211] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_x64-setup.exe
+          - link "Список изменений" [ref=f128e212] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases
+        - article [ref=f128e213]:
+          - heading "macOS (Apple Silicon)" [level=3] [ref=f128e217]
+          - paragraph [ref=f128e218]:
+            - code [ref=f128e219]: molvi_0.1.0_aarch64.dmg
+          - paragraph [ref=f128e220]: Установщик ~11 MB · Версия 0.1.0
+          - link "Скачать" [ref=f128e221] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_aarch64.dmg
+          - link "Список изменений" [ref=f128e222] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases
+        - article [ref=f128e223]:
+          - heading "Linux" [level=3] [ref=f128e228]
+          - paragraph [ref=f128e229]:
+            - code [ref=f128e230]: molvi_0.1.0_amd64.AppImage
+          - paragraph [ref=f128e231]: Установщик ~11 MB · Версия 0.1.0
+          - link "Скачать" [ref=f128e232] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_amd64.AppImage
+          - link "Список изменений" [ref=f128e233] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases
+      - paragraph [ref=f128e234]: MIT OR Apache-2.0 · ed25519-signed updates · ~11 MB installer
+      - complementary [ref=f128e235]:
+        - paragraph [ref=f128e236]: v0.1.0 собран и подписан для обновлений, но ещё не опубликован — скачайте его со страницы Releases.
+        - list [ref=f128e237]:
+          - listitem [ref=f128e238]: "→ Windows SmartScreen: Дополнительные сведения → Всё равно запустить."
+          - listitem [ref=f128e239]: "→ macOS Gatekeeper: щёлкните приложение правой кнопкой → Открыть."
+    - generic [ref=f128e241]:
+      - heading "FAQ" [level=2] [ref=f128e243]
+      - group [ref=f128e244]:
+        - generic "Действительно бесплатно?" [ref=f128e245] [cursor=pointer]
+        - paragraph [ref=f128e250]: Да. MIT OR Apache-2.0, навсегда. Без аккаунта, без подписки, без платных функций.
+      - group [ref=f128e251]:
+        - generic "Нужен ли интернет?" [ref=f128e252] [cursor=pointer]
+      - group [ref=f128e256]:
+        - generic "Моё аудио куда-то отправляется?" [ref=f128e257] [cursor=pointer]
+      - group [ref=f128e261]:
+        - generic "Какие языки?" [ref=f128e262] [cursor=pointer]
+      - group [ref=f128e266]:
+        - generic "Какой размер загрузки?" [ref=f128e267] [cursor=pointer]
+      - group [ref=f128e271]:
+        - generic "Какие ОС?" [ref=f128e272] [cursor=pointer]
+  - contentinfo [ref=f128e276]:
+    - generic [ref=f128e277]:
+      - generic [ref=f128e278]:
+        - link "molvi" [ref=f128e279] [cursor=pointer]:
+          - /url: /molvi-website/
+        - paragraph [ref=f128e282]: "Автор: @bumbaRasch"
+      - navigation "Footer" [ref=f128e283]:
+        - generic [ref=f128e284]:
+          - heading "Продукт" [level=3] [ref=f128e285]
+          - list [ref=f128e286]:
+            - listitem [ref=f128e287]:
+              - link "Скачать" [ref=f128e288] [cursor=pointer]:
+                - /url: /molvi-website/#download
+            - listitem [ref=f128e289]:
+              - link "Список изменений" [ref=f128e290] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi/releases
+            - listitem [ref=f128e291]:
+              - link "Дорожная карта" [ref=f128e292] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi#roadmap
+        - generic [ref=f128e293]:
+          - heading "Ресурсы" [level=3] [ref=f128e294]
+          - list [ref=f128e295]:
+            - listitem [ref=f128e296]:
+              - link "Репозиторий" [ref=f128e297] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi
+            - listitem [ref=f128e298]:
+              - link "Приватность" [ref=f128e299] [cursor=pointer]:
+                - /url: /molvi-website/#privacy
+            - listitem [ref=f128e300]:
+              - link "Безопасность" [ref=f128e301] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi/security
+        - generic [ref=f128e302]:
+          - heading "Сообщество" [level=3] [ref=f128e303]
+          - list [ref=f128e304]:
+            - listitem [ref=f128e305]:
+              - link "GitHub" [ref=f128e306] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi
+            - listitem [ref=f128e307]:
+              - link "Содействие" [ref=f128e308] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi/blob/main/CONTRIBUTING.md
+    - generic [ref=f128e309]:
+      - generic [ref=f128e310]: © 2026 molvi
+      - generic [ref=f128e311]: MIT OR Apache-2.0
+  - generic [ref=f128e314]:
+    - button [ref=f128e315]
+    - button [ref=f128e321]
+    - button [ref=f128e325]
+    - button [ref=f128e330]

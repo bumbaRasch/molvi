@@ -1,0 +1,517 @@
+- generic [active] [ref=f42e1]:
+  - link [ref=f42e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=f42e3]:
+    - generic [ref=f42e4]:
+      - link "molvi" [ref=f42e5] [cursor=pointer]:
+        - /url: /molvi-website/
+      - navigation "molvi" [ref=f42e8]:
+        - link "How it works" [ref=f42e9] [cursor=pointer]:
+          - /url: "#how"
+        - link "Features" [ref=f42e10] [cursor=pointer]:
+          - /url: "#features"
+        - link "Privacy" [ref=f42e11] [cursor=pointer]:
+          - /url: "#privacy"
+        - link "Download" [ref=f42e12] [cursor=pointer]:
+          - /url: "#download"
+      - generic [ref=f42e13]:
+        - link "molvi on GitHub (opens in a new tab)" [ref=f42e14] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi
+          - generic [ref=f42e17]: View on GitHub
+        - button "Choose language" [ref=f42e19] [cursor=pointer]:
+          - generic [ref=f42e23]: English
+        - group "Theme" [ref=f42e24]:
+          - button "System" [ref=f42e25] [cursor=pointer]
+          - button "Light" [pressed] [ref=f42e29] [cursor=pointer]
+          - button "Dark" [ref=f42e33] [cursor=pointer]
+  - generic [ref=f42e37]:
+    - generic [ref=f42e38]:
+      - heading "Speak. It types. Nothing leaves." [level=1] [ref=f42e39]
+      - separator [ref=f42e40]
+      - paragraph [ref=f42e41]: molvi turns your voice into text in any app — transcribed on your device, in 36 UI languages, with a dedicated Russian engine. Free and open source, for Windows, macOS, and Linux.
+      - generic [ref=f42e42]:
+        - link "Download for Windows" [ref=f42e43] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_x64-setup.exe
+        - link "molvi on GitHub (opens in a new tab)" [ref=f42e44] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi
+          - text: View on GitHub ★
+      - paragraph [ref=f42e45]: Free · Open source · No account · ~11 MB installer
+    - img "molvi dictation overlay — hold the hotkey, speak, and the text appears live" [ref=f42e47]
+  - main [ref=f42e48]:
+    - region "0 bytes sent to the cloud · 0 accounts · 0 telemetry" [ref=f42e49]:
+      - generic [ref=f42e50]:
+        - paragraph [ref=f42e51]: 0 bytes sent to the cloud · 0 accounts · 0 telemetry
+        - paragraph [ref=f42e52]: Built with Tauri · Rust · GigaAM · Nemotron ASR · ONNX Runtime
+    - generic [ref=f42e54]:
+      - heading "How it works" [level=2] [ref=f42e56]
+      - list [ref=f42e57]:
+        - listitem [ref=f42e58]:
+          - generic [ref=f42e59]: "01"
+          - heading "Hold your hotkey" [level=3] [ref=f42e60]
+          - paragraph [ref=f42e61]: "Press and hold your hotkey (default: Alt + `) — the dictation overlay appears."
+        - listitem [ref=f42e62]:
+          - generic [ref=f42e63]: "02"
+          - heading "Speak" [level=3] [ref=f42e64]
+          - paragraph [ref=f42e65]: molvi transcribes on your CPU. Words stream live to the overlay as you talk.
+        - listitem [ref=f42e66]:
+          - generic [ref=f42e67]: "03"
+          - heading "Release" [level=3] [ref=f42e68]
+          - paragraph [ref=f42e69]: Polished text is pasted wherever your cursor is — any app, any field.
+    - generic [ref=f42e77]:
+      - heading "Private by design, not by promise." [level=2] [ref=f42e78]
+      - paragraph [ref=f42e79]: Recognition runs 100% on your CPU. Your voice never leaves your computer — and that claim is enforced by a test suite, not a marketing sentence.
+      - list [ref=f42e80]:
+        - listitem [ref=f42e81]: All processing happens on your device. The recognition engine makes zero network requests.
+        - listitem [ref=f42e82]: No telemetry, no analytics, no crash-report upload. None.
+        - listitem [ref=f42e83]: "Your data stays local: history, dictionary, and snippets live in a SQLite file under your appdata. Audio is never written to disk."
+      - link "Learn more" [ref=f42e84] [cursor=pointer]:
+        - /url: "#privacy"
+        - text: Learn more
+        - generic [ref=f42e85]: →
+    - generic [ref=f42e87]:
+      - img "molvi settings — recognition language and engine selection" [ref=f42e89]
+      - generic [ref=f42e90]:
+        - heading "Speaks your language" [level=2] [ref=f42e91]
+        - paragraph [ref=f42e92]: A 36-language interface — including Arabic and Hebrew, right-to-left. Plus 40+ recognition locales. No other dictation app ships a localized UI; the rest are English-only.
+        - paragraph [ref=f42e93]:
+          - strong [ref=f42e94]: No other dictation tool in this space runs a Russian-native engine — everyone else transcribes Russian through a multilingual model.
+        - link "Learn more" [ref=f42e95] [cursor=pointer]:
+          - /url: "#languages"
+          - text: Learn more
+          - generic [ref=f42e96]: →
+    - generic [ref=f42e98]:
+      - img "molvi first-run onboarding dialog" [ref=f42e100]
+      - generic [ref=f42e101]:
+        - heading "More than dictation" [level=2] [ref=f42e102]
+        - paragraph [ref=f42e103]: "molvi pastes into any app and bends to your workflow: voice commands, per-app profiles, a custom dictionary, snippets, and deterministic Smart clean-up."
+        - list [ref=f42e104]:
+          - listitem [ref=f42e105]: Command mode — say a phrase, trigger a keyboard action (undo, copy, paste, new line, select-all, …). 10 actions across 5 languages.
+          - listitem [ref=f42e106]: Per-app profiles — different post-processing per foreground application.
+          - listitem [ref=f42e107]: Dictionary (CSV/JSON import/export) and snippets (voice → text blocks).
+          - listitem [ref=f42e108]: "Three post-processing tiers: Raw, Smart (deterministic, offline), and Polished (bring-your-own LLM endpoint)."
+        - link "Learn more" [ref=f42e109] [cursor=pointer]:
+          - /url: "#features"
+          - text: Learn more
+          - generic [ref=f42e110]: →
+    - generic [ref=f42e112]:
+      - heading "Built for the way you work" [level=2] [ref=f42e114]
+      - generic [ref=f42e115]:
+        - article [ref=f42e116]:
+          - heading "Works in any app" [level=3] [ref=f42e123]
+          - paragraph [ref=f42e124]: Text lands wherever your cursor is — any window, any field.
+        - article [ref=f42e125]:
+          - heading "Snippets" [level=3] [ref=f42e131]
+          - paragraph [ref=f42e132]: A short phrase expands into a whole text block.
+        - article [ref=f42e133]:
+          - heading "Dictionary" [level=3] [ref=f42e138]
+          - paragraph [ref=f42e139]: Teach molvi your terms. Import and export CSV/JSON.
+        - article [ref=f42e140]:
+          - heading "Local history" [level=3] [ref=f42e145]
+          - paragraph [ref=f42e146]: Searchable, opt-in, stored in SQLite. One-click erase.
+        - article [ref=f42e147]:
+          - heading "Custom hotkey" [level=3] [ref=f42e152]
+          - paragraph [ref=f42e153]: Push-to-talk or toggle. Your global shortcut, your choice.
+        - article [ref=f42e154]:
+          - heading "Live overlay" [level=3] [ref=f42e158]
+          - paragraph [ref=f42e159]: Watch words appear as you speak, not only after you release.
+        - article [ref=f42e160]:
+          - heading "Auto-updater" [level=3] [ref=f42e165]
+          - paragraph [ref=f42e166]: Ed25519-signed updates via GitHub Releases.
+    - generic [ref=f42e169]:
+      - generic [ref=f42e170]:
+        - heading "Private by design, not by promise." [level=2] [ref=f42e171]
+        - paragraph [ref=f42e172]: Recognition runs 100% on your CPU. Your voice never leaves your computer — and that claim is enforced by a test suite, not a marketing sentence.
+        - list [ref=f42e173]:
+          - listitem [ref=f42e174]:
+            - generic [ref=f42e178]: All processing happens on your device. The recognition engine makes zero network requests.
+          - listitem [ref=f42e179]:
+            - generic [ref=f42e183]: No telemetry, no analytics, no crash-report upload. None.
+          - listitem [ref=f42e184]:
+            - generic [ref=f42e188]: Logs carry metadata only — transcript text, audio, dictionary, history, and snippets are never logged.
+          - listitem [ref=f42e189]:
+            - generic [ref=f42e193]: "Your data stays local: history, dictionary, and snippets live in a SQLite file under your appdata. Audio is never written to disk."
+      - complementary [ref=f42e194]:
+        - paragraph [ref=f42e195]: "Block molvi in your firewall and dictate: recognition still works, proving nothing left the machine. Or watch your network monitor during a session — it stays silent. Or read the privacy test suite that fails the build if any transcript text reaches a log."
+        - link "Read the privacy test suite" [ref=f42e196] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi/blob/main/src-tauri/tests/log_privacy.rs
+          - text: Read the privacy test suite
+          - generic [ref=f42e197]: →
+        - paragraph [ref=f42e198]: The only outbound call is the optional update check (a latest.json fetch from GitHub — turn it off in settings), plus the one-time model download from Hugging Face.
+    - generic [ref=f42e200]:
+      - heading "Every language, on your terms" [level=2] [ref=f42e202]
+      - generic [ref=f42e203]:
+        - generic [ref=f42e204]:
+          - generic [ref=f42e205]: "36"
+          - generic [ref=f42e206]: 36-language UI
+          - generic [ref=f42e207]: Including Arabic and Hebrew, right-to-left.
+        - generic [ref=f42e208]:
+          - generic [ref=f42e209]: 40+
+          - generic [ref=f42e210]: 40+ recognition locales
+          - generic [ref=f42e211]: Multilingual streaming via Nemotron 3.5 ASR.
+          - generic [ref=f42e212]:
+            - generic [ref=f42e213]: EN
+            - generic [ref=f42e214]: ES
+            - generic [ref=f42e215]: FR
+            - generic [ref=f42e216]: DE
+            - generic [ref=f42e217]: IT
+            - generic [ref=f42e218]: PT
+            - generic [ref=f42e219]: RU
+            - generic [ref=f42e220]: ZH
+            - generic [ref=f42e221]: JA
+            - generic [ref=f42e222]: KO
+            - generic [ref=f42e223]: AR
+            - generic [ref=f42e224]: HI
+        - generic [ref=f42e225]:
+          - generic [ref=f42e226]: RU
+          - generic [ref=f42e227]: Russian-native engine
+          - generic [ref=f42e228]: GigaAM-v3 — fast and natively punctuated. Not a multilingual afterthought.
+    - generic [ref=f42e230]:
+      - heading "Fast on a plain CPU" [level=2] [ref=f42e232]
+      - table [ref=f42e234]:
+        - rowgroup [ref=f42e235]:
+          - row [ref=f42e236]:
+            - columnheader "Engine" [ref=f42e237]
+            - columnheader "Language" [ref=f42e238]
+            - columnheader "RTF" [ref=f42e239]
+            - columnheader "Release → text pasted" [ref=f42e240]
+        - rowgroup [ref=f42e241]:
+          - row [ref=f42e242]:
+            - cell "GigaAM-v3" [ref=f42e243]
+            - cell "Russian" [ref=f42e244]
+            - cell [ref=f42e245]:
+              - code [ref=f42e246]: ~0.02–0.03
+            - cell "fast" [ref=f42e247]
+          - row [ref=f42e248]:
+            - cell "Nemotron 3.5" [ref=f42e249]
+            - cell "EN / multilingual" [ref=f42e250]
+            - cell [ref=f42e251]:
+              - code [ref=f42e252]: ~0.05
+            - cell "~0.2 s" [ref=f42e253]
+      - paragraph [ref=f42e254]: Indicative. RTF = audio-seconds processed per wall-second. A single number is never the whole story — results vary with utterance length, language, and hardware; longer utterances amortize fixed per-session overhead.
+      - list [ref=f42e255]:
+        - listitem [ref=f42e256]: "Cold start to tray: under ~1.3 s (with a cached model)."
+        - listitem [ref=f42e257]: "Installer: ~11 MB (NSIS). Models download on first use, not bundled."
+      - paragraph [ref=f42e258]:
+        - strong [ref=f42e259]: "Honest tradeoff: Nemotron streams commas only (no terminal periods). Full punctuation comes from GigaAM (Russian) or Polished mode with your own LLM endpoint."
+    - generic [ref=f42e261]:
+      - generic [ref=f42e262]:
+        - heading "How it compares" [level=2] [ref=f42e263]
+        - paragraph [ref=f42e264]: Comparison as of August 2026. “?” means not verified by us — please open an issue if a cell is stale.
+      - table [ref=f42e266]:
+        - rowgroup [ref=f42e267]:
+          - row [ref=f42e268]:
+            - columnheader [ref=f42e269]
+            - columnheader "molvi" [ref=f42e270]
+            - columnheader [ref=f42e271]:
+              - link "Handy" [ref=f42e272] [cursor=pointer]:
+                - /url: https://github.com/cjpais/Handy
+            - columnheader [ref=f42e273]:
+              - link "Scribe" [ref=f42e274] [cursor=pointer]:
+                - /url: https://github.com/ChrisMcKee1/scribe
+            - columnheader [ref=f42e275]:
+              - link "VoiceInk" [ref=f42e276] [cursor=pointer]:
+                - /url: https://github.com/Beingpax/VoiceInk
+            - columnheader [ref=f42e277]:
+              - link "Vocalinux" [ref=f42e278] [cursor=pointer]:
+                - /url: https://github.com/jatinkrmalik/vocalinux
+            - columnheader [ref=f42e279]:
+              - link "superwhisper" [ref=f42e280] [cursor=pointer]:
+                - /url: https://superwhisper.com
+        - rowgroup [ref=f42e281]:
+          - row [ref=f42e282]:
+            - rowheader "Price" [ref=f42e283]
+            - cell "Free" [ref=f42e284]
+            - cell "Free" [ref=f42e285]
+            - cell "Free" [ref=f42e286]
+            - cell "Paid (trial)" [ref=f42e287]
+            - cell "Free" [ref=f42e288]
+            - cell "Freemium ($8.49/mo+)" [ref=f42e289]
+          - row [ref=f42e290]:
+            - rowheader "License" [ref=f42e291]
+            - cell "MIT·Apache-2.0" [ref=f42e292]
+            - cell "MIT" [ref=f42e293]
+            - cell "MIT" [ref=f42e294]
+            - cell "GPL-3" [ref=f42e295]
+            - cell "GPL-3" [ref=f42e296]
+            - cell "Proprietary" [ref=f42e297]
+          - row [ref=f42e298]:
+            - rowheader "Recognition on-device" [ref=f42e299]
+            - cell [ref=f42e300]:
+              - img "Yes" [ref=f42e301]: ✓
+            - cell [ref=f42e302]:
+              - img "Yes" [ref=f42e303]: ✓
+            - cell [ref=f42e304]:
+              - img "Yes" [ref=f42e305]: ✓
+            - cell [ref=f42e306]:
+              - img "Yes" [ref=f42e307]: ✓
+            - cell [ref=f42e308]:
+              - img "Yes" [ref=f42e309]: ✓
+            - cell [ref=f42e310]:
+              - img "Yes" [ref=f42e311]: ✓
+          - row [ref=f42e312]:
+            - rowheader "No account required" [ref=f42e313]
+            - cell [ref=f42e314]:
+              - img "Yes" [ref=f42e315]: ✓
+            - cell [ref=f42e316]:
+              - img "Yes" [ref=f42e317]: ✓
+            - cell [ref=f42e318]:
+              - img "Yes" [ref=f42e319]: ✓
+            - cell [ref=f42e320]:
+              - img "Partial" [ref=f42e321]: ≈
+            - cell [ref=f42e322]:
+              - img "Yes" [ref=f42e323]: ✓
+            - cell [ref=f42e324]:
+              - img "Partial" [ref=f42e325]: ≈
+          - row [ref=f42e326]:
+            - rowheader "Russian-native engine" [ref=f42e327]
+            - cell "✅ GigaAM" [ref=f42e328]
+            - cell [ref=f42e329]:
+              - img "No" [ref=f42e330]: ✗
+            - cell [ref=f42e331]:
+              - img "No" [ref=f42e332]: ✗
+            - cell [ref=f42e333]:
+              - img "No" [ref=f42e334]: ✗
+            - cell [ref=f42e335]:
+              - img "No" [ref=f42e336]: ✗
+            - cell [ref=f42e337]:
+              - img "No" [ref=f42e338]: ✗
+          - row [ref=f42e339]:
+            - rowheader "Recognition languages" [ref=f42e340]
+            - cell "40+" [ref=f42e341]
+            - cell "many" [ref=f42e342]
+            - cell "~25" [ref=f42e343]
+            - cell "many" [ref=f42e344]
+            - cell "~33" [ref=f42e345]
+            - cell "100+" [ref=f42e346]
+          - row [ref=f42e347]:
+            - rowheader "UI languages (+RTL)" [ref=f42e348]
+            - cell "36 (ar/he)" [ref=f42e349]
+            - cell "EN" [ref=f42e350]
+            - cell "EN" [ref=f42e351]
+            - cell "EN" [ref=f42e352]
+            - cell "EN" [ref=f42e353]
+            - cell "EN" [ref=f42e354]
+          - row [ref=f42e355]:
+            - rowheader "Platforms" [ref=f42e356]
+            - cell "Win·macOS(AS)·Linux" [ref=f42e357]
+            - cell "Win·macOS·Linux" [ref=f42e358]
+            - cell "Win" [ref=f42e359]
+            - cell "macOS" [ref=f42e360]
+            - cell "Linux" [ref=f42e361]
+            - cell "Win·macOS·iOS" [ref=f42e362]
+          - row [ref=f42e363]:
+            - rowheader "Command mode (voice → actions)" [ref=f42e364]
+            - cell [ref=f42e365]:
+              - img "Yes" [ref=f42e366]: ✓
+            - cell [ref=f42e367]:
+              - img "No" [ref=f42e368]: ✗
+            - cell [ref=f42e369]:
+              - img "No" [ref=f42e370]: ✗
+            - cell [ref=f42e371]:
+              - img "No" [ref=f42e372]: ✗
+            - cell [ref=f42e373]:
+              - img "Partial" [ref=f42e374]: ≈
+            - cell [ref=f42e375]:
+              - img "Unknown" [ref=f42e376]: "?"
+          - row [ref=f42e377]:
+            - rowheader "Dictionary + snippets" [ref=f42e378]
+            - cell "✓·✓" [ref=f42e379]
+            - cell "✓·✗" [ref=f42e380]
+            - cell "✓·✓" [ref=f42e381]
+            - cell "✓·✗" [ref=f42e382]
+            - cell "✗·✗" [ref=f42e383]
+            - cell "?·?" [ref=f42e384]
+          - row [ref=f42e385]:
+            - rowheader "Per-app profiles" [ref=f42e386]
+            - cell [ref=f42e387]:
+              - img "Yes" [ref=f42e388]: ✓
+            - cell [ref=f42e389]:
+              - img "No" [ref=f42e390]: ✗
+            - cell [ref=f42e391]:
+              - img "No" [ref=f42e392]: ✗
+            - cell [ref=f42e393]:
+              - img "Partial" [ref=f42e394]: ≈
+            - cell "roadmap" [ref=f42e395]
+            - cell [ref=f42e396]:
+              - img "Unknown" [ref=f42e397]: "?"
+          - row [ref=f42e398]:
+            - rowheader "Local history (search)" [ref=f42e399]
+            - cell [ref=f42e400]:
+              - img "Yes" [ref=f42e401]: ✓
+            - cell [ref=f42e402]:
+              - img "Partial" [ref=f42e403]: ≈
+            - cell [ref=f42e404]:
+              - img "Partial" [ref=f42e405]: ≈
+            - cell [ref=f42e406]:
+              - img "Partial" [ref=f42e407]: ≈
+            - cell [ref=f42e408]:
+              - img "No" [ref=f42e409]: ✗
+            - cell [ref=f42e410]:
+              - img "Unknown" [ref=f42e411]: "?"
+          - row [ref=f42e412]:
+            - rowheader "Auto-updater" [ref=f42e413]
+            - cell [ref=f42e414]:
+              - img "Yes" [ref=f42e415]: ✓
+            - cell [ref=f42e416]:
+              - img "Yes" [ref=f42e417]: ✓
+            - cell [ref=f42e418]:
+              - img "Yes" [ref=f42e419]: ✓
+            - cell [ref=f42e420]:
+              - img "Yes" [ref=f42e421]: ✓
+            - cell [ref=f42e422]:
+              - img "Yes" [ref=f42e423]: ✓
+            - cell [ref=f42e424]:
+              - img "Yes" [ref=f42e425]: ✓
+          - row [ref=f42e426]:
+            - rowheader "Privacy test suite" [ref=f42e427]
+            - cell [ref=f42e428]:
+              - img "Yes" [ref=f42e429]: ✓
+            - cell [ref=f42e430]:
+              - img "No" [ref=f42e431]: ✗
+            - cell [ref=f42e432]:
+              - img "No" [ref=f42e433]: ✗
+            - cell [ref=f42e434]:
+              - img "No" [ref=f42e435]: ✗
+            - cell [ref=f42e436]:
+              - img "No" [ref=f42e437]: ✗
+            - cell [ref=f42e438]:
+              - img "No" [ref=f42e439]: ✗
+          - row [ref=f42e440]:
+            - rowheader "Built-in offline LLM polish" [ref=f42e441]
+            - cell [ref=f42e442]:
+              - img "Partial" [ref=f42e443]: ≈
+            - cell [ref=f42e444]:
+              - img "Partial" [ref=f42e445]: ≈
+            - cell [ref=f42e446]:
+              - img "Yes" [ref=f42e447]: ✓
+            - cell [ref=f42e448]:
+              - img "Partial" [ref=f42e449]: ≈
+            - cell [ref=f42e450]:
+              - img "Yes" [ref=f42e451]: ✓
+            - cell [ref=f42e452]:
+              - img "No" [ref=f42e453]: ✗
+      - paragraph [ref=f42e454]: molvi builds on the same Rust ASR foundation (transcribe-rs) as Handy — the parent project. We list Handy as kin, not a rival to beat.
+    - generic [ref=f42e456]:
+      - generic [ref=f42e457]:
+        - heading "Known limitations" [level=2] [ref=f42e458]
+        - paragraph [ref=f42e459]: Honest about where molvi isn’t ahead.
+      - list [ref=f42e460]:
+        - listitem [ref=f42e461]: ⚠ First run downloads the model (~2.6 GB Nemotron default / ~225 MB GigaAM). It is not bundled, to keep the installer tiny.
+        - listitem [ref=f42e462]: ⚠ Installers are unsigned at the OS level (SmartScreen/Gatekeeper one-time bypass). Update payloads are ed25519-signed; OS code-signing is planned.
+        - listitem [ref=f42e463]: ⚠ macOS Apple Silicon only. No Intel build (an upstream runtime limitation).
+        - listitem [ref=f42e464]: "⚠ Linux: X11 is fully supported. Under Wayland, foreground-app detection and paste-focus fall back to global settings."
+        - listitem [ref=f42e465]: "⚠ Nemotron punctuation: streaming emits commas only — no terminal periods. Use GigaAM for punctuated Russian, or Polished mode with your own LLM."
+        - listitem [ref=f42e466]: ⚠ Desktop only. No iOS/Android.
+        - listitem [ref=f42e467]: ⚠ No bundled LLM polish. Polished mode is bring-your-own endpoint (Ollama, LM Studio, any OpenAI-compatible server).
+    - generic [ref=f42e469]:
+      - heading "Get molvi" [level=2] [ref=f42e471]
+      - generic [ref=f42e472]:
+        - article [ref=f42e473]:
+          - heading "Windows 11" [level=3] [ref=f42e477]
+          - paragraph [ref=f42e478]:
+            - code [ref=f42e479]: molvi_0.1.0_x64-setup.exe
+          - paragraph [ref=f42e480]: ~11 MB installer · Version 0.1.0
+          - link "Download" [ref=f42e481] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_x64-setup.exe
+          - link "Changelog" [ref=f42e482] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases
+        - article [ref=f42e483]:
+          - heading "macOS (Apple Silicon)" [level=3] [ref=f42e487]
+          - paragraph [ref=f42e488]:
+            - code [ref=f42e489]: molvi_0.1.0_aarch64.dmg
+          - paragraph [ref=f42e490]: ~11 MB installer · Version 0.1.0
+          - link "Download" [ref=f42e491] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_aarch64.dmg
+          - link "Changelog" [ref=f42e492] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases
+        - article [ref=f42e493]:
+          - heading "Linux" [level=3] [ref=f42e498]
+          - paragraph [ref=f42e499]:
+            - code [ref=f42e500]: molvi_0.1.0_amd64.AppImage
+          - paragraph [ref=f42e501]: ~11 MB installer · Version 0.1.0
+          - link "Download" [ref=f42e502] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_amd64.AppImage
+          - link "Changelog" [ref=f42e503] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases
+      - paragraph [ref=f42e504]: MIT OR Apache-2.0 · ed25519-signed updates · ~11 MB installer
+      - complementary [ref=f42e505]:
+        - paragraph [ref=f42e506]: v0.1.0 is built and signed for updates but not yet published — grab it from the Releases page.
+        - list [ref=f42e507]:
+          - listitem [ref=f42e508]: "→ Windows SmartScreen: More info → Run anyway."
+          - listitem [ref=f42e509]: "→ macOS Gatekeeper: right-click the app → Open."
+    - generic [ref=f42e511]:
+      - heading "FAQ" [level=2] [ref=f42e513]
+      - group [ref=f42e514]:
+        - generic "Is it really free?" [ref=f42e515] [cursor=pointer]
+        - paragraph [ref=f42e520]: Yes. MIT OR Apache-2.0, forever. No account, no subscription, no feature gate.
+      - group [ref=f42e521]:
+        - generic "Does it need the internet?" [ref=f42e522] [cursor=pointer]
+      - group [ref=f42e526]:
+        - generic "Does my audio get sent anywhere?" [ref=f42e527] [cursor=pointer]
+      - group [ref=f42e531]:
+        - generic "Which languages?" [ref=f42e532] [cursor=pointer]
+      - group [ref=f42e536]:
+        - generic "How big is the download?" [ref=f42e537] [cursor=pointer]
+      - group [ref=f42e541]:
+        - generic "Which OSes?" [ref=f42e542] [cursor=pointer]
+    - generic [ref=f42e547]:
+      - heading "Free and open source" [level=2] [ref=f42e548]
+      - paragraph [ref=f42e549]: molvi is dual-licensed under MIT OR Apache-2.0. No account, no subscription, no feature gate — forever.
+      - generic [ref=f42e550]:
+        - link "Star on GitHub ★" [ref=f42e551] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi
+        - link "Contribute" [ref=f42e552] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi/blob/main/CONTRIBUTING.md
+        - link "Roadmap" [ref=f42e553] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi#roadmap
+      - generic [ref=f42e554]:
+        - heading "Acknowledgements" [level=3] [ref=f42e555]
+        - paragraph [ref=f42e556]: molvi stands on the shoulders of GigaAM-v3, Nemotron 3.5 ASR, transcribe-rs, parakeet-rs, ONNX Runtime, and Tauri.
+  - contentinfo [ref=f42e557]:
+    - generic [ref=f42e558]:
+      - generic [ref=f42e559]:
+        - link "molvi" [ref=f42e560] [cursor=pointer]:
+          - /url: /molvi-website/
+        - paragraph [ref=f42e563]: Made by @bumbaRasch
+      - navigation "Footer" [ref=f42e564]:
+        - generic [ref=f42e565]:
+          - heading "Product" [level=3] [ref=f42e566]
+          - list [ref=f42e567]:
+            - listitem [ref=f42e568]:
+              - link "Download" [ref=f42e569] [cursor=pointer]:
+                - /url: /molvi-website/#download
+            - listitem [ref=f42e570]:
+              - link "Changelog" [ref=f42e571] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi/releases
+            - listitem [ref=f42e572]:
+              - link "Roadmap" [ref=f42e573] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi#roadmap
+        - generic [ref=f42e574]:
+          - heading "Resources" [level=3] [ref=f42e575]
+          - list [ref=f42e576]:
+            - listitem [ref=f42e577]:
+              - link "Repository" [ref=f42e578] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi
+            - listitem [ref=f42e579]:
+              - link "Privacy" [ref=f42e580] [cursor=pointer]:
+                - /url: /molvi-website/#privacy
+            - listitem [ref=f42e581]:
+              - link "Security" [ref=f42e582] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi/security
+        - generic [ref=f42e583]:
+          - heading "Community" [level=3] [ref=f42e584]
+          - list [ref=f42e585]:
+            - listitem [ref=f42e586]:
+              - link "GitHub" [ref=f42e587] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi
+            - listitem [ref=f42e588]:
+              - link "Contributing" [ref=f42e589] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi/blob/main/CONTRIBUTING.md
+    - generic [ref=f42e590]:
+      - generic [ref=f42e591]: © 2026 molvi
+      - generic [ref=f42e592]: MIT OR Apache-2.0
+  - generic [ref=f42e595]:
+    - button [ref=f42e596]
+    - button [ref=f42e602]
+    - button [ref=f42e606]
+    - button [ref=f42e611]

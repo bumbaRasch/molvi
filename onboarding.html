@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MOLVI</title>
+    <link rel="stylesheet" href="/src/onboarding.css" />
+    <script type="module" src="/src/onboarding.ts" defer></script>
+  </head>
+  <body>
+    <main id="onboarding" class="dialog">
+      <header class="top">
+        <select id="ui-lang" class="lang-select" aria-label="Language"></select>
+        <span id="step-indicator" class="step-indicator muted"></span>
+        <button id="skip" class="link" type="button"></button>
+      </header>
+
+      <!-- Step rail: 3 segments; .done/.active/.pending drive fill. -->
+      <div class="rail" aria-hidden="true">
+        <span class="seg" data-i="1"></span>
+        <span class="seg" data-i="2"></span>
+        <span class="seg" data-i="3"></span>
+      </div>
+
+      <!-- Step bodies: only one is visible at a time. TS toggles .hidden. -->
+      <section class="step" data-step="1">
+        <img class="brand-logo" src="/icon.png" alt="" width="56" height="56" />
+        <h1 id="welcome-title" class="title"></h1>
+        <p id="privacy-lead" class="lead"></p>
+
+        <!-- Choice phase: two cards side-by-side, pre-selected by UI language.
+             The Download button lives INSIDE the selected card (keeps step 1
+             short so the fixed 720×480 onboarding window never scrolls). -->
+        <div id="model-choice">
+          <p id="model-choose-subtitle" class="muted small"></p>
+          <div class="model-cards">
+            <div class="model-card" id="card-nemotron" role="button" tabindex="0">
+              <span class="model-badge" id="badge-nemotron" hidden></span>
+              <a class="model-name" href="https://huggingface.co/pantinor/nemotron-3.5-asr-streaming-0.6b-onnx" target="_blank" rel="noopener noreferrer">Nemotron</a>
+              <span class="model-desc" id="nemotron-desc"></span>
+              <span class="model-size" id="nemotron-size"></span>
+              <button type="button" class="btn primary card-download" id="download-nemotron" hidden></button>
+            </div>
+            <div class="model-card" id="card-gigaam" role="button" tabindex="0">
+              <span class="model-badge" id="badge-gigaam" hidden></span>
+              <a class="model-name" href="https://huggingface.co/istupakov/gigaam-v3-onnx" target="_blank" rel="noopener noreferrer">GigaAM</a>
+              <span class="model-desc" id="gigaam-desc"></span>
+              <span class="model-size" id="gigaam-size"></span>
+              <button type="button" class="btn primary card-download" id="download-gigaam" hidden></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Download phase: real progress + cancel. -->
+        <div id="model-progress" hidden>
+          <p id="downloading" class="muted small"></p>
+          <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+          <p id="progress-text" class="muted small"></p>
+          <div class="row-end">
+            <button type="button" class="btn" id="cancel-download"></button>
+          </div>
+        </div>
+
+        <!-- Error phase: retry or choose another. -->
+        <div id="model-error" hidden>
+          <p id="model-error-text" class="alert error"></p>
+          <div class="row-end">
+            <button type="button" class="btn primary" id="retry-download"></button>
+            <button type="button" class="btn" id="choose-another"></button>
+          </div>
+        </div>
+      </section>
+
+      <section class="step hidden" data-step="2">
+        <h1 id="hotkey-title" class="title"></h1>
+        <p id="hotkey-hint" class="lead"></p>
+        <div class="capture-card">
+          <span id="dot-2" class="dot breathing" aria-hidden="true"></span>
+          <button class="btn primary" id="hotkey-capture" type="button"></button>
+          <span id="hotkey-captured" class="combo muted"></span>
+        </div>
+        <div class="mic-test">
+          <span id="dot-mic" class="dot breathing mic-dot" aria-hidden="true"></span>
+          <p id="mic-hint" class="muted small"></p>
+          <p id="mic-heard" class="heard hidden"></p>
+        </div>
+        <div class="row-end actions">
+          <button class="btn primary" id="continue-2" type="button"></button>
+        </div>
+      </section>
+
+      <section class="step hidden" data-step="3">
+        <h1 id="first-word-title" class="title"></h1>
+        <p id="first-word-hint" class="lead"></p>
+        <div class="practice">
+          <span id="dot-practice" class="dot breathing practice-dot" aria-hidden="true"></span>
+          <p id="preparing" class="preparing muted"></p>
+          <p id="caption" class="caption"></p>
+          <p id="all-set" class="all-set hidden"></p>
+        </div>
+        <div class="row-end actions">
+          <button class="btn" id="open-settings-done" type="button"></button>
+          <button class="btn primary" id="done" type="button"></button>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

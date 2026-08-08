@@ -1,0 +1,517 @@
+- generic [active] [ref=f76e1]:
+  - link "Перейти к содержимому" [ref=f76e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=f76e3]:
+    - generic [ref=f76e4]:
+      - link "molvi" [ref=f76e5] [cursor=pointer]:
+        - /url: /molvi-website/
+      - navigation "molvi" [ref=f76e8]:
+        - link "Как это работает" [ref=f76e9] [cursor=pointer]:
+          - /url: "#how"
+        - link "Возможности" [ref=f76e10] [cursor=pointer]:
+          - /url: "#features"
+        - link "Приватность" [ref=f76e11] [cursor=pointer]:
+          - /url: "#privacy"
+        - link "Скачать" [ref=f76e12] [cursor=pointer]:
+          - /url: "#download"
+      - generic [ref=f76e13]:
+        - link "molvi на GitHub (открывается в новой вкладке)" [ref=f76e14] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi
+          - generic [ref=f76e17]: На GitHub
+        - button "Выбрать язык" [ref=f76e19] [cursor=pointer]:
+          - generic [ref=f76e23]: Русский
+        - group "Тема" [ref=f76e24]:
+          - button "Системная" [ref=f76e25] [cursor=pointer]
+          - button "Светлая" [pressed] [ref=f76e29] [cursor=pointer]
+          - button "Тёмная" [ref=f76e33] [cursor=pointer]
+  - generic [ref=f76e37]:
+    - generic [ref=f76e38]:
+      - heading "Говорите. Текст появляется. Ничего не уходит." [level=1] [ref=f76e39]
+      - separator [ref=f76e40]
+      - paragraph [ref=f76e41]: molvi превращает ваш голос в текст в любом приложении — распознавание прямо на вашем устройстве, 36 языков интерфейса, отдельный движок для русского. Бесплатно и с открытым исходным кодом для Windows, macOS и Linux.
+      - generic [ref=f76e42]:
+        - link "Скачать для Windows" [ref=f76e43] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_x64-setup.exe
+        - link "molvi на GitHub (открывается в новой вкладке)" [ref=f76e44] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi
+          - text: На GitHub ★
+      - paragraph [ref=f76e45]: Бесплатно · Открытый исходный код · Без аккаунта · Установщик ~11 МБ
+    - img "Окно диктовки molvi — удерживайте горячую клавишу, говорите, и текст появляется в реальном времени" [ref=f76e47]
+  - main [ref=f76e48]:
+    - region "0 байт в облако · 0 аккаунтов · 0 телеметрии" [ref=f76e49]:
+      - generic [ref=f76e50]:
+        - paragraph [ref=f76e51]: 0 байт в облако · 0 аккаунтов · 0 телеметрии
+        - paragraph [ref=f76e52]: Создано на Tauri · Rust · GigaAM · Nemotron ASR · ONNX Runtime
+    - generic [ref=f76e54]:
+      - heading "Как это работает" [level=2] [ref=f76e56]
+      - list [ref=f76e57]:
+        - listitem [ref=f76e58]:
+          - generic [ref=f76e59]: "01"
+          - heading "Удерживайте горячую клавишу" [level=3] [ref=f76e60]
+          - paragraph [ref=f76e61]: "Нажмите и удерживайте горячую клавишу (по умолчанию: Alt + `) — появится окно диктовки."
+        - listitem [ref=f76e62]:
+          - generic [ref=f76e63]: "02"
+          - heading "Говорите" [level=3] [ref=f76e64]
+          - paragraph [ref=f76e65]: molvi расшифровывает речь на вашем процессоре. Слова появляются в окне в реальном времени, пока вы говорите.
+        - listitem [ref=f76e66]:
+          - generic [ref=f76e67]: "03"
+          - heading "Отпустите" [level=3] [ref=f76e68]
+          - paragraph [ref=f76e69]: Готовый текст вставляется там, где установлен курсор — в любое приложение, в любое поле.
+    - generic [ref=f76e77]:
+      - heading "Приватность по конструкции, а не по обещанию." [level=2] [ref=f76e78]
+      - paragraph [ref=f76e79]: Распознавание работает на 100% на вашем процессоре. Ваш голос не покидает ваш компьютер — и это утверждение подкреплено набором тестов, а не маркетинговым заявлением.
+      - list [ref=f76e80]:
+        - listitem [ref=f76e81]: Вся обработка происходит на вашем устройстве. Движок распознавания не делает ни одного сетевого запроса.
+        - listitem [ref=f76e82]: Никакой телеметрии, никакой аналитики, никакой отправки отчётов об ошибках. Никакой.
+        - listitem [ref=f76e83]: "Ваши данные остаются локальными: история, словарь и сниппеты хранятся в файле SQLite в каталоге данных приложения. Аудио никогда не записывается на диск."
+      - link "Подробнее" [ref=f76e84] [cursor=pointer]:
+        - /url: "#privacy"
+        - text: Подробнее
+        - generic [ref=f76e85]: →
+    - generic [ref=f76e87]:
+      - img "Настройки molvi — язык распознавания и выбор движка" [ref=f76e89]
+      - generic [ref=f76e90]:
+        - heading "Говорит на вашем языке" [level=2] [ref=f76e91]
+        - paragraph [ref=f76e92]: Интерфейс на 36 языках — включая арабский и иврит (письмо справа налево). Плюс более 40 языков распознавания. Ни одно другое приложение диктовки не имеет локализованного интерфейса — все остальные только на английском.
+        - paragraph [ref=f76e93]:
+          - strong [ref=f76e94]: Ни один другой инструмент диктовки в этой области не использует движок, созданный специально для русского языка — все остальные расшифровывают русский через мультиязычную модель.
+        - link "Подробнее" [ref=f76e95] [cursor=pointer]:
+          - /url: "#languages"
+          - text: Подробнее
+          - generic [ref=f76e96]: →
+    - generic [ref=f76e98]:
+      - img "Диалог первого запуска molvi" [ref=f76e100]
+      - generic [ref=f76e101]:
+        - heading "Больше, чем диктовка" [level=2] [ref=f76e102]
+        - paragraph [ref=f76e103]: "molvi вставляет текст в любое приложение и подстраивается под ваш рабочий процесс: голосовые команды, профили для приложений, собственный словарь, сниппеты и детерминированная «умная» обработка."
+        - list [ref=f76e104]:
+          - listitem [ref=f76e105]: Командный режим — произнесите фразу, чтобы вызвать действие клавиатуры (отменить, копировать, вставить, новая строка, выделить всё, …). 10 действий на 5 языках.
+          - listitem [ref=f76e106]: Профили для приложений — разная постобработка для каждого активного приложения.
+          - listitem [ref=f76e107]: Словарь (импорт/экспорт CSV/JSON) и сниппеты (голос → фрагменты текста).
+          - listitem [ref=f76e108]: "Три уровня постобработки: Raw («как есть»), Smart (детерминированная, офлайн) и Polished (с собственным эндпоинтом LLM)."
+        - link "Подробнее" [ref=f76e109] [cursor=pointer]:
+          - /url: "#features"
+          - text: Подробнее
+          - generic [ref=f76e110]: →
+    - generic [ref=f76e112]:
+      - heading "Создано под ваш стиль работы" [level=2] [ref=f76e114]
+      - generic [ref=f76e115]:
+        - article [ref=f76e116]:
+          - heading "Работает в любом приложении" [level=3] [ref=f76e123]
+          - paragraph [ref=f76e124]: Текст появляется там, где курсор — в любом окне, в любом поле.
+        - article [ref=f76e125]:
+          - heading "Сниппеты" [level=3] [ref=f76e131]
+          - paragraph [ref=f76e132]: Короткая фраза разворачивается в целый фрагмент текста.
+        - article [ref=f76e133]:
+          - heading "Словарь" [level=3] [ref=f76e138]
+          - paragraph [ref=f76e139]: Научите molvi своим терминам. Импорт и экспорт CSV/JSON.
+        - article [ref=f76e140]:
+          - heading "Локальная история" [level=3] [ref=f76e145]
+          - paragraph [ref=f76e146]: С возможностью поиска, по выбору, хранится в SQLite. Стирание одним щелчком.
+        - article [ref=f76e147]:
+          - heading "Своя горячая клавиша" [level=3] [ref=f76e152]
+          - paragraph [ref=f76e153]: Нажми-и-говори или переключатель. Ваше глобальное сочетание — ваш выбор.
+        - article [ref=f76e154]:
+          - heading "Живое окно" [level=3] [ref=f76e158]
+          - paragraph [ref=f76e159]: Слова появляются по мере речи, а не только после того, как вы отпустили.
+        - article [ref=f76e160]:
+          - heading "Автообновление" [level=3] [ref=f76e165]
+          - paragraph [ref=f76e166]: Обновления с подписью ed25519 через GitHub Releases.
+    - generic [ref=f76e169]:
+      - generic [ref=f76e170]:
+        - heading "Приватность по конструкции, а не по обещанию." [level=2] [ref=f76e171]
+        - paragraph [ref=f76e172]: Распознавание работает на 100% на вашем процессоре. Ваш голос не покидает ваш компьютер — и это утверждение подкреплено набором тестов, а не маркетинговым заявлением.
+        - list [ref=f76e173]:
+          - listitem [ref=f76e174]:
+            - generic [ref=f76e178]: Вся обработка происходит на вашем устройстве. Движок распознавания не делает ни одного сетевого запроса.
+          - listitem [ref=f76e179]:
+            - generic [ref=f76e183]: Никакой телеметрии, никакой аналитики, никакой отправки отчётов об ошибках. Никакой.
+          - listitem [ref=f76e184]:
+            - generic [ref=f76e188]: Логи содержат только метаданные — текст расшифровки, аудио, словарь, история и сниппеты никогда не записываются в логи.
+          - listitem [ref=f76e189]:
+            - generic [ref=f76e193]: "Ваши данные остаются локальными: история, словарь и сниппеты хранятся в файле SQLite в каталоге данных приложения. Аудио никогда не записывается на диск."
+      - complementary [ref=f76e194]:
+        - paragraph [ref=f76e195]: "Заблокируйте molvi в брандмауэре и надиктуйте: распознавание продолжит работать, доказывая, что ничего не покинуло компьютер. Или следите за сетевым монитором во время сессии — он остаётся тихим. Или прочитайте набор тестов приватности, который ломает сборку, если какой-либо текст расшифровки попадает в лог."
+        - link "Читать набор тестов приватности" [ref=f76e196] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi/blob/main/src-tauri/tests/log_privacy.rs
+          - text: Читать набор тестов приватности
+          - generic [ref=f76e197]: →
+        - paragraph [ref=f76e198]: Единственный исходящий вызов — необязательная проверка обновлений (запрос latest.json с GitHub — отключается в настройках), а также разовая загрузка модели с Hugging Face.
+    - generic [ref=f76e200]:
+      - heading "Любой язык — на ваших условиях" [level=2] [ref=f76e202]
+      - generic [ref=f76e203]:
+        - generic [ref=f76e204]:
+          - generic [ref=f76e205]: "36"
+          - generic [ref=f76e206]: Интерфейс на 36 языках
+          - generic [ref=f76e207]: Включая арабский и иврит (письмо справа налево).
+        - generic [ref=f76e208]:
+          - generic [ref=f76e209]: 40+
+          - generic [ref=f76e210]: Более 40 языков распознавания
+          - generic [ref=f76e211]: Мультиязычная потоковая транскрипция через Nemotron 3.5 ASR.
+          - generic [ref=f76e212]:
+            - generic [ref=f76e213]: EN
+            - generic [ref=f76e214]: ES
+            - generic [ref=f76e215]: FR
+            - generic [ref=f76e216]: DE
+            - generic [ref=f76e217]: IT
+            - generic [ref=f76e218]: PT
+            - generic [ref=f76e219]: RU
+            - generic [ref=f76e220]: ZH
+            - generic [ref=f76e221]: JA
+            - generic [ref=f76e222]: KO
+            - generic [ref=f76e223]: AR
+            - generic [ref=f76e224]: HI
+        - generic [ref=f76e225]:
+          - generic [ref=f76e226]: RU
+          - generic [ref=f76e227]: Движок для русского языка
+          - generic [ref=f76e228]: GigaAM-v3 — быстрый и с собственной пунктуацией. Не запоздалая мультиязычная надстройка.
+    - generic [ref=f76e230]:
+      - heading "Быстро на обычном процессоре" [level=2] [ref=f76e232]
+      - table [ref=f76e234]:
+        - rowgroup [ref=f76e235]:
+          - row [ref=f76e236]:
+            - columnheader "Движок" [ref=f76e237]
+            - columnheader "Язык" [ref=f76e238]
+            - columnheader "RTF" [ref=f76e239]
+            - columnheader "Отпускание → текст вставлен" [ref=f76e240]
+        - rowgroup [ref=f76e241]:
+          - row [ref=f76e242]:
+            - cell "GigaAM-v3" [ref=f76e243]
+            - cell "Русский" [ref=f76e244]
+            - cell [ref=f76e245]:
+              - code [ref=f76e246]: ~0.02–0.03
+            - cell "быстро" [ref=f76e247]
+          - row [ref=f76e248]:
+            - cell "Nemotron 3.5" [ref=f76e249]
+            - cell "EN / multilingual" [ref=f76e250]
+            - cell [ref=f76e251]:
+              - code [ref=f76e252]: ~0.05
+            - cell "быстро" [ref=f76e253]
+      - paragraph [ref=f76e254]: "Ориентировочно. RTF = секунды аудио, обрабатываемые за секунду реального времени. Одно число — это ещё не вся картина: результаты зависят от длины фразы, языка и оборудования; более длинные фразы амортизируют фиксированные накладные расходы сессии."
+      - list [ref=f76e255]:
+        - listitem [ref=f76e256]: "Холодный старт в трей: менее ~1,3 с (с кэшированной моделью)."
+        - listitem [ref=f76e257]: "Установщик: ~11 МБ (NSIS). Модели загружаются при первом использовании, а не в комплекте."
+      - paragraph [ref=f76e258]:
+        - strong [ref=f76e259]: "Честный компромисс: Nemotron передаёт только запятые (без точек в конце). Полная пунктуация доступна через GigaAM (русский) или режим Polished с собственным LLM."
+    - generic [ref=f76e261]:
+      - generic [ref=f76e262]:
+        - heading "Сравнение" [level=2] [ref=f76e263]
+        - paragraph [ref=f76e264]: Сравнение по состоянию на август 2026 г. «?» означает «не проверено нами» — откройте issue, если ячейка устарела.
+      - table [ref=f76e266]:
+        - rowgroup [ref=f76e267]:
+          - row [ref=f76e268]:
+            - columnheader [ref=f76e269]
+            - columnheader "molvi" [ref=f76e270]
+            - columnheader [ref=f76e271]:
+              - link "Handy" [ref=f76e272] [cursor=pointer]:
+                - /url: https://github.com/cjpais/Handy
+            - columnheader [ref=f76e273]:
+              - link "Scribe" [ref=f76e274] [cursor=pointer]:
+                - /url: https://github.com/ChrisMcKee1/scribe
+            - columnheader [ref=f76e275]:
+              - link "VoiceInk" [ref=f76e276] [cursor=pointer]:
+                - /url: https://github.com/Beingpax/VoiceInk
+            - columnheader [ref=f76e277]:
+              - link "Vocalinux" [ref=f76e278] [cursor=pointer]:
+                - /url: https://github.com/jatinkrmalik/vocalinux
+            - columnheader [ref=f76e279]:
+              - link "superwhisper" [ref=f76e280] [cursor=pointer]:
+                - /url: https://superwhisper.com
+        - rowgroup [ref=f76e281]:
+          - row [ref=f76e282]:
+            - rowheader "Цена" [ref=f76e283]
+            - cell "Бесплатно" [ref=f76e284]
+            - cell "Бесплатно" [ref=f76e285]
+            - cell "Бесплатно" [ref=f76e286]
+            - cell "Платно (пробная версия)" [ref=f76e287]
+            - cell "Бесплатно" [ref=f76e288]
+            - cell "Freemium ($8.49/мес+)" [ref=f76e289]
+          - row [ref=f76e290]:
+            - rowheader "Лицензия" [ref=f76e291]
+            - cell "MIT·Apache-2.0" [ref=f76e292]
+            - cell "MIT" [ref=f76e293]
+            - cell "MIT" [ref=f76e294]
+            - cell "GPL-3" [ref=f76e295]
+            - cell "GPL-3" [ref=f76e296]
+            - cell "Проприетарная" [ref=f76e297]
+          - row [ref=f76e298]:
+            - rowheader "Распознавание на устройстве" [ref=f76e299]
+            - cell [ref=f76e300]:
+              - img "Да" [ref=f76e301]: ✓
+            - cell [ref=f76e302]:
+              - img "Да" [ref=f76e303]: ✓
+            - cell [ref=f76e304]:
+              - img "Да" [ref=f76e305]: ✓
+            - cell [ref=f76e306]:
+              - img "Да" [ref=f76e307]: ✓
+            - cell [ref=f76e308]:
+              - img "Да" [ref=f76e309]: ✓
+            - cell [ref=f76e310]:
+              - img "Да" [ref=f76e311]: ✓
+          - row [ref=f76e312]:
+            - rowheader "Без аккаунта" [ref=f76e313]
+            - cell [ref=f76e314]:
+              - img "Да" [ref=f76e315]: ✓
+            - cell [ref=f76e316]:
+              - img "Да" [ref=f76e317]: ✓
+            - cell [ref=f76e318]:
+              - img "Да" [ref=f76e319]: ✓
+            - cell [ref=f76e320]:
+              - img "Частично" [ref=f76e321]: ≈
+            - cell [ref=f76e322]:
+              - img "Да" [ref=f76e323]: ✓
+            - cell [ref=f76e324]:
+              - img "Частично" [ref=f76e325]: ≈
+          - row [ref=f76e326]:
+            - rowheader "Русский движок" [ref=f76e327]
+            - cell "✅ GigaAM" [ref=f76e328]
+            - cell [ref=f76e329]:
+              - img "Нет" [ref=f76e330]: ✗
+            - cell [ref=f76e331]:
+              - img "Нет" [ref=f76e332]: ✗
+            - cell [ref=f76e333]:
+              - img "Нет" [ref=f76e334]: ✗
+            - cell [ref=f76e335]:
+              - img "Нет" [ref=f76e336]: ✗
+            - cell [ref=f76e337]:
+              - img "Нет" [ref=f76e338]: ✗
+          - row [ref=f76e339]:
+            - rowheader "Языки распознавания" [ref=f76e340]
+            - cell "40+" [ref=f76e341]
+            - cell "много" [ref=f76e342]
+            - cell "~25" [ref=f76e343]
+            - cell "много" [ref=f76e344]
+            - cell "~33" [ref=f76e345]
+            - cell "100+" [ref=f76e346]
+          - row [ref=f76e347]:
+            - rowheader "Языки интерфейса (+RTL)" [ref=f76e348]
+            - cell "36 (ar/he)" [ref=f76e349]
+            - cell "EN" [ref=f76e350]
+            - cell "EN" [ref=f76e351]
+            - cell "EN" [ref=f76e352]
+            - cell "EN" [ref=f76e353]
+            - cell "EN" [ref=f76e354]
+          - row [ref=f76e355]:
+            - rowheader "Платформы" [ref=f76e356]
+            - cell "Win·macOS(AS)·Linux" [ref=f76e357]
+            - cell "Win·macOS·Linux" [ref=f76e358]
+            - cell "Win" [ref=f76e359]
+            - cell "macOS" [ref=f76e360]
+            - cell "Linux" [ref=f76e361]
+            - cell "Win·macOS·iOS" [ref=f76e362]
+          - row [ref=f76e363]:
+            - rowheader "Командный режим (голос → действия)" [ref=f76e364]
+            - cell [ref=f76e365]:
+              - img "Да" [ref=f76e366]: ✓
+            - cell [ref=f76e367]:
+              - img "Нет" [ref=f76e368]: ✗
+            - cell [ref=f76e369]:
+              - img "Нет" [ref=f76e370]: ✗
+            - cell [ref=f76e371]:
+              - img "Нет" [ref=f76e372]: ✗
+            - cell [ref=f76e373]:
+              - img "Частично" [ref=f76e374]: ≈
+            - cell [ref=f76e375]:
+              - img "Неизвестно" [ref=f76e376]: "?"
+          - row [ref=f76e377]:
+            - rowheader "Словарь + сниппеты" [ref=f76e378]
+            - cell "✓·✓" [ref=f76e379]
+            - cell "✓·✗" [ref=f76e380]
+            - cell "✓·✓" [ref=f76e381]
+            - cell "✓·✗" [ref=f76e382]
+            - cell "✗·✗" [ref=f76e383]
+            - cell "?·?" [ref=f76e384]
+          - row [ref=f76e385]:
+            - rowheader "Профили для приложений" [ref=f76e386]
+            - cell [ref=f76e387]:
+              - img "Да" [ref=f76e388]: ✓
+            - cell [ref=f76e389]:
+              - img "Нет" [ref=f76e390]: ✗
+            - cell [ref=f76e391]:
+              - img "Нет" [ref=f76e392]: ✗
+            - cell [ref=f76e393]:
+              - img "Частично" [ref=f76e394]: ≈
+            - cell "в планах" [ref=f76e395]
+            - cell [ref=f76e396]:
+              - img "Неизвестно" [ref=f76e397]: "?"
+          - row [ref=f76e398]:
+            - rowheader "Локальная история (поиск)" [ref=f76e399]
+            - cell [ref=f76e400]:
+              - img "Да" [ref=f76e401]: ✓
+            - cell [ref=f76e402]:
+              - img "Частично" [ref=f76e403]: ≈
+            - cell [ref=f76e404]:
+              - img "Частично" [ref=f76e405]: ≈
+            - cell [ref=f76e406]:
+              - img "Частично" [ref=f76e407]: ≈
+            - cell [ref=f76e408]:
+              - img "Нет" [ref=f76e409]: ✗
+            - cell [ref=f76e410]:
+              - img "Неизвестно" [ref=f76e411]: "?"
+          - row [ref=f76e412]:
+            - rowheader "Автообновление" [ref=f76e413]
+            - cell [ref=f76e414]:
+              - img "Да" [ref=f76e415]: ✓
+            - cell [ref=f76e416]:
+              - img "Да" [ref=f76e417]: ✓
+            - cell [ref=f76e418]:
+              - img "Да" [ref=f76e419]: ✓
+            - cell [ref=f76e420]:
+              - img "Да" [ref=f76e421]: ✓
+            - cell [ref=f76e422]:
+              - img "Да" [ref=f76e423]: ✓
+            - cell [ref=f76e424]:
+              - img "Да" [ref=f76e425]: ✓
+          - row [ref=f76e426]:
+            - rowheader "Набор тестов приватности" [ref=f76e427]
+            - cell [ref=f76e428]:
+              - img "Да" [ref=f76e429]: ✓
+            - cell [ref=f76e430]:
+              - img "Нет" [ref=f76e431]: ✗
+            - cell [ref=f76e432]:
+              - img "Нет" [ref=f76e433]: ✗
+            - cell [ref=f76e434]:
+              - img "Нет" [ref=f76e435]: ✗
+            - cell [ref=f76e436]:
+              - img "Нет" [ref=f76e437]: ✗
+            - cell [ref=f76e438]:
+              - img "Нет" [ref=f76e439]: ✗
+          - row [ref=f76e440]:
+            - rowheader "Встроенная офлайн LLM-полировка" [ref=f76e441]
+            - cell [ref=f76e442]:
+              - img "Частично" [ref=f76e443]: ≈
+            - cell [ref=f76e444]:
+              - img "Частично" [ref=f76e445]: ≈
+            - cell [ref=f76e446]:
+              - img "Да" [ref=f76e447]: ✓
+            - cell [ref=f76e448]:
+              - img "Частично" [ref=f76e449]: ≈
+            - cell [ref=f76e450]:
+              - img "Да" [ref=f76e451]: ✓
+            - cell [ref=f76e452]:
+              - img "Нет" [ref=f76e453]: ✗
+      - paragraph [ref=f76e454]: molvi построен на той же базе распознавания речи на Rust (transcribe-rs), что и Handy — родительский проект. Мы считаем Handy родственной разработкой, а не соперником, которого нужно превзойти.
+    - generic [ref=f76e456]:
+      - generic [ref=f76e457]:
+        - heading "Известные ограничения" [level=2] [ref=f76e458]
+        - paragraph [ref=f76e459]: Честно о том, в чём molvi не впереди.
+      - list [ref=f76e460]:
+        - listitem [ref=f76e461]: ⚠ При первом запуске загружается модель (~2,6 ГБ для Nemotron по умолчанию / ~225 МБ для GigaAM). Она не входит в комплект, чтобы установщик оставался компактным.
+        - listitem [ref=f76e462]: ⚠ Установщики не подписаны на уровне ОС (разовый обход SmartScreen/Gatekeeper). Полезные обновления подписаны ed25519; подписывание на уровне ОС в планах.
+        - listitem [ref=f76e463]: ⚠ macOS — только Apple Silicon. Сборки для Intel нет (ограничение вышележащей среды выполнения).
+        - listitem [ref=f76e464]: "⚠ Linux: X11 полностью поддерживается. В Wayland определение активного приложения и фокус вставки fallback к глобальным настройкам."
+        - listitem [ref=f76e465]: "⚠ Пунктуация Nemotron: потоковая передача выдаёт только запятые — без точек в конце. Используйте GigaAM для пунктуации русского или режим Polished со своим LLM."
+        - listitem [ref=f76e466]: ⚠ Только десктоп. Нет iOS/Android.
+        - listitem [ref=f76e467]: ⚠ Нет встроенной LLM-полировки. Режим Polished предполагает собственный эндпоинт (Ollama, LM Studio, любой OpenAI-совместимый сервер).
+    - generic [ref=f76e469]:
+      - heading "Скачать molvi" [level=2] [ref=f76e471]
+      - generic [ref=f76e472]:
+        - article [ref=f76e473]:
+          - heading "Windows 11" [level=3] [ref=f76e477]
+          - paragraph [ref=f76e478]:
+            - code [ref=f76e479]: molvi_0.1.0_x64-setup.exe
+          - paragraph [ref=f76e480]: Установщик ~11 MB · Версия 0.1.0
+          - link "Скачать" [ref=f76e481] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_x64-setup.exe
+          - link "Список изменений" [ref=f76e482] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases
+        - article [ref=f76e483]:
+          - heading "macOS (Apple Silicon)" [level=3] [ref=f76e487]
+          - paragraph [ref=f76e488]:
+            - code [ref=f76e489]: molvi_0.1.0_aarch64.dmg
+          - paragraph [ref=f76e490]: Установщик ~11 MB · Версия 0.1.0
+          - link "Скачать" [ref=f76e491] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_aarch64.dmg
+          - link "Список изменений" [ref=f76e492] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases
+        - article [ref=f76e493]:
+          - heading "Linux" [level=3] [ref=f76e498]
+          - paragraph [ref=f76e499]:
+            - code [ref=f76e500]: molvi_0.1.0_amd64.AppImage
+          - paragraph [ref=f76e501]: Установщик ~11 MB · Версия 0.1.0
+          - link "Скачать" [ref=f76e502] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_amd64.AppImage
+          - link "Список изменений" [ref=f76e503] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases
+      - paragraph [ref=f76e504]: MIT OR Apache-2.0 · ed25519-signed updates · ~11 MB installer
+      - complementary [ref=f76e505]:
+        - paragraph [ref=f76e506]: v0.1.0 собран и подписан для обновлений, но ещё не опубликован — скачайте его со страницы Releases.
+        - list [ref=f76e507]:
+          - listitem [ref=f76e508]: "→ Windows SmartScreen: Дополнительные сведения → Всё равно запустить."
+          - listitem [ref=f76e509]: "→ macOS Gatekeeper: щёлкните приложение правой кнопкой → Открыть."
+    - generic [ref=f76e511]:
+      - heading "FAQ" [level=2] [ref=f76e513]
+      - group [ref=f76e514]:
+        - generic "Действительно бесплатно?" [ref=f76e515] [cursor=pointer]
+        - paragraph [ref=f76e520]: Да. MIT OR Apache-2.0, навсегда. Без аккаунта, без подписки, без платных функций.
+      - group [ref=f76e521]:
+        - generic "Нужен ли интернет?" [ref=f76e522] [cursor=pointer]
+      - group [ref=f76e526]:
+        - generic "Моё аудио куда-то отправляется?" [ref=f76e527] [cursor=pointer]
+      - group [ref=f76e531]:
+        - generic "Какие языки?" [ref=f76e532] [cursor=pointer]
+      - group [ref=f76e536]:
+        - generic "Какой размер загрузки?" [ref=f76e537] [cursor=pointer]
+      - group [ref=f76e541]:
+        - generic "Какие ОС?" [ref=f76e542] [cursor=pointer]
+    - generic [ref=f76e547]:
+      - heading "Бесплатно и с открытым исходным кодом" [level=2] [ref=f76e548]
+      - paragraph [ref=f76e549]: molvi распространяется по двойной лицензии MIT OR Apache-2.0. Без аккаунта, без подписки, без платных функций — навсегда.
+      - generic [ref=f76e550]:
+        - link "Поставить звезду на GitHub ★" [ref=f76e551] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi
+        - link "Содействовать" [ref=f76e552] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi/blob/main/CONTRIBUTING.md
+        - link "Дорожная карта" [ref=f76e553] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi#roadmap
+      - generic [ref=f76e554]:
+        - heading "Благодарности" [level=3] [ref=f76e555]
+        - paragraph [ref=f76e556]: molvi стоит на плечах GigaAM-v3, Nemotron 3.5 ASR, transcribe-rs, parakeet-rs, ONNX Runtime и Tauri.
+  - contentinfo [ref=f76e557]:
+    - generic [ref=f76e558]:
+      - generic [ref=f76e559]:
+        - link "molvi" [ref=f76e560] [cursor=pointer]:
+          - /url: /molvi-website/
+        - paragraph [ref=f76e563]: "Автор: @bumbaRasch"
+      - navigation "Footer" [ref=f76e564]:
+        - generic [ref=f76e565]:
+          - heading "Продукт" [level=3] [ref=f76e566]
+          - list [ref=f76e567]:
+            - listitem [ref=f76e568]:
+              - link "Скачать" [ref=f76e569] [cursor=pointer]:
+                - /url: /molvi-website/#download
+            - listitem [ref=f76e570]:
+              - link "Список изменений" [ref=f76e571] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi/releases
+            - listitem [ref=f76e572]:
+              - link "Дорожная карта" [ref=f76e573] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi#roadmap
+        - generic [ref=f76e574]:
+          - heading "Ресурсы" [level=3] [ref=f76e575]
+          - list [ref=f76e576]:
+            - listitem [ref=f76e577]:
+              - link "Репозиторий" [ref=f76e578] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi
+            - listitem [ref=f76e579]:
+              - link "Приватность" [ref=f76e580] [cursor=pointer]:
+                - /url: /molvi-website/#privacy
+            - listitem [ref=f76e581]:
+              - link "Безопасность" [ref=f76e582] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi/security
+        - generic [ref=f76e583]:
+          - heading "Сообщество" [level=3] [ref=f76e584]
+          - list [ref=f76e585]:
+            - listitem [ref=f76e586]:
+              - link "GitHub" [ref=f76e587] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi
+            - listitem [ref=f76e588]:
+              - link "Содействие" [ref=f76e589] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi/blob/main/CONTRIBUTING.md
+    - generic [ref=f76e590]:
+      - generic [ref=f76e591]: © 2026 molvi
+      - generic [ref=f76e592]: MIT OR Apache-2.0
+  - generic [ref=f76e595]:
+    - button [ref=f76e596]
+    - button [ref=f76e602]
+    - button [ref=f76e606]
+    - button [ref=f76e611]

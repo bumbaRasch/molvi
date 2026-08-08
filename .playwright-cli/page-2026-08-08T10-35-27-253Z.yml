@@ -1,0 +1,206 @@
+- generic [active] [ref=f160e1]:
+  - link "Skip to content" [ref=f160e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=f160e3]:
+    - generic [ref=f160e4]:
+      - link "molvi" [ref=f160e5] [cursor=pointer]:
+        - /url: /molvi-website/
+      - navigation "molvi" [ref=f160e8]:
+        - link "How it works" [ref=f160e9] [cursor=pointer]:
+          - /url: "#how"
+        - link "Features" [ref=f160e10] [cursor=pointer]:
+          - /url: "#features"
+        - link "Privacy" [ref=f160e11] [cursor=pointer]:
+          - /url: "#privacy"
+        - link "Download" [ref=f160e12] [cursor=pointer]:
+          - /url: "#download"
+      - generic [ref=f160e13]:
+        - link "molvi on GitHub (opens in a new tab)" [ref=f160e14] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi
+          - generic [ref=f160e17]: View on GitHub
+        - button "Choose language" [ref=f160e19] [cursor=pointer]:
+          - generic [ref=f160e23]: English
+        - group "Theme" [ref=f160e24]:
+          - button "System" [ref=f160e25] [cursor=pointer]
+          - button "Light" [pressed] [ref=f160e29] [cursor=pointer]
+          - button "Dark" [ref=f160e33] [cursor=pointer]
+  - generic [ref=f160e37]:
+    - generic [ref=f160e38]:
+      - heading "Speak freely. It stays here." [level=1] [ref=f160e39]
+      - paragraph [ref=f160e40]: molvi turns your speech into text on your computer, and nothing is sent anywhere.
+    - generic [ref=f160e99]:
+      - generic [ref=f160e100]:
+        - link "Download for Windows" [ref=f160e101] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_x64-setup.exe
+        - link "Download for macOS" [ref=f160e106] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_aarch64.dmg
+          - generic [ref=f160e110]: macOS
+        - link "Download for Linux" [ref=f160e111] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_amd64.AppImage
+          - generic [ref=f160e116]: Linux
+      - paragraph [ref=f160e117]: Free · open source · no account
+  - main [ref=f160e118]:
+    - generic [ref=f160e120]:
+      - heading "How it works" [level=2] [ref=f160e122]
+      - list [ref=f160e123]:
+        - listitem [ref=f160e124]:
+          - generic [ref=f160e125]: "01"
+          - heading "Hold the hotkey" [level=3] [ref=f160e131]
+          - generic [ref=f160e132]: "Alt + `"
+          - paragraph [ref=f160e133]: Opens the overlay
+        - listitem [ref=f160e134]:
+          - generic [ref=f160e135]: "02"
+          - heading "Speak" [level=3] [ref=f160e141]
+          - paragraph [ref=f160e142]: Words appear as you talk
+        - listitem [ref=f160e159]:
+          - generic [ref=f160e160]: "03"
+          - heading "Release to paste" [level=3] [ref=f160e165]
+          - paragraph [ref=f160e166]: Text lands at your cursor
+      - list [ref=f160e167]:
+        - listitem [ref=f160e168]: Commands
+        - listitem [ref=f160e172]: Snippets & dict
+        - listitem [ref=f160e176]: History
+        - listitem [ref=f160e181]: Overlay
+        - listitem [ref=f160e185]: Auto-update
+    - generic [ref=f160e191]:
+      - generic [ref=f160e192]:
+        - heading "Private by design, not by promise." [level=2] [ref=f160e193]
+        - paragraph [ref=f160e194]: Recognition runs 100% on your CPU. Your voice never leaves your computer — and that claim is enforced by a test suite, not a marketing sentence.
+        - list [ref=f160e195]:
+          - listitem [ref=f160e196]:
+            - generic [ref=f160e200]: All processing happens on your device. The recognition engine makes zero network requests.
+          - listitem [ref=f160e201]:
+            - generic [ref=f160e205]: No telemetry, no analytics, no crash-report upload. None.
+          - listitem [ref=f160e206]:
+            - generic [ref=f160e210]: Logs carry metadata only — transcript text, audio, dictionary, history, and snippets are never logged.
+          - listitem [ref=f160e211]:
+            - generic [ref=f160e215]: "Your data stays local: history, dictionary, and snippets live in a SQLite file under your appdata. Audio is never written to disk."
+      - complementary [ref=f160e216]:
+        - paragraph [ref=f160e217]: "Block molvi in your firewall and dictate: recognition still works, proving nothing left the machine. Or watch your network monitor during a session — it stays silent. Or read the privacy test suite that fails the build if any transcript text reaches a log."
+        - link "Read the privacy test suite" [ref=f160e218] [cursor=pointer]:
+          - /url: https://github.com/bumbaRasch/molvi/blob/main/src-tauri/tests/log_privacy.rs
+          - text: Read the privacy test suite
+          - generic [ref=f160e219]: →
+        - paragraph [ref=f160e220]: The only outbound call is the optional update check (a latest.json fetch from GitHub — turn it off in settings), plus the one-time model download from Hugging Face.
+    - generic [ref=f160e222]:
+      - heading "Every language, on your terms" [level=2] [ref=f160e224]
+      - generic [ref=f160e225]:
+        - generic [ref=f160e226]:
+          - generic [ref=f160e227]: "36"
+          - generic [ref=f160e228]: 36-language UI
+          - generic [ref=f160e229]: Including Arabic and Hebrew, right-to-left.
+        - generic [ref=f160e230]:
+          - generic [ref=f160e231]: 40+
+          - generic [ref=f160e232]: 40+ recognition locales
+          - generic [ref=f160e233]: Multilingual streaming via Nemotron 3.5 ASR.
+          - generic [ref=f160e234]:
+            - generic [ref=f160e235]: EN
+            - generic [ref=f160e236]: ES
+            - generic [ref=f160e237]: FR
+            - generic [ref=f160e238]: DE
+            - generic [ref=f160e239]: IT
+            - generic [ref=f160e240]: PT
+            - generic [ref=f160e241]: RU
+            - generic [ref=f160e242]: ZH
+            - generic [ref=f160e243]: JA
+            - generic [ref=f160e244]: KO
+            - generic [ref=f160e245]: AR
+            - generic [ref=f160e246]: HI
+        - generic [ref=f160e247]:
+          - generic [ref=f160e248]: RU
+          - generic [ref=f160e249]: Russian-native engine
+          - generic [ref=f160e250]: GigaAM-v3 — fast and natively punctuated. Not a multilingual afterthought.
+    - generic [ref=f160e252]:
+      - heading "Get molvi" [level=2] [ref=f160e254]
+      - generic [ref=f160e255]:
+        - article [ref=f160e256]:
+          - heading "Windows 11" [level=3] [ref=f160e260]
+          - paragraph [ref=f160e261]:
+            - code [ref=f160e262]: molvi_0.1.0_x64-setup.exe
+          - paragraph [ref=f160e263]: ~11 MB installer · Version 0.1.0
+          - link "Download" [ref=f160e264] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_x64-setup.exe
+          - link "Changelog" [ref=f160e265] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases
+        - article [ref=f160e266]:
+          - heading "macOS (Apple Silicon)" [level=3] [ref=f160e270]
+          - paragraph [ref=f160e271]:
+            - code [ref=f160e272]: molvi_0.1.0_aarch64.dmg
+          - paragraph [ref=f160e273]: ~11 MB installer · Version 0.1.0
+          - link "Download" [ref=f160e274] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_aarch64.dmg
+          - link "Changelog" [ref=f160e275] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases
+        - article [ref=f160e276]:
+          - heading "Linux" [level=3] [ref=f160e281]
+          - paragraph [ref=f160e282]:
+            - code [ref=f160e283]: molvi_0.1.0_amd64.AppImage
+          - paragraph [ref=f160e284]: ~11 MB installer · Version 0.1.0
+          - link "Download" [ref=f160e285] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases/download/v0.1.0/molvi_0.1.0_amd64.AppImage
+          - link "Changelog" [ref=f160e286] [cursor=pointer]:
+            - /url: https://github.com/bumbaRasch/molvi/releases
+      - paragraph [ref=f160e287]: MIT OR Apache-2.0 · ed25519-signed updates · ~11 MB installer
+      - complementary [ref=f160e288]:
+        - paragraph [ref=f160e289]: v0.1.0 is built and signed for updates but not yet published — grab it from the Releases page.
+        - list [ref=f160e290]:
+          - listitem [ref=f160e291]: "→ Windows SmartScreen: More info → Run anyway."
+          - listitem [ref=f160e292]: "→ macOS Gatekeeper: right-click the app → Open."
+    - generic [ref=f160e294]:
+      - heading "FAQ" [level=2] [ref=f160e296]
+      - group [ref=f160e297]:
+        - generic "Is it really free?" [ref=f160e298] [cursor=pointer]
+        - paragraph [ref=f160e303]: Yes. MIT OR Apache-2.0, forever. No account, no subscription, no feature gate.
+      - group [ref=f160e304]:
+        - generic "Does it need the internet?" [ref=f160e305] [cursor=pointer]
+      - group [ref=f160e309]:
+        - generic "Does my audio get sent anywhere?" [ref=f160e310] [cursor=pointer]
+      - group [ref=f160e314]:
+        - generic "Which languages?" [ref=f160e315] [cursor=pointer]
+      - group [ref=f160e319]:
+        - generic "How big is the download?" [ref=f160e320] [cursor=pointer]
+      - group [ref=f160e324]:
+        - generic "Which OSes?" [ref=f160e325] [cursor=pointer]
+  - contentinfo [ref=f160e329]:
+    - generic [ref=f160e330]:
+      - generic [ref=f160e331]:
+        - link "molvi" [ref=f160e332] [cursor=pointer]:
+          - /url: /molvi-website/
+        - paragraph [ref=f160e335]: Made by @bumbaRasch
+      - navigation "Footer" [ref=f160e336]:
+        - generic [ref=f160e337]:
+          - heading "Product" [level=3] [ref=f160e338]
+          - list [ref=f160e339]:
+            - listitem [ref=f160e340]:
+              - link "Download" [ref=f160e341] [cursor=pointer]:
+                - /url: /molvi-website/#download
+            - listitem [ref=f160e342]:
+              - link "Changelog" [ref=f160e343] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi/releases
+            - listitem [ref=f160e344]:
+              - link "Roadmap" [ref=f160e345] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi#roadmap
+        - generic [ref=f160e346]:
+          - heading "Resources" [level=3] [ref=f160e347]
+          - list [ref=f160e348]:
+            - listitem [ref=f160e349]:
+              - link "Repository" [ref=f160e350] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi
+            - listitem [ref=f160e351]:
+              - link "Privacy" [ref=f160e352] [cursor=pointer]:
+                - /url: /molvi-website/#privacy
+            - listitem [ref=f160e353]:
+              - link "Security" [ref=f160e354] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi/security
+        - generic [ref=f160e355]:
+          - heading "Community" [level=3] [ref=f160e356]
+          - list [ref=f160e357]:
+            - listitem [ref=f160e358]:
+              - link "GitHub" [ref=f160e359] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi
+            - listitem [ref=f160e360]:
+              - link "Contributing" [ref=f160e361] [cursor=pointer]:
+                - /url: https://github.com/bumbaRasch/molvi/blob/main/CONTRIBUTING.md
+    - generic [ref=f160e362]:
+      - generic [ref=f160e363]: © 2026 molvi
+      - generic [ref=f160e364]: MIT OR Apache-2.0

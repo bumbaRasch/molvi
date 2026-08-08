@@ -1,0 +1,2 @@
+# Generated measurement reports (report/<UTC-stamp>.{md,json}) land here.
+# This directory IS tracked (small JSON/MD). The model dir + target/ are gitignored.

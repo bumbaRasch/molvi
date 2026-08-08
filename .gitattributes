@@ -1,0 +1,11 @@
+# Normalize text files to LF in the repository (cross-platform; silences the
+# "LF will be replaced by CRLF" warnings on Windows). Editors render per-OS.
+* text=auto eol=lf
+
+# Binaries — never normalize line endings.
+*.png binary
+*.ico binary
+*.icns binary
+*.wav binary
+*.mp3 binary
+*.ogg binary
