@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ask a question (Discussions)
+    url: https://github.com/bumbaRasch/molvi/discussions
+    about: For how-to questions and discussion, use Discussions instead of issues.

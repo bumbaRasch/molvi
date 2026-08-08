@@ -1,0 +1,131 @@
+[package]
+name = "molvi"
+version = "0.1.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+
+[lib]
+name = "molvi"
+path = "src/lib.rs"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2.11", features = ["tray-icon"] }
+tauri-plugin-single-instance = "2"
+tauri-plugin-global-shortcut = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+tracing = "0.1"
+# Privacy (spec §10.1): the tracing-log bridge would surface transcribe-rs's
+# `log::info!("  -> \"{}\"", text)` (vad_chunked.rs:189, transcript text!) into
+# our subscriber at the default info level. Feature-unification re-enables
+# `tracing-log` (tracing-appender pulls tracing-subscriber/default), so log.rs
+# skips the bridge by calling tracing::subscriber::set_global_default directly
+# instead of `.init()` (which auto-installs LogTracer). Keep it that way.
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tracing-appender = "0.2"
+# ponytail: async HFClient (.build()) is core; blocking feature gated build_sync()
+# which model_store no longer uses after the sync->async switch.
+hf-hub = { version = "1.0" }
+rubato = "4.0"
+cpal = "0.18"
+rtrb = "0.3"
+# ponytail: features mirror molvi-task0 (the verified Task-0 binary). `onnx`
+# enables GigaAM/ort; `audio-features` gates `audio::read_wav_samples`.
+transcribe-rs = { version = "0.3.11", features = ["onnx", "audio-features"] }
+# Nemotron-3.5-ASR (multilingual RNN-T). Task 18: opt-in second engine behind
+# the SpeechEngine adapter trait. parakeet-rs pulls ort rc.13, which unifies
+# over transcribe-rs's rc.12 (both compile — verified in the Task-17 spike).
+parakeet-rs = "0.3.7"
+# ponytail: paste deps. enigo 0.6 = 0.6.1 (latest; 0.7 does not exist on
+# crates.io).
+arboard = "3"
+enigo = "0.6"
+
+# Phase-2 deps (Task 1): sqlite (history/dictionary), autostart + updater +
+# process + dialog plugins, ureq for the updater's release-channel fetch.
+# Versions from the plan's Pre-flight table (spec §4, verified 2026-08-03).
+rusqlite = { version = "0.40.1", features = ["bundled"] }
+# regex 1.x already in the lockfile (1.13.1, transitive via transcribe-rs).
+# Declared directly for dictionary::apply token-substitution (Task 2).
+regex = "1"
+tauri-plugin-autostart = "2.5.1"
+tauri-plugin-updater = "2.10.1"
+tauri-plugin-process = "2"
+tauri-plugin-dialog = "2.7.2"
+tauri-plugin-opener = "2.5.4"
+ureq = { version = "3.3", features = ["json"] }
+
+[features]
+default = []
+# Model-gated integration tests: load the real ~214MB GigaAM-v3 model + run
+# inference. Run with: cargo test --features engine-model-test engine
+engine-model-test = []
+
+[dev-dependencies]
+# Used by tests/log_privacy.rs::log_bridge_is_absent to emit a sentinel via the
+# `log` crate and prove no tracing-log bridge forwards it to our subscriber.
+log = "0.4"
+
+# ponytail: canonical perf profile (Cargo Book §profiles verified). panic MUST
+# stay "unwind" — catch_unwind is load-bearing (engine.rs feed_chunk/finish +
+# coordinator.rs handler). lto="thin" not "fat": ~halves link time on the huge
+# ort dependency tree for marginal perf gain.
+[profile.release]
+opt-level = 3
+codegen-units = 1
+lto = "thin"
+strip = true
+panic = "unwind"
+
+# transcribe-rs 0.3.11 (published) exact-pins ort to `=2.0.0-rc.12`, which
+# conflicts irreconcilably with parakeet-rs 0.3.7's `^2.0.0-rc.13` (Task 18).
+# R8's direct `ort` pin cannot override an internal exact pin. Upstream PR #92
+# (commit efc66111, merged to cjpais/transcribe-rs main 2026-07-31) relaxes the
+# pin to `"2.0.0-rc.12"` (caret → allows rc.13); the diff from 0.3.11 is a
+# single character (`=` removed) and the package version stays 0.3.11. Pinned to
+# the immutable SHA (content-addressed — matches molvi's HF revision posture).
+# Drop this patch once a transcribe-rs release >0.3.11 ships PR #92.
+[patch.crates-io]
+transcribe-rs = { git = "https://github.com/cjpais/transcribe-rs", rev = "efc66111d519a434e28d51d94740008a7ce29360" }
+
+# Windows-only crate: Win32 APIs across audio/paste/profiles/ort_affinity/
+# model_store. Target-gated so non-Windows resolves without it (Phase 2/3
+# wire per-OS equivalents). Windows behavior unchanged (same version+features).
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.62", features = ["Win32_UI_WindowsAndMessaging", "Win32_UI_Input_KeyboardAndMouse", "Win32_Foundation", "Win32_System_Threading", "Win32_System_SystemInformation", "Win32_Media_Audio", "Win32_Storage_FileSystem"] }
+
+# CoreML EP for both engines, Apple Silicon only (D3). ort-sys dist.tsv has no
+# x86_64-apple-darwin row → Intel Mac unsupported without load-dynamic.
+# Feature names verified against the resolved crate sources
+# (~/.cargo/registry/.../transcribe-rs-0.3.11 + parakeet-rs-0.3.7):
+#   transcribe-rs `ort-coreml` = ["onnx", "ort/coreml"]  (onnx pulls audio-features)
+#   parakeet-rs   `coreml`     = ["ort/coreml"]           (defaults re-declared below)
+[target.'cfg(all(target_os = "macos", target_arch = "aarch64"))'.dependencies]
+transcribe-rs = { version = "0.3.11", features = ["ort-coreml"] }
+parakeet-rs = { version = "0.3.7", default-features = false, features = ["cpu", "ort-defaults", "api-28", "coreml"] }
+
+# Overlay focus fix (spike #3; tauri#14102): Tauri focusable:false is broken on
+# macOS. tauri-nspanel converts the webview window to a non-activating NSPanel.
+# NOT published to crates.io (verified 2026-08-07) → git branch v2.1 (mirrors
+# cjpais/Handy). Task 7 consumes it; Task 4 only wired the dep.
+[target.'cfg(target_os = "macos")'.dependencies]
+tauri-nspanel = { git = "https://github.com/ahkohd/tauri-nspanel", branch = "v2.1" }
+# profiles::foreground_exe + macos_frontmost_pid (Task 8). Per-class features
+# verified against objc2-app-kit 0.3.2 Cargo.toml; bare "0.3" does NOT enable
+# NSWorkspace/NSRunningApplication. NSString: Display → .to_string() works.
+objc2 = "0.6"
+objc2-foundation = { version = "0.3", features = ["NSURL", "NSString"] }
+objc2-app-kit = { version = "0.3", features = ["NSWorkspace", "NSRunningApplication"] }
+
+# Linux X11 EWMH helpers (x11.rs) + statvfs disk-space check (model_store.rs).
+# Both already in the lockfile transitively (enigo pulls x11rb; cpal/etc pull
+# libc) — promoting to direct deps makes them importable. x11rb features come
+# via feature-unification with enigo (randr/xinput/xtest); core xproto + connect
+# are all molvi uses.
+[target.'cfg(all(unix, not(target_os = "macos")))'.dependencies]
+x11rb = "0.13"
+libc = "0.2"
