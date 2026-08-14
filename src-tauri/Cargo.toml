@@ -30,7 +30,7 @@ tracing-appender = "0.2"
 # ponytail: async HFClient (.build()) is core; blocking feature gated build_sync()
 # which model_store no longer uses after the sync->async switch.
 hf-hub = { version = "1.0" }
-rubato = "4.0"
+rubato = "5.0"
 cpal = "0.18"
 rtrb = "0.3"
 # ponytail: features mirror molvi-task0 (the verified Task-0 binary). `onnx`
